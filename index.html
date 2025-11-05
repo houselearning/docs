@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev & Help Docs Home | HouseLearning</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <!-- Configure Tailwind for Inter font and custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2', // A strong blue for links and accents
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font Import -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Sticky Header/Navigation Bar -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo/Site Title -->
+            <a href="#" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <!-- Nav Links/External Links -->
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Left Sidebar (Documentation Index) -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Getting Started</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50">Welcome Guide</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Installation</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Configuration</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Developer API</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">API Reference</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Authentication</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Data Models</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Support & Help</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="md:col-span-9 space-y-8">
+
+                <!-- Welcome Hero Section -->
+                <section class="bg-bg-card p-8 sm:p-12 rounded-xl shadow-lg border border-gray-100">
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">
+                        Welcome to the HouseLearning Knowledge Base
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-6">
+                        Find comprehensive documentation, API references, and technical guides to help you build and deploy your projects seamlessly.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition duration-150">
+                            Start Reading the Guide
+                        </a>
+                        <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-xl shadow-sm text-gray-700 bg-white hover:bg-gray-50 transition duration-150">
+                            View API Status
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Feature Cards Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Card 1: Developers -->
+                    <div class="bg-bg-card p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                        <svg class="w-8 h-8 text-primary-accent mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        <h2 class="text-xl font-bold text-gray-900 mb-2">Developer Guides</h2>
+                        <p class="text-gray-600 text-sm mb-4">Dive into technical specifications, code examples, and integration patterns for our core services.</p>
+                        <a href="#" class="text-sm font-medium text-primary-accent hover:text-blue-700">Explore Code & APIs &rarr;</a>
+                    </div>
+
+                    <!-- Card 2: Help & Support -->
+                    <div class="bg-bg-card p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                        <svg class="w-8 h-8 text-primary-accent mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9.247a1 1 0 01.78-.397h3.884c.324 0 .63.155.823.414l3.14 4.072a1 1 0 01-.78 1.62H4.887a1 1 0 01-.823-.414l-3.14-4.072a1 1 0 01.78-1.62h3.884a1 1 0 01.78.397z"></path></svg>
+                        <h2 class="text-xl font-bold text-gray-900 mb-2">Help & Troubleshooting</h2>
+                        <p class="text-gray-600 text-sm mb-4">Solutions to common issues, detailed FAQ sections, and best practices for system maintenance.</p>
+                        <a href="#" class="text-sm font-medium text-primary-accent hover:text-blue-700">Get Assistance Now &rarr;</a>
+                    </div>
+
+                    <!-- Card 3: Latest Updates -->
+                    <div class="bg-bg-card p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                        <svg class="w-8 h-8 text-primary-accent mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        <h2 class="text-xl font-bold text-gray-900 mb-2">What's New</h2>
+                        <p class="text-gray-600 text-sm mb-4">Stay current with the latest platform changes, feature releases, and deprecation announcements.</p>
+                        <a href="#" class="text-sm font-medium text-primary-accent hover:text-blue-700">Check Release Notes &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Call to Action Section -->
+                <section class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mt-8 text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Can't Find What You Need?</h2>
+                    <p class="text-gray-600 mb-5">Our community forum and expert support team are ready to help with advanced questions.</p>
+                    <a href="#" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-xl shadow-sm text-primary-accent bg-white hover:bg-blue-50 transition duration-150">
+                        Visit the Community Forum
+                    </a>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Simple Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
