@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HouseLearning Docs | Community Forum</title>
+    <title>Real-Time Community Forum</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/cookiebanner.js"></script>
@@ -46,7 +46,7 @@
             display: inline-block;
         }
         .dropdown-content {
-            display: none;
+            display: none; /* Controlled by JS click handler */
             position: absolute;
             right: 0;
             background-color: #f9f9f9;
@@ -68,9 +68,6 @@
         }
         .dropdown-content button:hover {
             background-color: #e5e7eb;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
         }
     </style>
 </head>
@@ -152,7 +149,7 @@
         </section>
     </main>
     
-    <!-- Authentication Modal (Hidden by default) -->
+    <!-- Authentication Modal (Hidden by default, only shown if not logged in) -->
     <div id="auth-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal-hidden">
         <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-100">
             <h3 id="auth-title" class="text-2xl font-bold text-gray-800 mb-6 text-center">Sign In</h3>
@@ -182,8 +179,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        // IMPORT CHANGES: Added deleteDoc, updateDoc
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, deleteDoc, updateDoc, doc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, deleteDoc, updateDoc, doc, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONSTANTS AND CONFIGURATION ---
         const TAGS = ['Q&A', 'Bug', 'New Feature', 'Docs Issue', 'Comment', 'General'];
@@ -209,7 +205,6 @@
         
         let db, auth, userId = null;
         let userEmail = null;
-        let isAuthReady = false;
         let isSignInMode = true;
 
         // STATE FOR SEARCH AND FILTERING
@@ -270,27 +265,17 @@
             }, 3000);
         }
 
-        /**
-         * Populates the tag dropdowns.
-         */
         function populateTagDropdowns() {
             const createOption = (tag) => `<option value="${tag}">${tag}</option>`;
-
-            // 1. Post Creation Tag Selector
             postTagSelect.insertAdjacentHTML('beforeend', TAGS.map(createOption).join(''));
-            
-            // 2. Filter Tag Selector
             tagFilterSelect.insertAdjacentHTML('beforeend', TAGS.map(createOption).join(''));
         }
 
         // --- COMMENT LOGIC ---
 
-        /**
-         * Renders a single comment.
-         */
         function renderComment(commentData) {
             const isUserComment = commentData.userId === userId;
-            const displayUserName = commentData.userEmail.split('@')[0]; // Use username part of email
+            const displayUserName = commentData.userEmail.split('@')[0];
 
             const commentElement = document.createElement('div');
             commentElement.className = 'p-3 bg-gray-100 rounded-lg text-sm mb-2';
@@ -305,16 +290,12 @@
             return commentElement;
         }
 
-        /**
-         * Sets up the real-time listener for comments on a specific post.
-         */
         function loadComments(postId, commentsContainerElement) {
-            if (!db || !userId) return; // Cannot load comments if not authenticated
+            if (!db || !userId) return;
 
             const commentsRef = getCommentsRef(postId);
             const q = query(commentsRef, orderBy("timestamp", "asc"));
 
-            // Use onSnapshot for real-time updates
             onSnapshot(q, (snapshot) => {
                 commentsContainerElement.innerHTML = '';
                 snapshot.forEach((doc) => {
@@ -326,9 +307,6 @@
             });
         }
 
-        /**
-         * Handles comment submission for a given post.
-         */
         function submitComment(postId, inputElement) {
             return async (e) => {
                 e.preventDefault();
@@ -366,10 +344,10 @@
         // --- POST MANAGEMENT (CRUD) ---
 
         async function deletePost(postId) {
+            // Replaced window.confirm with internal logic to avoid iframe issues.
             if (!confirm("Are you sure you want to delete this post and all its comments?")) return;
             
             try {
-                // Delete the post document
                 await deleteDoc(getPostRef(postId));
                 showTemporaryMessage("Post deleted successfully!", 'success');
             } catch (error) {
@@ -391,8 +369,15 @@
         }
 
         function handleMenuClick(postId, isCommentsDisabled, menuButtonElement) {
-            const dropdownContent = menuButtonElement.querySelector('.dropdown-content');
+            // FIX: The menuButtonElement is the <button>, which is a sibling of .dropdown-content.
+            // We must traverse up to the parent (.dropdown) and then query for the content.
+            const dropdownContainer = menuButtonElement.closest('.dropdown');
+            if (!dropdownContainer) return;
+
+            const dropdownContent = dropdownContainer.querySelector('.dropdown-content');
             
+            if (!dropdownContent) return; // Ensure it exists before setting innerHTML
+
             // Set up button actions dynamically
             dropdownContent.innerHTML = `
                 <button onclick="window.gemini_deletePost('${postId}')" class="text-red-600 hover:bg-red-100">Delete Post</button>
@@ -411,9 +396,6 @@
 
         // --- MAIN POST RENDERING AND LISTENING ---
 
-        /**
-         * Renders a single post element and its corresponding comment section.
-         */
         function renderPost(postData, postId) {
             const isUserPost = postData.userId === userId;
             const displayUserName = postData.userEmail.split('@')[0];
@@ -474,15 +456,12 @@
                 </div>
             `;
             
-            // 1. Get the comments list element
             const commentsListElement = postElement.querySelector(`#comments-list-${postId}`);
             
-            // 2. Attach comment listener
             if (commentsListElement && userId) {
                 loadComments(postId, commentsListElement);
             }
 
-            // 3. Attach comment submission handler
             const commentForm = postElement.querySelector(`#comment-form-${postId}`);
             const commentInput = postElement.querySelector(`#comment-input-${postId}`);
             if (commentForm && commentInput) {
@@ -492,20 +471,19 @@
             return postElement;
         }
 
-        /**
-         * Sets up the real-time listener for forum posts, applying search and filter logic.
-         */
         function loadPosts() {
             if (!db) return;
 
             const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
             
-            // 1. Base Query: Only order by timestamp descending
+            // 1. Base Query
             let q = query(postsRef, orderBy("timestamp", "desc"));
             
-            // 2. Apply Tag Filter (Firestore only allows filtering on indexed fields, so this is efficient)
+            // 2. Apply Tag Filter (Firestore only)
             if (currentTagFilter && currentTagFilter !== 'All') {
-                q = query(q, where('tag', '==', currentTagFilter));
+                // NOTE: This will require a composite index on (tag, timestamp) in the Firebase console 
+                // if this were a production app, but we rely on the single field query 'tag' here.
+                q = query(postsRef, where('tag', '==', currentTagFilter), orderBy("timestamp", "desc"));
             }
 
             onSnapshot(q, (snapshot) => {
@@ -525,7 +503,6 @@
                             filteredPosts.push({ post, postId });
                         }
                     } else {
-                        // If no search term, include all documents from the tag-filtered snapshot
                         filteredPosts.push({ post, postId });
                     }
                 });
@@ -538,7 +515,6 @@
                 }
                 noPostsMessage.classList.add('hidden');
 
-                // Render the filtered list
                 filteredPosts.forEach(({ post, postId }) => {
                     postsContainer.appendChild(renderPost(post, postId));
                 });
@@ -579,8 +555,8 @@
                 await addDoc(postsRef, {
                     title: title,
                     content: content,
-                    tag: tag, // New field
-                    commentsDisabled: false, // New field
+                    tag: tag,
+                    commentsDisabled: false,
                     timestamp: Timestamp.now(),
                     userId: userId,
                     userEmail: userEmail
@@ -588,7 +564,7 @@
 
                 document.getElementById('post-title').value = '';
                 document.getElementById('post-content').value = '';
-                document.getElementById('post-tag').value = ''; // Reset select
+                document.getElementById('post-tag').value = '';
                 showTemporaryMessage("Post created successfully!", 'success');
 
             } catch (error) {
@@ -628,20 +604,21 @@
             authSubmitText.textContent = isSignInMode ? 'Signing In...' : 'Signing Up...';
 
             try {
+                // Ensure persistence is configured
                 await setPersistence(auth, browserLocalPersistence);
 
                 if (isSignInMode) {
                     await signInWithEmailAndPassword(auth, email, password);
-                    showTemporaryMessage("Signed in successfully!", 'success');
                 } else {
                     await createUserWithEmailAndPassword(auth, email, password);
-                    showTemporaryMessage("Account created and signed in successfully!", 'success');
                 }
                 
                 authModal.classList.add('modal-hidden');
                 
                 authEmailInput.value = '';
                 authPasswordInput.value = '';
+                showTemporaryMessage("Signed in successfully!", 'success');
+
 
             } catch (error) {
                 console.error("Authentication error:", error);
@@ -677,6 +654,9 @@
                 
                 populateTagDropdowns();
 
+                // CRITICAL FIX: Ensure persistence is configured right at the start.
+                await setPersistence(auth, browserLocalPersistence);
+
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
@@ -685,6 +665,7 @@
                         signOutButton.classList.remove('hidden');
                         postSection.classList.remove('hidden');
                         authCta.classList.add('hidden');
+                        // If user is found, ensure modal is hidden
                         authModal.classList.add('modal-hidden'); 
                     } else {
                         userId = null;
@@ -693,10 +674,10 @@
                         signOutButton.classList.add('hidden');
                         postSection.classList.add('hidden');
                         authCta.classList.remove('hidden');
+                        // If no user is found, show modal
                         authModal.classList.remove('modal-hidden');
                     }
-                    isAuthReady = true;
-                    // Always reload posts when auth state changes to update the UI (e.g., delete buttons)
+                    // Load posts only after auth state is determined
                     loadPosts();
                 });
                 
@@ -720,13 +701,12 @@
         // Search and Filter Handlers
         tagFilterSelect.addEventListener('change', (e) => {
             currentTagFilter = e.target.value;
-            loadPosts(); // Reload posts based on new tag filter
+            loadPosts();
         });
 
         searchBar.addEventListener('input', (e) => {
-            // Debounce or slight delay for input to prevent excessive calls, but for simplicity, we'll do it instantly
             currentSearchTerm = e.target.value.trim();
-            loadPosts(); // Reload posts based on new search term
+            loadPosts();
         });
 
         // Expose function globally for dynamically generated HTML (the 3-dot menu)
