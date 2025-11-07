@@ -40,6 +40,38 @@
         .modal-hidden {
             display: none;
         }
+        /* Style for the 3-dot menu dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 10;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .dropdown-content button {
+            color: #374151;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.2s;
+            font-size: 0.875rem;
+        }
+        .dropdown-content button:hover {
+            background-color: #e5e7eb;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans min-h-screen">
@@ -64,6 +96,15 @@
             <form id="post-form">
                 <input type="text" id="post-title" required placeholder="Title (Max 50 characters)" maxlength="50"
                     class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm">
+                
+                <div class="mb-3">
+                    <select id="post-tag" required 
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm bg-white appearance-none">
+                        <option value="" disabled selected>Select a Tag *</option>
+                        <!-- Tags will be populated by JS -->
+                    </select>
+                </div>
+
                 <textarea id="post-content" required placeholder="What's on your mind? (Max 500 characters)" maxlength="500" rows="4"
                     class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm resize-none"></textarea>
                 <button type="submit" id="submit-button"
@@ -76,24 +117,38 @@
         <!-- Call to Action when signed out -->
         <section id="auth-cta" class="bg-accent/10 p-10 rounded-xl shadow-lg mb-8 text-center hidden">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Join the Discussion!</h2>
-            <p class="text-gray-600 mb-6">You must sign in or create an account to post content.</p>
+            <p class="text-gray-600 mb-6">You must sign in or create an account to post content or view comments.</p>
             <button id="open-auth-modal" class="bg-secondary hover:bg-accent text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md">
                 Sign In / Sign Up
             </button>
         </section>
 
-
-        <!-- Posts Display Section -->
+        <!-- Search and Filter Section -->
         <section class="mb-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Recent Discussions</h2>
+            
+            <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                <!-- Search Bar -->
+                <input type="text" id="search-bar" placeholder="Search by title or content..."
+                    class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition shadow-sm">
+                
+                <!-- Tag Filter -->
+                <select id="tag-filter" 
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition shadow-sm bg-white appearance-none w-full sm:w-48">
+                    <option value="All">Filter by Tag (All)</option>
+                    <!-- Tag filter options will be populated by JS -->
+                </select>
+            </div>
+
+            <!-- Posts Display Section -->
             <div id="loading-indicator" class="text-center text-gray-500 p-8">
                 <div class="animate-spin inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
                 <p class="mt-2">Loading posts...</p>
             </div>
-            <div id="posts-container" class="space-y-4 max-h-[70vh] overflow-y-auto">
+            <div id="posts-container" class="space-y-6 max-h-[70vh] overflow-y-auto">
                 <!-- Posts will be injected here -->
             </div>
-            <p id="no-posts-message" class="text-center text-gray-500 italic p-8 hidden">No posts yet. Be the first to start a discussion!</p>
+            <p id="no-posts-message" class="text-center text-gray-500 italic p-8 hidden">No posts yet or no results found. Be the first to start a discussion!</p>
         </section>
     </main>
     
@@ -126,12 +181,21 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // IMPORT CHANGES: Added deleteDoc, updateDoc
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, deleteDoc, updateDoc, doc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- ENVIRONMENT/CONFIG ---
-        // The environment configuration (__firebase_config) will override the default if defined,
-        // which ensures we adhere to the platform's mandatory requirements.
+        // --- CONSTANTS AND CONFIGURATION ---
+        const TAGS = ['Q&A', 'Bug', 'New Feature', 'Docs Issue', 'Comment', 'General'];
+        const TAG_COLORS = {
+            'Q&A': 'bg-blue-500',
+            'Bug': 'bg-red-500',
+            'New Feature': 'bg-green-500',
+            'Docs Issue': 'bg-yellow-500',
+            'Comment': 'bg-purple-500',
+            'General': 'bg-gray-500'
+        };
+
         const defaultFirebaseConfig = {
             apiKey: "AIzaSyDoXSwni65CuY1_32ZE8B1nwfQO_3VNpTw",
             authDomain: "contract-center-llc-10.firebaseapp.com",
@@ -141,15 +205,16 @@
             appId: "1:323221512767:web:6421260f875997dbf64e8a",
         };
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : JSON.stringify(defaultFirebaseConfig));
-        
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        
-        // No longer using __initial_auth_token since we are doing Email/Password auth
         
         let db, auth, userId = null;
         let userEmail = null;
         let isAuthReady = false;
-        let isSignInMode = true; // State for the auth modal
+        let isSignInMode = true;
+
+        // STATE FOR SEARCH AND FILTERING
+        let currentSearchTerm = '';
+        let currentTagFilter = 'All'; 
 
         // --- DOM Elements ---
         const postsContainer = document.getElementById('posts-container');
@@ -162,6 +227,9 @@
         const authCta = document.getElementById('auth-cta');
         const userInfoSpan = document.getElementById('user-info');
         const signOutButton = document.getElementById('sign-out-button');
+        const postTagSelect = document.getElementById('post-tag');
+        const tagFilterSelect = document.getElementById('tag-filter');
+        const searchBar = document.getElementById('search-bar');
         
         // Modal Elements
         const authModal = document.getElementById('auth-modal');
@@ -175,12 +243,11 @@
         const authEmailInput = document.getElementById('auth-email');
         const authPasswordInput = document.getElementById('auth-password');
 
+        // --- FIREBASE PATHS & HELPERS ---
+        const getPostRef = (postId) => doc(db, `artifacts/${appId}/public/data/forum_posts`, postId);
+        const getCommentsRef = (postId) => collection(db, `artifacts/${appId}/public/data/forum_posts/${postId}/comments`);
 
-        /**
-         * Converts Firestore Timestamp to a readable string.
-         * @param {Timestamp} timestamp
-         * @returns {string} Formatted date/time string.
-         */
+        // --- UTILITY FUNCTIONS ---
         function formatTimestamp(timestamp) {
             if (timestamp && timestamp.toDate) {
                 return timestamp.toDate().toLocaleString('en-US', {
@@ -190,65 +257,292 @@
             }
             return 'Just now';
         }
+        
+        function showTemporaryMessage(message, type) {
+            const tempMsg = document.createElement('div');
+            tempMsg.textContent = message;
+            tempMsg.className = `fixed bottom-5 right-5 p-4 rounded-lg shadow-xl text-white font-semibold transition-opacity duration-300 z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            document.body.appendChild(tempMsg);
+
+            setTimeout(() => {
+                tempMsg.style.opacity = '0';
+                tempMsg.addEventListener('transitionend', () => tempMsg.remove());
+            }, 3000);
+        }
 
         /**
-         * Renders a single post element.
-         * @param {Object} postData The post data.
-         * @returns {HTMLElement} The created post element.
+         * Populates the tag dropdowns.
          */
-        function renderPost(postData) {
+        function populateTagDropdowns() {
+            const createOption = (tag) => `<option value="${tag}">${tag}</option>`;
+
+            // 1. Post Creation Tag Selector
+            postTagSelect.insertAdjacentHTML('beforeend', TAGS.map(createOption).join(''));
+            
+            // 2. Filter Tag Selector
+            tagFilterSelect.insertAdjacentHTML('beforeend', TAGS.map(createOption).join(''));
+        }
+
+        // --- COMMENT LOGIC ---
+
+        /**
+         * Renders a single comment.
+         */
+        function renderComment(commentData) {
+            const isUserComment = commentData.userId === userId;
+            const displayUserName = commentData.userEmail.split('@')[0]; // Use username part of email
+
+            const commentElement = document.createElement('div');
+            commentElement.className = 'p-3 bg-gray-100 rounded-lg text-sm mb-2';
+            
+            commentElement.innerHTML = `
+                <div class="font-medium flex justify-between items-center mb-1">
+                    <span class="${isUserComment ? 'text-accent' : 'text-gray-700'}">${displayUserName}</span>
+                    <span class="text-xs text-gray-500">${formatTimestamp(commentData.timestamp)}</span>
+                </div>
+                <p class="text-gray-800 whitespace-pre-wrap">${commentData.content}</p>
+            `;
+            return commentElement;
+        }
+
+        /**
+         * Sets up the real-time listener for comments on a specific post.
+         */
+        function loadComments(postId, commentsContainerElement) {
+            if (!db || !userId) return; // Cannot load comments if not authenticated
+
+            const commentsRef = getCommentsRef(postId);
+            const q = query(commentsRef, orderBy("timestamp", "asc"));
+
+            // Use onSnapshot for real-time updates
+            onSnapshot(q, (snapshot) => {
+                commentsContainerElement.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const comment = doc.data();
+                    commentsContainerElement.appendChild(renderComment(comment));
+                });
+            }, (error) => {
+                console.error("Error listening to comments:", error);
+            });
+        }
+
+        /**
+         * Handles comment submission for a given post.
+         */
+        function submitComment(postId, inputElement) {
+            return async (e) => {
+                e.preventDefault();
+
+                if (!userId) {
+                    showTemporaryMessage("You must be signed in to comment.", 'error');
+                    return;
+                }
+
+                const content = inputElement.value.trim();
+                if (!content) return;
+
+                const commentsRef = getCommentsRef(postId);
+                inputElement.disabled = true;
+
+                try {
+                    await addDoc(commentsRef, {
+                        content: content,
+                        timestamp: Timestamp.now(),
+                        userId: userId,
+                        userEmail: userEmail
+                    });
+
+                    inputElement.value = '';
+                } catch (error) {
+                    console.error("Error submitting comment:", error);
+                    showTemporaryMessage(`Failed to submit comment: ${error.message}`, 'error');
+                } finally {
+                    inputElement.disabled = false;
+                }
+            };
+        }
+
+
+        // --- POST MANAGEMENT (CRUD) ---
+
+        async function deletePost(postId) {
+            if (!confirm("Are you sure you want to delete this post and all its comments?")) return;
+            
+            try {
+                // Delete the post document
+                await deleteDoc(getPostRef(postId));
+                showTemporaryMessage("Post deleted successfully!", 'success');
+            } catch (error) {
+                console.error("Error deleting post:", error);
+                showTemporaryMessage(`Failed to delete post: ${error.message}`, 'error');
+            }
+        }
+
+        async function toggleComments(postId, currentStatus) {
+            try {
+                await updateDoc(getPostRef(postId), {
+                    commentsDisabled: !currentStatus
+                });
+                showTemporaryMessage(`Comments successfully ${currentStatus ? 'enabled' : 'disabled'}!`, 'success');
+            } catch (error) {
+                console.error("Error toggling comments:", error);
+                showTemporaryMessage(`Failed to toggle comments: ${error.message}`, 'error');
+            }
+        }
+
+        function handleMenuClick(postId, isCommentsDisabled, menuButtonElement) {
+            const dropdownContent = menuButtonElement.querySelector('.dropdown-content');
+            
+            // Set up button actions dynamically
+            dropdownContent.innerHTML = `
+                <button onclick="window.gemini_deletePost('${postId}')" class="text-red-600 hover:bg-red-100">Delete Post</button>
+                <button onclick="window.gemini_toggleComments('${postId}', ${isCommentsDisabled})">
+                    ${isCommentsDisabled ? 'Enable Comments' : 'Disable Comments'}
+                </button>
+            `;
+            // Temporary way to expose functions globally for onclick events in dynamically generated HTML
+            window.gemini_deletePost = deletePost;
+            window.gemini_toggleComments = toggleComments;
+
+            // Simple toggle to show/hide the menu manually on button click
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        }
+
+
+        // --- MAIN POST RENDERING AND LISTENING ---
+
+        /**
+         * Renders a single post element and its corresponding comment section.
+         */
+        function renderPost(postData, postId) {
             const isUserPost = postData.userId === userId;
-            // Use email for display, or a truncated ID if email is missing (shouldn't happen with email auth)
-            const displayUserName = postData.userEmail || `User_${postData.userId.substring(0, 4)}`;
+            const displayUserName = postData.userEmail.split('@')[0];
+            const tagColor = TAG_COLORS[postData.tag] || TAG_COLORS['General'];
+            const commentsDisabled = postData.commentsDisabled || false;
 
             const postElement = document.createElement('div');
-            postElement.className = 'post bg-white p-5 rounded-xl shadow-md transition duration-200 hover:shadow-lg';
+            postElement.className = 'post bg-white p-5 rounded-xl shadow-md border-t-4 border-primary/50';
             
             postElement.innerHTML = `
                 <div class="flex justify-between items-start mb-3">
-                    <h3 class="text-lg font-bold text-gray-900">${postData.title}</h3>
-                    <span class="text-xs font-medium px-2 py-0.5 rounded-full ${isUserPost ? 'bg-accent/20 text-accent' : 'bg-gray-200 text-gray-600'}">
-                        ${isUserPost ? 'You' : 'Member'}
-                    </span>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-xl font-bold text-gray-900 truncate">${postData.title}</h3>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3 ml-4">
+                        <!-- Tag Badge -->
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full text-white ${tagColor} shadow-md">${postData.tag}</span>
+
+                        <!-- Management Menu (Only for post owner) -->
+                        ${isUserPost ? `
+                            <div class="dropdown">
+                                <button class="text-gray-500 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition" onclick="handleMenuClick('${postId}', ${commentsDisabled}, this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                                </button>
+                                <div class="dropdown-content">
+                                    <!-- Content injected by JS -->
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
                 </div>
-                <p class="text-gray-700 mb-3 whitespace-pre-wrap">${postData.content}</p>
-                <div class="text-right text-xs text-gray-400">
-                    Posted by <span class="font-medium">${displayUserName}</span> on ${formatTimestamp(postData.timestamp)}
+
+                <p class="text-gray-700 mb-4 whitespace-pre-wrap">${postData.content}</p>
+                
+                <div class="text-right text-xs text-gray-400 border-t pt-2 mt-2">
+                    Posted by <span class="font-medium text-gray-600">${displayUserName}</span> on ${formatTimestamp(postData.timestamp)}
+                </div>
+
+                <!-- Comments Section Placeholder -->
+                <div class="mt-5 pt-3 border-t border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-3">Comments (${commentsDisabled ? 'Disabled' : 'Open'})</h4>
+                    <div id="comments-list-${postId}" class="comments-list space-y-2 max-h-48 overflow-y-auto pr-2">
+                        <!-- Comments will be injected here -->
+                    </div>
+                    
+                    <!-- Comment Input Form -->
+                    <form id="comment-form-${postId}" class="mt-4 ${commentsDisabled || !userId ? 'hidden' : 'flex items-center space-x-2'}">
+                        <input type="text" id="comment-input-${postId}" placeholder="Write a comment..." required
+                            class="flex-grow p-2 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent text-sm" ${commentsDisabled ? 'disabled' : ''}>
+                        <button type="submit" 
+                            class="bg-accent hover:bg-secondary text-white font-medium py-2 px-4 rounded-lg text-sm transition" ${commentsDisabled ? 'disabled' : ''}>
+                            Send
+                        </button>
+                    </form>
+                    ${!userId && !commentsDisabled ? '<p class="text-sm text-gray-500 mt-4 italic">Sign in to leave a comment.</p>' : ''}
+                    ${commentsDisabled ? '<p class="text-sm text-red-500 mt-4 italic">Commenting is currently disabled for this post.</p>' : ''}
                 </div>
             `;
+            
+            // 1. Get the comments list element
+            const commentsListElement = postElement.querySelector(`#comments-list-${postId}`);
+            
+            // 2. Attach comment listener
+            if (commentsListElement && userId) {
+                loadComments(postId, commentsListElement);
+            }
+
+            // 3. Attach comment submission handler
+            const commentForm = postElement.querySelector(`#comment-form-${postId}`);
+            const commentInput = postElement.querySelector(`#comment-input-${postId}`);
+            if (commentForm && commentInput) {
+                commentForm.addEventListener('submit', submitComment(postId, commentInput));
+            }
+            
             return postElement;
         }
 
         /**
-         * Sets up the real-time listener for forum posts.
+         * Sets up the real-time listener for forum posts, applying search and filter logic.
          */
         function loadPosts() {
-            if (!db) return; // DB must be initialized
+            if (!db) return;
 
-            // Path for public collaborative data: /artifacts/{appId}/public/data/forum_posts
-            // This collection path is explicitly allowed for read/write by authenticated users in firestore.rules
             const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
             
-            // Query posts ordered by timestamp descending (newest first)
-            // NOTE: No orderBy used to avoid index requirements in this example.
-            const q = query(postsRef, orderBy("timestamp", "desc"));
+            // 1. Base Query: Only order by timestamp descending
+            let q = query(postsRef, orderBy("timestamp", "desc"));
+            
+            // 2. Apply Tag Filter (Firestore only allows filtering on indexed fields, so this is efficient)
+            if (currentTagFilter && currentTagFilter !== 'All') {
+                q = query(q, where('tag', '==', currentTagFilter));
+            }
 
-            // Set up real-time listener
             onSnapshot(q, (snapshot) => {
                 loadingIndicator.classList.add('hidden');
-                postsContainer.innerHTML = '';
                 
-                if (snapshot.empty) {
+                let filteredPosts = [];
+
+                snapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postId = doc.id;
+                    
+                    // 3. Apply Client-Side Text Search Filter
+                    if (currentSearchTerm) {
+                        const searchTermLower = currentSearchTerm.toLowerCase();
+                        if (post.title.toLowerCase().includes(searchTermLower) ||
+                            post.content.toLowerCase().includes(searchTermLower)) {
+                            filteredPosts.push({ post, postId });
+                        }
+                    } else {
+                        // If no search term, include all documents from the tag-filtered snapshot
+                        filteredPosts.push({ post, postId });
+                    }
+                });
+                
+                postsContainer.innerHTML = '';
+
+                if (filteredPosts.length === 0) {
                     noPostsMessage.classList.remove('hidden');
                     return;
                 }
                 noPostsMessage.classList.add('hidden');
 
-                // Clear and re-render all posts
-                snapshot.forEach((doc) => {
-                    const post = doc.data();
-                    postsContainer.appendChild(renderPost(post));
+                // Render the filtered list
+                filteredPosts.forEach(({ post, postId }) => {
+                    postsContainer.appendChild(renderPost(post, postId));
                 });
+
             }, (error) => {
                 console.error("Error listening to posts:", error);
                 loadingIndicator.innerHTML = `<p class="text-red-500">Error loading posts: ${error.message}</p>`;
@@ -257,7 +551,6 @@
 
         /**
          * Handles the submission of a new post.
-         * @param {Event} e The form submission event.
          */
         async function submitPost(e) {
             e.preventDefault();
@@ -269,28 +562,33 @@
 
             const title = document.getElementById('post-title').value.trim();
             const content = document.getElementById('post-content').value.trim();
+            const tag = document.getElementById('post-tag').value;
 
-            if (!title || !content) return;
+            if (!title || !content || !tag) {
+                showTemporaryMessage("Please fill out all fields and select a tag.", 'error');
+                return;
+            }
 
             submitButton.disabled = true;
             submitText.textContent = 'Posting...';
             submitButton.classList.add('opacity-70');
 
             try {
-                // Path for public collaborative data: /artifacts/{appId}/public/data/forum_posts
                 const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
                 
-                // Add the new document
                 await addDoc(postsRef, {
                     title: title,
                     content: content,
-                    timestamp: Timestamp.now(), // Firestore timestamp for accurate ordering
+                    tag: tag, // New field
+                    commentsDisabled: false, // New field
+                    timestamp: Timestamp.now(),
                     userId: userId,
-                    userEmail: userEmail // Store the email for display
+                    userEmail: userEmail
                 });
 
                 document.getElementById('post-title').value = '';
                 document.getElementById('post-content').value = '';
+                document.getElementById('post-tag').value = ''; // Reset select
                 showTemporaryMessage("Post created successfully!", 'success');
 
             } catch (error) {
@@ -303,9 +601,8 @@
             }
         }
         
-        /**
-         * Toggles between Sign In and Sign Up mode in the modal.
-         */
+        // --- AUTHENTICATION LOGIC ---
+
         function toggleAuthMode() {
             isSignInMode = !isSignInMode;
             if (isSignInMode) {
@@ -317,13 +614,9 @@
                 authSubmitText.textContent = 'Sign Up';
                 toggleAuthModeButton.textContent = 'Already have an account? Sign In';
             }
-            authErrorMessage.classList.add('hidden'); // Clear error message on toggle
+            authErrorMessage.classList.add('hidden');
         }
 
-        /**
-         * Handles the authentication form submission (Sign In or Sign Up).
-         * @param {Event} e The form submission event.
-         */
         async function handleAuthSubmit(e) {
             e.preventDefault();
             
@@ -335,6 +628,8 @@
             authSubmitText.textContent = isSignInMode ? 'Signing In...' : 'Signing Up...';
 
             try {
+                await setPersistence(auth, browserLocalPersistence);
+
                 if (isSignInMode) {
                     await signInWithEmailAndPassword(auth, email, password);
                     showTemporaryMessage("Signed in successfully!", 'success');
@@ -342,10 +637,9 @@
                     await createUserWithEmailAndPassword(auth, email, password);
                     showTemporaryMessage("Account created and signed in successfully!", 'success');
                 }
-                // Close modal on successful sign-in/sign-up (as requested)
+                
                 authModal.classList.add('modal-hidden');
                 
-                // Clear the form inputs after successful sign-in
                 authEmailInput.value = '';
                 authPasswordInput.value = '';
 
@@ -360,9 +654,6 @@
             }
         }
 
-        /**
-         * Handles user sign out.
-         */
         async function handleSignOut() {
             try {
                 await signOut(auth);
@@ -374,59 +665,38 @@
         }
 
         /**
-         * Displays a temporary success/error message.
-         * @param {string} message The message to display.
-         * @param {('success'|'error')} type The type of message.
-         */
-        function showTemporaryMessage(message, type) {
-            const tempMsg = document.createElement('div');
-            tempMsg.textContent = message;
-            tempMsg.className = `fixed bottom-5 right-5 p-4 rounded-lg shadow-xl text-white font-semibold transition-opacity duration-300 z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
-            document.body.appendChild(tempMsg);
-
-            setTimeout(() => {
-                tempMsg.style.opacity = '0';
-                tempMsg.addEventListener('transitionend', () => tempMsg.remove());
-            }, 3000);
-        }
-
-        /**
          * Initializes Firebase and sets up authentication listener.
          */
         async function initFirebase() {
             try {
-                setLogLevel('debug'); // Set debug logging
+                setLogLevel('debug');
                 
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
                 
-                // 1. Listen for auth state changes
+                populateTagDropdowns();
+
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        // User is signed in
                         userId = user.uid;
                         userEmail = user.email || 'N/A';
                         userInfoSpan.textContent = userEmail;
                         signOutButton.classList.remove('hidden');
                         postSection.classList.remove('hidden');
                         authCta.classList.add('hidden');
-                        // Ensure modal is hidden if the user object is received
                         authModal.classList.add('modal-hidden'); 
-                        isAuthReady = true;
                     } else {
-                        // User is signed out
                         userId = null;
                         userEmail = null;
                         userInfoSpan.textContent = 'Guest';
                         signOutButton.classList.add('hidden');
                         postSection.classList.add('hidden');
                         authCta.classList.remove('hidden');
-                        // Show modal for sign in
                         authModal.classList.remove('modal-hidden');
-                        isAuthReady = false;
                     }
-                    // 2. Load posts regardless of authentication state, as data is public
+                    isAuthReady = true;
+                    // Always reload posts when auth state changes to update the UI (e.g., delete buttons)
                     loadPosts();
                 });
                 
@@ -442,19 +712,25 @@
         signOutButton.addEventListener('click', handleSignOut);
         toggleAuthModeButton.addEventListener('click', toggleAuthMode);
         openAuthModalButton.addEventListener('click', () => {
-             // Reset modal to sign-in state when opened
             isSignInMode = true;
             toggleAuthMode();
             authModal.classList.remove('modal-hidden');
         });
 
-        // Close modal when clicking outside (on the overlay)
-        authModal.addEventListener('click', (e) => {
-            if (e.target === authModal) {
-                authModal.classList.add('modal-hidden');
-            }
+        // Search and Filter Handlers
+        tagFilterSelect.addEventListener('change', (e) => {
+            currentTagFilter = e.target.value;
+            loadPosts(); // Reload posts based on new tag filter
         });
 
+        searchBar.addEventListener('input', (e) => {
+            // Debounce or slight delay for input to prevent excessive calls, but for simplicity, we'll do it instantly
+            currentSearchTerm = e.target.value.trim();
+            loadPosts(); // Reload posts based on new search term
+        });
+
+        // Expose function globally for dynamically generated HTML (the 3-dot menu)
+        window.handleMenuClick = handleMenuClick; 
 
         window.onload = initFirebase;
     </script>
