@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation Guide | HouseLearning Docs</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <!-- Configure Tailwind for Inter font and custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2', // A strong blue for links and accents
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font Import -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Sticky Header/Navigation Bar -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo/Site Title -->
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <!-- Nav Links/External Links -->
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Left Sidebar (Documentation Index) - Installation is highlighted -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Getting Started</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Welcome Guide</a></li>
+                            <!-- ACTIVE LINK -->
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Installation</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Configuration</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Developer API</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">API Reference</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Authentication</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Data Models</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Support & Help</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="md:col-span-9 space-y-8">
+
+                <!-- Page Content Section -->
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Getting Started</p>
+                    <h1 class="text-4xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        Installation Guide: Setting Up for Local Development
+                    </h1>
+
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        Since HouseLearning is built on **static files** hosted via GitHub Pages (keeping the project free and simple), the setup process is minimal. You don't need databases, complex servers, or special frameworks—just the files and a browser!
+                    </p>
+
+                    <!-- Prerequisites -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">1. Prerequisites</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Ensure you have these two essential tools installed:
+                        </p>
+                        <ul class="space-y-2 text-gray-700 list-disc list-inside ml-4">
+                            <li>
+                                <span class="font-semibold">Git:</span> Used for cloning the repository and managing contributions.
+                            </li>
+                            <li>
+                                <span class="font-semibold">Text Editor:</span> Any code editor (VS Code, Sublime Text, Atom) for modifying HTML and Markdown files.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Cloning the Repository -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">2. Clone the Repository</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Open your terminal or command prompt and run the following command to download the entire project structure:
+                        </p>
+                        <div class="bg-gray-800 p-4 rounded-xl shadow-inner overflow-x-auto">
+                            <code class="text-white block whitespace-pre-wrap">git clone https://github.com/houselearning/houselearning.github.io.git</code>
+                        </div>
+                        <p class="text-gray-700 mt-3">
+                            This will create a new directory named <code class="bg-gray-100 p-1 rounded">houselearning.github.io</code> containing all the documentation files.
+                        </p>
+                    </div>
+
+                    <!-- Running Locally -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">3. View the Documentation</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            You have two easy, zero-cost methods to view and test the documentation locally:
+                        </p>
+
+                        <!-- Method A: Direct File Open -->
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-1">Method A: Direct File Open (Recommended for simple viewing)</h3>
+                            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-600">
+                                <li>Navigate into the cloned directory: <code class="bg-gray-100 p-1 rounded">cd houselearning.github.io</code></li>
+                                <li>Locate the main file: <code class="bg-gray-100 p-1 rounded">index.html</code></li>
+                                <li>Right-click <code class="bg-gray-100 p-1 rounded">index.html</code> and select "Open with" &rarr; "Your Browser" (e.g., Chrome, Firefox).</li>
+                            </ol>
+                            <p class="text-sm text-red-600 mt-2 italic">Note: Some browser features (like dynamic URL routing) may not function perfectly using this method, but it is great for content editing.</p>
+                        </div>
+
+                        <!-- Method B: Simple HTTP Server -->
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-1">Method B: Simple HTTP Server (Recommended for full functionality)</h3>
+                            <p class="text-gray-600 mb-2">
+                                If you have Python installed, you can use its built-in server to simulate a web host locally:
+                            </p>
+                            <div class="bg-gray-800 p-3 rounded-xl shadow-inner overflow-x-auto">
+                                <code class="text-white block whitespace-pre-wrap">python3 -m http.server</code>
+                            </div>
+                            <p class="text-gray-600 mt-2">
+                                After running the command, open your browser and navigate to: <code class="bg-gray-100 p-1 rounded">http://localhost:8000</code>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Next Step CTA -->
+                    <div class="pt-6 border-t border-gray-200 mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">What's next?</p>
+                        <p class="text-gray-700 mb-4">
+                            Now that you have the documentation running, proceed to the Configuration guide to learn how to prepare your local environment for making and submitting changes.
+                        </p>
+                        <a href="#" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition duration-150">
+                            Continue to Configuration &rarr;
+                        </a>
+                    </div>
+                </section>
+                <!-- End Page Content Section -->
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Simple Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
