@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Community Forum</title>
+    <title>HouseLearning | Community Forum</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/cookiebanner.js"></script>
@@ -76,7 +76,7 @@
     <!-- Header -->
     <header class="bg-primary text-white shadow-lg">
         <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
-            <h1 class="text-2xl font-extrabold tracking-tight">Real-Time Forum</h1>
+            <h1 class="text-2xl font-extrabold tracking-tight">HouseLearning Docs | Forum</h1>
             <div class="text-sm flex items-center">
                 <span class="font-semibold mr-2">Signed in as:</span>
                 <span id="user-info" class="font-mono text-xs bg-primary/80 p-1 rounded-md">Guest</span>
@@ -206,6 +206,7 @@
         let db, auth, userId = null;
         let userEmail = null;
         let isSignInMode = true;
+        let hasCheckedAuth = false; // NEW FLAG: Tracks if the initial auth state check has run
 
         // STATE FOR SEARCH AND FILTERING
         let currentSearchTerm = '';
@@ -304,6 +305,7 @@
                 });
             }, (error) => {
                 console.error("Error listening to comments:", error);
+                // Note: Security rules for comments were provided separately to resolve this error.
             });
         }
 
@@ -654,29 +656,38 @@
                 
                 populateTagDropdowns();
 
-                // CRITICAL FIX: Ensure persistence is configured right at the start.
+                // CRITICAL: Set persistence at the very beginning to load session from cache
                 await setPersistence(auth, browserLocalPersistence);
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
+                        // User is signed in
                         userId = user.uid;
                         userEmail = user.email || 'N/A';
                         userInfoSpan.textContent = userEmail;
                         signOutButton.classList.remove('hidden');
                         postSection.classList.remove('hidden');
                         authCta.classList.add('hidden');
-                        // If user is found, ensure modal is hidden
+                        // Ensure modal is hidden
                         authModal.classList.add('modal-hidden'); 
                     } else {
+                        // User is signed out
                         userId = null;
                         userEmail = null;
                         userInfoSpan.textContent = 'Guest';
                         signOutButton.classList.add('hidden');
                         postSection.classList.add('hidden');
                         authCta.classList.remove('hidden');
-                        // If no user is found, show modal
-                        authModal.classList.remove('modal-hidden');
+                        
+                        // FIX: Only show the modal if the auth check has run at least once (i.e., past the initial null state)
+                        if (hasCheckedAuth) {
+                            authModal.classList.remove('modal-hidden');
+                        }
                     }
+                    
+                    // Set flag after the first run is complete
+                    hasCheckedAuth = true;
+
                     // Load posts only after auth state is determined
                     loadPosts();
                 });
