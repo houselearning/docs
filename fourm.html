@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Community Forum</title>
+    <title>HouseLearning Docs | Community Forum</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/cookiebanner.js"></script>
@@ -172,6 +172,8 @@
         const authErrorMessage = document.getElementById('auth-error-message');
         const toggleAuthModeButton = document.getElementById('toggle-auth-mode');
         const openAuthModalButton = document.getElementById('open-auth-modal');
+        const authEmailInput = document.getElementById('auth-email');
+        const authPasswordInput = document.getElementById('auth-password');
 
 
         /**
@@ -325,8 +327,8 @@
         async function handleAuthSubmit(e) {
             e.preventDefault();
             
-            const email = document.getElementById('auth-email').value;
-            const password = document.getElementById('auth-password').value;
+            const email = authEmailInput.value;
+            const password = authPasswordInput.value;
 
             authErrorMessage.classList.add('hidden');
             authSubmitButton.disabled = true;
@@ -340,8 +342,13 @@
                     await createUserWithEmailAndPassword(auth, email, password);
                     showTemporaryMessage("Account created and signed in successfully!", 'success');
                 }
-                // Close modal on success
+                // Close modal on successful sign-in/sign-up (as requested)
                 authModal.classList.add('modal-hidden');
+                
+                // Clear the form inputs after successful sign-in
+                authEmailInput.value = '';
+                authPasswordInput.value = '';
+
             } catch (error) {
                 console.error("Authentication error:", error);
                 let message = error.message.replace('Firebase: Error (auth/', '').replace(/\)\.$/, '').replace(/-/g, ' ').toUpperCase();
@@ -404,7 +411,8 @@
                         signOutButton.classList.remove('hidden');
                         postSection.classList.remove('hidden');
                         authCta.classList.add('hidden');
-                        authModal.classList.add('modal-hidden');
+                        // Ensure modal is hidden if the user object is received
+                        authModal.classList.add('modal-hidden'); 
                         isAuthReady = true;
                     } else {
                         // User is signed out
@@ -419,7 +427,6 @@
                         isAuthReady = false;
                     }
                     // 2. Load posts regardless of authentication state, as data is public
-                    // This is handled by the Firestore rule: `allow read, write: if isAuthenticated();`
                     loadPosts();
                 });
                 
