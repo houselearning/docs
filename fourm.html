@@ -153,7 +153,7 @@
     <div id="auth-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal-hidden">
         <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-100 relative">
             
-            <!-- NEW: Close Button -->
+            <!-- Close Button -->
             <button id="close-auth-modal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
             </button>
@@ -384,16 +384,13 @@
             
             if (!dropdownContent) return;
 
-            // Set up button actions dynamically
+            // Set up button actions dynamically, calling the now globally exposed functions
             dropdownContent.innerHTML = `
-                <button onclick="window.gemini_deletePost('${postId}')" class="text-red-600 hover:bg-red-100">Delete Post</button>
-                <button onclick="window.gemini_toggleComments('${postId}', ${isCommentsDisabled})">
+                <button onclick="window.deletePost('${postId}')" class="text-red-600 hover:bg-red-100">Delete Post</button>
+                <button onclick="window.toggleComments('${postId}', ${isCommentsDisabled})">
                     ${isCommentsDisabled ? 'Enable Comments' : 'Disable Comments'}
                 </button>
             `;
-            // Temporary way to expose functions globally for onclick events in dynamically generated HTML
-            window.gemini_deletePost = deletePost;
-            window.gemini_toggleComments = toggleComments;
 
             // Simple toggle to show/hide the menu manually on button click
             dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
@@ -708,33 +705,36 @@
                 console.error("Firebase initialization failed:", error);
                 loadingIndicator.innerHTML = `<p class="text-red-500">Initialization failed: ${error.message}</p>`;
             }
+
+            // --- Event Listeners and Initialization ---
+            // Moved all listeners here to ensure DOM elements are fully loaded before attachment
+            form.addEventListener('submit', submitPost);
+            authForm.addEventListener('submit', handleAuthSubmit);
+            signOutButton.addEventListener('click', handleSignOut);
+            toggleAuthModeButton.addEventListener('click', toggleAuthMode);
+            closeAuthModalButton.addEventListener('click', closeAuthModal);
+            openAuthModalButton.addEventListener('click', () => {
+                isSignInMode = true;
+                toggleAuthMode();
+                authModal.classList.remove('modal-hidden');
+            });
+
+            // Search and Filter Handlers
+            tagFilterSelect.addEventListener('change', (e) => {
+                currentTagFilter = e.target.value;
+                loadPosts();
+            });
+
+            searchBar.addEventListener('input', (e) => {
+                currentSearchTerm = e.target.value.trim();
+                loadPosts();
+            });
         }
 
-        // --- Event Listeners and Initialization ---
-        form.addEventListener('submit', submitPost);
-        authForm.addEventListener('submit', handleAuthSubmit);
-        signOutButton.addEventListener('click', handleSignOut);
-        toggleAuthModeButton.addEventListener('click', toggleAuthMode);
-        closeAuthModalButton.addEventListener('click', closeAuthModal); // New listener for the 'X' button
-        openAuthModalButton.addEventListener('click', () => {
-            isSignInMode = true;
-            toggleAuthMode();
-            authModal.classList.remove('modal-hidden');
-        });
-
-        // Search and Filter Handlers
-        tagFilterSelect.addEventListener('change', (e) => {
-            currentTagFilter = e.target.value;
-            loadPosts();
-        });
-
-        searchBar.addEventListener('input', (e) => {
-            currentSearchTerm = e.target.value.trim();
-            loadPosts();
-        });
-
-        // Expose function globally for dynamically generated HTML (the 3-dot menu)
+        // Expose functions globally for dynamically generated HTML to call them reliably
         window.handleMenuClick = handleMenuClick; 
+        window.deletePost = deletePost;
+        window.toggleComments = toggleComments;
 
         window.onload = initFirebase;
     </script>
