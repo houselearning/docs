@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Community Forum</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <!-- Configure Tailwind for custom theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5',
+                        'secondary': '#8b5cf6',
+                        'accent': '#a78bfa',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for post list */
+        #posts-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #posts-container::-webkit-scrollbar-thumb {
+            background-color: #a78bfa;
+            border-radius: 10px;
+        }
+        #posts-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        /* Style to hide modal */
+        .modal-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-primary text-white shadow-lg">
+        <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold tracking-tight">Real-Time Forum</h1>
+            <div class="text-sm flex items-center">
+                <span class="font-semibold mr-2">Signed in as:</span>
+                <span id="user-info" class="font-mono text-xs bg-primary/80 p-1 rounded-md">Guest</span>
+                <button id="sign-out-button" class="ml-4 px-3 py-1 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium text-sm transition duration-200 hidden">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4">
+
+        <!-- New Post Form -->
+        <section id="post-section" class="bg-white p-6 rounded-xl shadow-lg mb-8 border-t-4 border-accent hidden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Create New Post</h2>
+            <form id="post-form">
+                <input type="text" id="post-title" required placeholder="Title (Max 50 characters)" maxlength="50"
+                    class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm">
+                <textarea id="post-content" required placeholder="What's on your mind? (Max 500 characters)" maxlength="500" rows="4"
+                    class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm resize-none"></textarea>
+                <button type="submit" id="submit-button"
+                    class="w-full bg-secondary hover:bg-accent text-white font-bold py-3 rounded-lg transition duration-300 shadow-md">
+                    <span id="submit-text">Submit Post</span>
+                </button>
+            </form>
+        </section>
+        
+        <!-- Call to Action when signed out -->
+        <section id="auth-cta" class="bg-accent/10 p-10 rounded-xl shadow-lg mb-8 text-center hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Join the Discussion!</h2>
+            <p class="text-gray-600 mb-6">You must sign in or create an account to post content.</p>
+            <button id="open-auth-modal" class="bg-secondary hover:bg-accent text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md">
+                Sign In / Sign Up
+            </button>
+        </section>
+
+
+        <!-- Posts Display Section -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Recent Discussions</h2>
+            <div id="loading-indicator" class="text-center text-gray-500 p-8">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
+                <p class="mt-2">Loading posts...</p>
+            </div>
+            <div id="posts-container" class="space-y-4 max-h-[70vh] overflow-y-auto">
+                <!-- Posts will be injected here -->
+            </div>
+            <p id="no-posts-message" class="text-center text-gray-500 italic p-8 hidden">No posts yet. Be the first to start a discussion!</p>
+        </section>
+    </main>
+    
+    <!-- Authentication Modal (Hidden by default) -->
+    <div id="auth-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal-hidden">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-100">
+            <h3 id="auth-title" class="text-2xl font-bold text-gray-800 mb-6 text-center">Sign In</h3>
+            <div id="auth-error-message" class="text-red-600 bg-red-100 p-3 rounded-lg mb-4 hidden"></div>
+            
+            <form id="auth-form">
+                <input type="email" id="auth-email" required placeholder="Email Address"
+                    class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 shadow-sm">
+                <input type="password" id="auth-password" required placeholder="Password (min 6 characters)"
+                    class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 shadow-sm">
+                
+                <button type="submit" id="auth-submit-button" 
+                    class="w-full bg-primary hover:bg-secondary text-white font-bold py-3 rounded-lg transition duration-300 shadow-md">
+                    <span id="auth-submit-text">Sign In</span>
+                </button>
+            </form>
+            
+            <p class="text-center mt-6 text-sm">
+                <button id="toggle-auth-mode" class="text-primary hover:text-secondary font-medium transition duration-150">
+                    Need an account? Sign Up
+                </button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- ENVIRONMENT/CONFIG ---
+        // The environment configuration (__firebase_config) will override the default if defined,
+        // which ensures we adhere to the platform's mandatory requirements.
+        const defaultFirebaseConfig = {
+            apiKey: "AIzaSyDoXSwni65CuY1_32ZE8B1nwfQO_3VNpTw",
+            authDomain: "contract-center-llc-10.firebaseapp.com",
+            projectId: "contract-center-llc-10",
+            storageBucket: "contract-center-llc-10.firebasestorage.app",
+            messagingSenderId: "323221512767",
+            appId: "1:323221512767:web:6421260f875997dbf64e8a",
+        };
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : JSON.stringify(defaultFirebaseConfig));
+        
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        
+        // No longer using __initial_auth_token since we are doing Email/Password auth
+        
+        let db, auth, userId = null;
+        let userEmail = null;
+        let isAuthReady = false;
+        let isSignInMode = true; // State for the auth modal
+
+        // --- DOM Elements ---
+        const postsContainer = document.getElementById('posts-container');
+        const form = document.getElementById('post-form');
+        const submitButton = document.getElementById('submit-button');
+        const submitText = document.getElementById('submit-text');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const noPostsMessage = document.getElementById('no-posts-message');
+        const postSection = document.getElementById('post-section');
+        const authCta = document.getElementById('auth-cta');
+        const userInfoSpan = document.getElementById('user-info');
+        const signOutButton = document.getElementById('sign-out-button');
+        
+        // Modal Elements
+        const authModal = document.getElementById('auth-modal');
+        const authForm = document.getElementById('auth-form');
+        const authTitle = document.getElementById('auth-title');
+        const authSubmitButton = document.getElementById('auth-submit-button');
+        const authSubmitText = document.getElementById('auth-submit-text');
+        const authErrorMessage = document.getElementById('auth-error-message');
+        const toggleAuthModeButton = document.getElementById('toggle-auth-mode');
+        const openAuthModalButton = document.getElementById('open-auth-modal');
+
+
+        /**
+         * Converts Firestore Timestamp to a readable string.
+         * @param {Timestamp} timestamp
+         * @returns {string} Formatted date/time string.
+         */
+        function formatTimestamp(timestamp) {
+            if (timestamp && timestamp.toDate) {
+                return timestamp.toDate().toLocaleString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            }
+            return 'Just now';
+        }
+
+        /**
+         * Renders a single post element.
+         * @param {Object} postData The post data.
+         * @returns {HTMLElement} The created post element.
+         */
+        function renderPost(postData) {
+            const isUserPost = postData.userId === userId;
+            // Use email for display, or a truncated ID if email is missing (shouldn't happen with email auth)
+            const displayUserName = postData.userEmail || `User_${postData.userId.substring(0, 4)}`;
+
+            const postElement = document.createElement('div');
+            postElement.className = 'post bg-white p-5 rounded-xl shadow-md transition duration-200 hover:shadow-lg';
+            
+            postElement.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-lg font-bold text-gray-900">${postData.title}</h3>
+                    <span class="text-xs font-medium px-2 py-0.5 rounded-full ${isUserPost ? 'bg-accent/20 text-accent' : 'bg-gray-200 text-gray-600'}">
+                        ${isUserPost ? 'You' : 'Member'}
+                    </span>
+                </div>
+                <p class="text-gray-700 mb-3 whitespace-pre-wrap">${postData.content}</p>
+                <div class="text-right text-xs text-gray-400">
+                    Posted by <span class="font-medium">${displayUserName}</span> on ${formatTimestamp(postData.timestamp)}
+                </div>
+            `;
+            return postElement;
+        }
+
+        /**
+         * Sets up the real-time listener for forum posts.
+         */
+        function loadPosts() {
+            if (!db) return; // DB must be initialized
+
+            // Path for public collaborative data: /artifacts/{appId}/public/data/forum_posts
+            // This collection path is explicitly allowed for read/write by authenticated users in firestore.rules
+            const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
+            
+            // Query posts ordered by timestamp descending (newest first)
+            // NOTE: No orderBy used to avoid index requirements in this example.
+            const q = query(postsRef, orderBy("timestamp", "desc"));
+
+            // Set up real-time listener
+            onSnapshot(q, (snapshot) => {
+                loadingIndicator.classList.add('hidden');
+                postsContainer.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    noPostsMessage.classList.remove('hidden');
+                    return;
+                }
+                noPostsMessage.classList.add('hidden');
+
+                // Clear and re-render all posts
+                snapshot.forEach((doc) => {
+                    const post = doc.data();
+                    postsContainer.appendChild(renderPost(post));
+                });
+            }, (error) => {
+                console.error("Error listening to posts:", error);
+                loadingIndicator.innerHTML = `<p class="text-red-500">Error loading posts: ${error.message}</p>`;
+            });
+        }
+
+        /**
+         * Handles the submission of a new post.
+         * @param {Event} e The form submission event.
+         */
+        async function submitPost(e) {
+            e.preventDefault();
+
+            if (!userId) {
+                showTemporaryMessage("Error: You must be signed in to post.", 'error');
+                return;
+            }
+
+            const title = document.getElementById('post-title').value.trim();
+            const content = document.getElementById('post-content').value.trim();
+
+            if (!title || !content) return;
+
+            submitButton.disabled = true;
+            submitText.textContent = 'Posting...';
+            submitButton.classList.add('opacity-70');
+
+            try {
+                // Path for public collaborative data: /artifacts/{appId}/public/data/forum_posts
+                const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
+                
+                // Add the new document
+                await addDoc(postsRef, {
+                    title: title,
+                    content: content,
+                    timestamp: Timestamp.now(), // Firestore timestamp for accurate ordering
+                    userId: userId,
+                    userEmail: userEmail // Store the email for display
+                });
+
+                document.getElementById('post-title').value = '';
+                document.getElementById('post-content').value = '';
+                showTemporaryMessage("Post created successfully!", 'success');
+
+            } catch (error) {
+                console.error("Error writing document: ", error);
+                showTemporaryMessage(`Failed to create post: ${error.message}`, 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitText.textContent = 'Submit Post';
+                submitButton.classList.remove('opacity-70');
+            }
+        }
+        
+        /**
+         * Toggles between Sign In and Sign Up mode in the modal.
+         */
+        function toggleAuthMode() {
+            isSignInMode = !isSignInMode;
+            if (isSignInMode) {
+                authTitle.textContent = 'Sign In';
+                authSubmitText.textContent = 'Sign In';
+                toggleAuthModeButton.textContent = 'Need an account? Sign Up';
+            } else {
+                authTitle.textContent = 'Create Account';
+                authSubmitText.textContent = 'Sign Up';
+                toggleAuthModeButton.textContent = 'Already have an account? Sign In';
+            }
+            authErrorMessage.classList.add('hidden'); // Clear error message on toggle
+        }
+
+        /**
+         * Handles the authentication form submission (Sign In or Sign Up).
+         * @param {Event} e The form submission event.
+         */
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+
+            authErrorMessage.classList.add('hidden');
+            authSubmitButton.disabled = true;
+            authSubmitText.textContent = isSignInMode ? 'Signing In...' : 'Signing Up...';
+
+            try {
+                if (isSignInMode) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    showTemporaryMessage("Signed in successfully!", 'success');
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    showTemporaryMessage("Account created and signed in successfully!", 'success');
+                }
+                // Close modal on success
+                authModal.classList.add('modal-hidden');
+            } catch (error) {
+                console.error("Authentication error:", error);
+                let message = error.message.replace('Firebase: Error (auth/', '').replace(/\)\.$/, '').replace(/-/g, ' ').toUpperCase();
+                authErrorMessage.textContent = `Error: ${message}`;
+                authErrorMessage.classList.remove('hidden');
+            } finally {
+                authSubmitButton.disabled = false;
+                authSubmitText.textContent = isSignInMode ? 'Sign In' : 'Sign Up';
+            }
+        }
+
+        /**
+         * Handles user sign out.
+         */
+        async function handleSignOut() {
+            try {
+                await signOut(auth);
+                showTemporaryMessage("Signed out successfully.", 'success');
+            } catch (error) {
+                console.error("Error signing out:", error);
+                showTemporaryMessage(`Sign out failed: ${error.message}`, 'error');
+            }
+        }
+
+        /**
+         * Displays a temporary success/error message.
+         * @param {string} message The message to display.
+         * @param {('success'|'error')} type The type of message.
+         */
+        function showTemporaryMessage(message, type) {
+            const tempMsg = document.createElement('div');
+            tempMsg.textContent = message;
+            tempMsg.className = `fixed bottom-5 right-5 p-4 rounded-lg shadow-xl text-white font-semibold transition-opacity duration-300 z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            document.body.appendChild(tempMsg);
+
+            setTimeout(() => {
+                tempMsg.style.opacity = '0';
+                tempMsg.addEventListener('transitionend', () => tempMsg.remove());
+            }, 3000);
+        }
+
+        /**
+         * Initializes Firebase and sets up authentication listener.
+         */
+        async function initFirebase() {
+            try {
+                setLogLevel('debug'); // Set debug logging
+                
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // 1. Listen for auth state changes
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        // User is signed in
+                        userId = user.uid;
+                        userEmail = user.email || 'N/A';
+                        userInfoSpan.textContent = userEmail;
+                        signOutButton.classList.remove('hidden');
+                        postSection.classList.remove('hidden');
+                        authCta.classList.add('hidden');
+                        authModal.classList.add('modal-hidden');
+                        isAuthReady = true;
+                    } else {
+                        // User is signed out
+                        userId = null;
+                        userEmail = null;
+                        userInfoSpan.textContent = 'Guest';
+                        signOutButton.classList.add('hidden');
+                        postSection.classList.add('hidden');
+                        authCta.classList.remove('hidden');
+                        // Show modal for sign in
+                        authModal.classList.remove('modal-hidden');
+                        isAuthReady = false;
+                    }
+                    // 2. Load posts regardless of authentication state, as data is public
+                    // This is handled by the Firestore rule: `allow read, write: if isAuthenticated();`
+                    loadPosts();
+                });
+                
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                loadingIndicator.innerHTML = `<p class="text-red-500">Initialization failed: ${error.message}</p>`;
+            }
+        }
+
+        // --- Event Listeners and Initialization ---
+        form.addEventListener('submit', submitPost);
+        authForm.addEventListener('submit', handleAuthSubmit);
+        signOutButton.addEventListener('click', handleSignOut);
+        toggleAuthModeButton.addEventListener('click', toggleAuthMode);
+        openAuthModalButton.addEventListener('click', () => {
+             // Reset modal to sign-in state when opened
+            isSignInMode = true;
+            toggleAuthMode();
+            authModal.classList.remove('modal-hidden');
+        });
+
+        // Close modal when clicking outside (on the overlay)
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.classList.add('modal-hidden');
+            }
+        });
+
+
+        window.onload = initFirebase;
+    </script>
+</body>
+</html>
