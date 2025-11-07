@@ -159,6 +159,17 @@
             <div id="posts-container" class="space-y-6 max-h-[70vh] overflow-y-auto">
                 <!-- Posts will be injected here -->
             </div>
+            <!-- Thread / single-post view (full-page overlay) -->
+            <section id="thread-view" class="hidden fixed inset-0 z-50 bg-gray-100 overflow-auto p-6">
+                <div class="max-w-4xl mx-auto">
+                    <div id="thread-controls" class="sticky top-4 bg-transparent z-50 flex items-center justify-between mb-4">
+                        <button id="thread-back" class="px-3 py-1 bg-white/90 border rounded-md text-sm shadow-sm" aria-label="Back to list">← Back</button>
+                    </div>
+                    <div id="thread-content" class="space-y-6">
+                        <!-- single post will be injected here -->
+                    </div>
+                </div>
+            </section>
             <p id="no-posts-message" class="text-center text-gray-500 italic p-8 hidden">No posts yet or no results found. Be the first to start a discussion!</p>
         </section>
     </main>
@@ -199,7 +210,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, deleteDoc, updateDoc, doc, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, deleteDoc, updateDoc, doc, getDoc, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONSTANTS AND CONFIGURATION ---
         const TAGS = ['Q&A', 'Bug', 'New Feature', 'Docs Issue', 'Comment', 'General'];
@@ -428,10 +439,13 @@
             const postElement = document.createElement('div');
             postElement.className = 'post bg-white p-5 rounded-xl shadow-md border-t-4 border-primary/50';
             
+            // Make the title a clickable anchor that opens the thread view
             postElement.innerHTML = `
                 <div class="flex justify-between items-start mb-3">
                     <div class="flex-1 min-w-0">
-                        <h3 class="text-xl font-bold text-gray-900 truncate">${postData.title}</h3>
+                        <h3 class="text-xl font-bold text-gray-900 truncate">
+                            <a href="#post:${postId}" onclick="if(window.openThread){window.openThread('${postId}'); return false;}" class="hover:underline">${postData.title}</a>
+                        </h3>
                     </div>
                     
                     <div class="flex items-center space-x-3 ml-4">
@@ -865,12 +879,97 @@
             }
         }
 
+        // --- THREAD VIEW (single-post) ---
+        const threadView = document.getElementById('thread-view');
+        const threadContent = document.getElementById('thread-content');
+        const threadBackBtn = document.getElementById('thread-back');
+
+        async function openThread(postId) {
+            if (!db) return;
+            // Show loading state inside overlay content area
+            if (threadContent) {
+                threadContent.innerHTML = `<div class="p-6 bg-white rounded-lg shadow">Loading thread...</div>`;
+            }
+            // Update URL hash for direct links / history
+            try { location.hash = `post:${postId}`; } catch (e) {}
+
+            // Fetch post document
+            try {
+                const postDoc = await getDoc(getPostRef(postId));
+                if (!postDoc.exists) {
+                    threadContent.innerHTML = `<div class="p-6 bg-white rounded-lg shadow text-red-600">Thread not found.</div>`;
+                    return;
+                }
+                const post = postDoc.data();
+                // Render single post using existing renderer
+                threadContent.innerHTML = '';
+                const single = renderPost(post, postId);
+                threadContent.appendChild(single);
+                // Show thread view as full-page overlay, hide list underneath
+                if (threadView) threadView.classList.remove('hidden');
+                if (postsContainer) postsContainer.classList.add('hidden');
+                // Prevent background scroll
+                document.body.style.overflow = 'hidden';
+            } catch (err) {
+                console.error('Error loading thread:', err);
+                if (threadContent) threadContent.innerHTML = `<div class="p-6 bg-white rounded-lg shadow text-red-600">Failed to load thread.</div>`;
+            }
+        }
+
+        function closeThread() {
+            // Clear hash only if it's a post hash
+            if (location.hash && location.hash.startsWith('#post:')) {
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+            }
+            if (threadView) threadView.classList.add('hidden');
+            if (postsContainer) postsContainer.classList.remove('hidden');
+            if (threadContent) threadContent.innerHTML = '';
+            // Restore background scrolling
+            document.body.style.overflow = '';
+        }
+
+        // Expose globally for inline handlers
+        window.openThread = openThread;
+        window.closeThread = closeThread;
+
+        // Back button and hash handling
+        if (threadBackBtn) threadBackBtn.addEventListener('click', closeThread);
+        window.addEventListener('hashchange', () => {
+            const h = location.hash.replace('#', '');
+            if (h && h.startsWith('post:')) {
+                const id = h.split(':')[1];
+                if (id) openThread(id);
+            } else {
+                closeThread();
+            }
+        });
+
+        // If page loaded with a post hash, open it once DB is ready / auth resolved
+        window.addEventListener('load', () => {
+            const h = location.hash.replace('#', '');
+            if (h && h.startsWith('post:')) {
+                const id = h.split(':')[1];
+                if (id) {
+                    // small delay until initFirebase sets db
+                    const tryOpen = () => {
+                        if (typeof openThread === 'function' && db) {
+                            openThread(id);
+                        } else {
+                            setTimeout(tryOpen, 200);
+                        }
+                    };
+                    tryOpen();
+                }
+            }
+        });
+
         // Expose functions globally for dynamically generated HTML to call them reliably
         window.handleMenuClick = handleMenuClick; 
         window.deletePost = deletePost;
         window.toggleComments = toggleComments;
         // Expose the close function so the modal X (inline onclick) works even before module init finishes
         window.closeAuthModal = closeAuthModal;
+        // openThread/closeThread already exposed above
 
         window.onload = initFirebase;
     </script>
