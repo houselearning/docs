@@ -1,1082 +1,1183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>HouseLearning Docs | Forum (Cleaned)</title>
-
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: "#4f46e5",
-            secondary: "#8b5cf6",
-            accent: "#a78bfa",
-          },
-          fontFamily: {
-            sans: ["Inter", "sans-serif"],
-          },
-        },
-      },
-    };
-  </script>
-
-  <style>
-    /* scrollbars */
-    #posts-container::-webkit-scrollbar {
-      width: 8px;
-    }
-    #posts-container::-webkit-scrollbar-thumb {
-      background-color: #a78bfa;
-      border-radius: 10px;
-    }
-    #posts-container::-webkit-scrollbar-track {
-      background: #e5e7eb;
-    }
-    .modal-hidden { display: none; }
-    .dropdown { position: relative; display: inline-block; }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,.12);
-      z-index: 50;
-      border-radius: .5rem;
-      overflow: hidden;
-    }
-    .dropdown-content button { width:100%; text-align:left; padding:12px 16px; font-size:0.875rem; }
-    .dropdown-content button:hover { background:#e5e7eb; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HouseLearning Docs | Community Forum</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <!-- Configure Tailwind for custom theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5',
+                        'secondary': '#8b5cf6',
+                        'accent': '#a78bfa',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for post list */
+        #posts-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #posts-container::-webkit-scrollbar-thumb {
+            background-color: #a78bfa;
+            border-radius: 10px;
+        }
+        #posts-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        /* Style to hide modal */
+        .modal-hidden {
+            display: none;
+        }
+        /* Style for the 3-dot menu dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none; /* Controlled by JS click handler */
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 10;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .dropdown-content button {
+            color: #374151;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.2s;
+            font-size: 0.875rem;
+        }
+        .dropdown-content button:hover {
+            background-color: #e5e7eb;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 font-sans min-h-screen">
 
-  <!-- Header -->
-  <header class="bg-primary text-white shadow-lg">
-    <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
-      <h1 class="text-2xl font-extrabold tracking-tight">HouseLearning Docs | Forum</h1>
+    <!-- Header -->
+    <header class="bg-primary text-white shadow-lg">
+        <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold tracking-tight">HouseLearning Docs | Forum</h1>
+            <div class="text-sm flex items-center">
+                <span class="font-semibold mr-2">Signed in as:</span>
+                <!-- Replaced static avatar+name with a clickable user menu -->
+                <div id="user-menu" class="relative">
+                    <button id="user-menu-button" class="flex items-center focus:outline-none">
+                        <img id="user-avatar" src="https://robohash.org/guest.png?size=80x80&set=set3" alt="Guest avatar" class="w-8 h-8 rounded-full mr-2 bg-white/30 object-cover">
+                        <span id="user-info" class="font-mono text-xs bg-primary/80 p-1 rounded-md">Guest</span>
+                    </button>
 
-      <div class="text-sm flex items-center">
-        <span class="font-semibold mr-2">Signed in as:</span>
-        <div id="user-menu" class="relative">
-          <button id="user-menu-button" class="flex items-center focus:outline-none">
-            <img id="user-avatar" src="https://robohash.org/guest.png?size=80x80&set=set3" alt="Guest avatar" class="w-8 h-8 rounded-full mr-2 bg-white/30 object-cover"/>
-            <span id="user-info" class="font-mono text-xs bg-primary/80 p-1 rounded-md">Guest</span>
-          </button>
-          <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-white text-gray-800 rounded shadow-lg z-50"></div>
+                    <!-- Dropdown populated by JS -->
+                    <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-white text-gray-800 rounded shadow-lg z-50">
+                        <!-- JS will inject menu items here -->
+                    </div>
+                </div>
+                <button id="sign-out-button" class="ml-4 px-3 py-1 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium text-sm transition duration-200 hidden">Sign Out</button>
+            </div>
         </div>
-        <button id="sign-out-button" class="ml-4 px-3 py-1 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium text-sm transition duration-200 hidden">Sign Out</button>
-      </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4">
+
+        <!-- New Post Form -->
+        <section id="post-section" class="bg-white p-6 rounded-xl shadow-lg mb-8 border-t-4 border-accent hidden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Create New Post</h2>
+            <form id="post-form">
+                <input type="text" id="post-title" required placeholder="Title (Max 50 characters)" maxlength="50"
+                    class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm">
+                
+                <div class="mb-3">
+                    <select id="post-tag" required 
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm bg-white appearance-none">
+                        <option value="" disabled selected>Select a Tag *</option>
+                        <!-- Tags will be populated by JS -->
+                    </select>
+                </div>
+
+                <textarea id="post-content" required placeholder="What's on your mind? (Max 500 characters)" maxlength="500" rows="4"
+                    class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150 shadow-sm resize-none"></textarea>
+                <button type="submit" id="submit-button"
+                    class="w-full bg-secondary hover:bg-accent text-white font-bold py-3 rounded-lg transition duration-300 shadow-md">
+                    <span id="submit-text">Submit Post</span>
+                </button>
+            </form>
+        </section>
+        
+        <!-- Call to Action when signed out -->
+        <section id="auth-cta" class="bg-accent/10 p-10 rounded-xl shadow-lg mb-8 text-center hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Join the Discussion!</h2>
+            <p class="text-gray-600 mb-6">You must sign in or create an account to post content or view comments.</p>
+            <button id="open-auth-modal" class="bg-secondary hover:bg-accent text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md">
+                Sign In / Sign Up
+            </button>
+        </section>
+
+        <!-- Search and Filter Section -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Recent Discussions</h2>
+            
+            <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                <!-- Search Bar -->
+                <div class="flex w-full">
+                    <input type="text" id="search-bar" placeholder="Search by title or content..."
+                        class="flex-grow p-3 border border-gray-300 rounded-l-lg focus:ring-primary focus:border-primary transition shadow-sm">
+                    <button id="search-button" class="px-4 bg-primary hover:bg-secondary text-white rounded-r-lg ml-2">Search</button>
+                </div>
+                
+                <!-- Tag Filter -->
+                <select id="tag-filter" 
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition shadow-sm bg-white appearance-none w-full sm:w-48">
+                    <option value="All">Filter by Tag (All)</option>
+                    <!-- Tag filter options will be populated by JS -->
+                </select>
+            </div>
+
+            <!-- Posts Display Section -->
+            <div id="loading-indicator" class="text-center text-gray-500 p-8">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
+                <p class="mt-2">Loading posts...</p>
+            </div>
+            <div id="posts-container" class="space-y-6 max-h-[70vh] overflow-y-auto">
+                <!-- Posts will be injected here -->
+            </div>
+            <!-- Thread / single-post view (full-page overlay) -->
+            <section id="thread-view" class="hidden fixed inset-0 z-50 bg-gray-100 overflow-auto p-6">
+                <div class="max-w-4xl mx-auto">
+                    <div id="thread-controls" class="sticky top-4 bg-transparent z-50 flex items-center justify-between mb-4">
+                        <button id="thread-back" class="px-3 py-1 bg-white/90 border rounded-md text-sm shadow-sm" aria-label="Back to list">← Back</button>
+                    </div>
+                    <div id="thread-content" class="space-y-6">
+                        <!-- single post will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile / user page overlay (full-page) -->
+            <section id="profile-view" class="hidden fixed inset-0 z-60 bg-white overflow-auto p-6">
+                <div class="max-w-4xl mx-auto">
+                    <div id="profile-controls" class="sticky top-4 bg-transparent z-50 flex items-center justify-between mb-6">
+                        <button id="profile-back" class="px-3 py-1 bg-white/90 border rounded-md text-sm shadow-sm" aria-label="Back to list">← Back</button>
+                    </div>
+                    <div id="profile-content" class="bg-white rounded-lg p-6 shadow space-y-6">
+                        <!-- profile content injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <p id="no-posts-message" class="text-center text-gray-500 italic p-8 hidden">No posts yet or no results found. Be the first to start a discussion!</p>
+        </section>
+    </main>
+    
+    <!-- Authentication Modal (Hidden by default, delayed appearance on sign out) -->
+    <div id="auth-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal-hidden">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-100 relative">
+            
+            <!-- Close Button -->
+            <button id="close-auth-modal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition" onclick="if(window.closeAuthModal) window.closeAuthModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+            
+            <h3 id="auth-title" class="text-2xl font-bold text-gray-800 mb-6 text-center">Sign In</h3>
+            <div id="auth-error-message" class="text-red-600 bg-red-100 p-3 rounded-lg mb-4 hidden"></div>
+            
+            <form id="auth-form">
+                <input type="email" id="auth-email" required placeholder="Email Address"
+                    class="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 shadow-sm">
+                <input type="password" id="auth-password" required placeholder="Password (min 6 characters)"
+                    class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 shadow-sm">
+                
+                <button type="submit" id="auth-submit-button" 
+                    class="w-full bg-primary hover:bg-secondary text-white font-bold py-3 rounded-lg transition duration-300 shadow-md">
+                    <span id="auth-submit-text">Sign In</span>
+                </button>
+            </form>
+            
+            <p class="text-center mt-6 text-sm">
+                <button id="toggle-auth-mode" class="text-primary hover:text-secondary font-medium transition duration-150">
+                    Need an account? Sign Up
+                </button>
+            </p>
+        </div>
     </div>
-  </header>
 
-  <main class="max-w-4xl mx-auto p-4">
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, deleteDoc, updateDoc, doc, getDoc, getDocs, setDoc, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    <!-- Create Post -->
-    <section id="post-section" class="bg-white p-6 rounded-xl shadow-lg mb-8 border-t-4 border-accent hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">Create New Post</h2>
-      <form id="post-form">
-        <input id="post-title" type="text" maxlength="50" placeholder="Title (Max 50 characters)" class="w-full p-3 mb-3 border rounded-lg"/>
-        <div class="mb-3">
-          <select id="post-tag" required class="w-full p-3 border rounded-lg bg-white">
-            <option value="" disabled selected>Select a Tag *</option>
-          </select>
-        </div>
-        <textarea id="post-content" maxlength="500" rows="4" placeholder="What's on your mind? (Max 500 characters)" class="w-full p-3 mb-4 border rounded-lg resize-none"></textarea>
-        <button id="submit-button" type="submit" class="w-full bg-secondary hover:bg-accent text-white font-bold py-3 rounded-lg">
-          <span id="submit-text">Submit Post</span>
-        </button>
-      </form>
-    </section>
+        // --- CONSTANTS AND CONFIGURATION ---
+        const TAGS = ['Q&A', 'Bug', 'New Feature', 'Docs Issue', 'Comment', 'General'];
+        const TAG_COLORS = {
+            'Q&A': 'bg-blue-500',
+            'Bug': 'bg-red-500',
+            'New Feature': 'bg-green-500',
+            'Docs Issue': 'bg-yellow-500',
+            'Comment': 'bg-purple-500',
+            'General': 'bg-gray-500'
+        };
 
-    <!-- Auth CTA -->
-    <section id="auth-cta" class="bg-accent/10 p-10 rounded-xl shadow-lg mb-8 text-center hidden">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Join the Discussion!</h2>
-      <p class="text-gray-600 mb-6">You must sign in or create an account to post content or view comments.</p>
-      <button id="open-auth-modal" class="bg-secondary hover:bg-accent text-white font-bold py-3 px-6 rounded-lg">Sign In / Sign Up</button>
-    </section>
+        const defaultFirebaseConfig = {
+            apiKey: "AIzaSyDoXSwni65CuY1_32ZE8B1nwfQO_3VNpTw",
+            authDomain: "contract-center-llc-10.firebaseapp.com",
+            projectId: "contract-center-llc-10",
+            storageBucket: "contract-center-llc-10.firebasestorage.app",
+            messagingSenderId: "323221512767",
+            appId: "1:323221512767:web:6421260f875997dbf64e8a",
+        };
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : JSON.stringify(defaultFirebaseConfig));
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        
+        let db, auth, userId = null;
+        let userEmail = null;
+        let isSignInMode = true;
+        let authCheckTimeout; // Variable to hold the 5-second timeout ID
 
-    <!-- Search/Filter -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Recent Discussions</h2>
+        // STATE FOR SEARCH AND FILTERING
+        let currentSearchTerm = '';
+        let currentTagFilter = 'All'; 
 
-      <div class="flex flex-col sm:flex-row gap-3 mb-6">
-        <div class="flex w-full">
-          <input id="search-bar" type="text" placeholder="Search by title or content..." class="flex-grow p-3 border rounded-l-lg"/>
-          <button id="search-button" class="px-4 bg-primary hover:bg-secondary text-white rounded-r-lg ml-2">Search</button>
-        </div>
-        <select id="tag-filter" class="p-3 border rounded-lg bg-white w-full sm:w-48">
-          <option value="All">Filter by Tag (All)</option>
-        </select>
-      </div>
+        // --- DOM Elements ---
+        const postsContainer = document.getElementById('posts-container');
+        const form = document.getElementById('post-form');
+        const submitButton = document.getElementById('submit-button');
+        const submitText = document.getElementById('submit-text');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const noPostsMessage = document.getElementById('no-posts-message');
+        const postSection = document.getElementById('post-section');
+        const authCta = document.getElementById('auth-cta');
+        const userInfoSpan = document.getElementById('user-info');
+        const signOutButton = document.getElementById('sign-out-button');
+        const postTagSelect = document.getElementById('post-tag');
+        const tagFilterSelect = document.getElementById('tag-filter');
+        const searchBar = document.getElementById('search-bar');
+        const searchButton = document.getElementById('search-button');
+        
+        // Modal Elements
+        const authModal = document.getElementById('auth-modal');
+        const authForm = document.getElementById('auth-form');
+        const authTitle = document.getElementById('auth-title');
+        const authSubmitButton = document.getElementById('auth-submit-button');
+        const authSubmitText = document.getElementById('auth-submit-text');
+        const authErrorMessage = document.getElementById('auth-error-message');
+        const toggleAuthModeButton = document.getElementById('toggle-auth-mode');
+        const openAuthModalButton = document.getElementById('open-auth-modal');
+        const authEmailInput = document.getElementById('auth-email');
+        const authPasswordInput = document.getElementById('auth-password');
+        const closeAuthModalButton = document.getElementById('close-auth-modal');
 
-      <div id="loading-indicator" class="text-center text-gray-500 p-8">
-        <div class="animate-spin inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
-        <p class="mt-2">Loading posts...</p>
-      </div>
+        // New: avatar / user menu refs
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userMenuDropdown = document.getElementById('user-menu-dropdown');
+        const userAvatar = document.getElementById('user-avatar');
 
-      <div id="posts-container" class="space-y-6 max-h-[70vh] overflow-y-auto"></div>
+        // --- FIREBASE PATHS & HELPERS ---
+        const getPostRef = (postId) => doc(db, `artifacts/${appId}/public/data/forum_posts`, postId);
+        const getCommentsRef = (postId) => collection(db, `artifacts/${appId}/public/data/forum_posts/${postId}/comments`);
+        // Optional user profiles collection (if you store profile data)
+        const getUserRef = (userId) => doc(db, `artifacts/${appId}/public/data/user_profiles`, userId);
 
-      <section id="thread-view" class="hidden fixed inset-0 z-50 bg-gray-100 overflow-auto p-6">
-        <div class="max-w-4xl mx-auto">
-          <div id="thread-controls" class="sticky top-4 bg-transparent z-50 flex items-center justify-between mb-4">
-            <button id="thread-back" class="px-3 py-1 bg-white/90 border rounded-md text-sm shadow-sm">← Back</button>
-          </div>
-          <div id="thread-content" class="space-y-6"></div>
-        </div>
-      </section>
-
-      <section id="profile-view" class="hidden fixed inset-0 z-60 bg-white overflow-auto p-6">
-        <div class="max-w-4xl mx-auto">
-          <div id="profile-controls" class="sticky top-4 bg-transparent z-50 flex items-center justify-between mb-6">
-            <button id="profile-back" class="px-3 py-1 bg-white/90 border rounded-md text-sm shadow-sm">← Back</button>
-          </div>
-          <div id="profile-content" class="bg-white rounded-lg p-6 shadow space-y-6"></div>
-        </div>
-      </section>
-
-      <p id="no-posts-message" class="text-center text-gray-500 italic p-8 hidden">No posts yet or no results found. Be the first to start a discussion!</p>
-    </section>
-  </main>
-
-  <!-- Auth Modal -->
-  <div id="auth-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 modal-hidden">
-    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 relative">
-      <button id="close-auth-modal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">✕</button>
-      <h3 id="auth-title" class="text-2xl font-bold text-gray-800 mb-6 text-center">Sign In</h3>
-      <div id="auth-error-message" class="text-red-600 bg-red-100 p-3 rounded-lg mb-4 hidden"></div>
-      <form id="auth-form">
-        <input id="auth-email" type="email" placeholder="Email Address" required class="w-full p-3 mb-3 border rounded-lg"/>
-        <input id="auth-password" type="password" placeholder="Password (min 6 characters)" required class="w-full p-3 mb-4 border rounded-lg"/>
-        <button id="auth-submit-button" type="submit" class="w-full bg-primary hover:bg-secondary text-white font-bold py-3 rounded-lg">
-          <span id="auth-submit-text">Sign In</span>
-        </button>
-      </form>
-      <p class="text-center mt-6 text-sm">
-        <button id="toggle-auth-mode" class="text-primary hover:text-secondary font-medium">Need an account? Sign Up</button>
-      </p>
-    </div>
-  </div>
-
-  <!-- Followers Modal -->
-  <div id="followers-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-60 modal-hidden" style="display:none;">
-    <div class="bg-white w-full max-w-3xl mx-4 rounded-xl shadow-2xl p-6 relative">
-      <button id="followers-modal-close" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">✕</button>
-      <h3 id="followers-modal-title" class="text-xl font-bold mb-4">Followers / Following</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <h4 class="font-semibold mb-2">Followers</h4>
-          <div id="followers-list" class="max-h-64 overflow-auto space-y-2 border rounded p-3 bg-gray-50"></div>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-2">Following</h4>
-          <div id="following-list" class="max-h-64 overflow-auto space-y-2 border rounded p-3 bg-gray-50"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Firebase + App logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      setPersistence,
-      browserLocalPersistence
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      onSnapshot,
-      query,
-      orderBy,
-      Timestamp,
-      deleteDoc,
-      updateDoc,
-      doc,
-      getDoc,
-      getDocs,
-      setDoc,
-      where,
-      arrayUnion,
-      arrayRemove,
-      increment,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    // -----------------------
-    // Config & state
-    // -----------------------
-    const TAGS = ['Q&A', 'Bug', 'New Feature', 'Docs Issue', 'Comment', 'General'];
-    const TAG_COLORS = {
-      'Q&A': 'bg-blue-500',
-      'Bug': 'bg-red-500',
-      'New Feature': 'bg-green-500',
-      'Docs Issue': 'bg-yellow-500',
-      'Comment': 'bg-purple-500',
-      'General': 'bg-gray-500'
-    };
-
-    const defaultFirebaseConfig = {
-      apiKey: "AIzaSyDoXSwni65CuY1_32ZE8B1nwfQO_3VNpTw",
-      authDomain: "contract-center-llc-10.firebaseapp.com",
-      projectId: "contract-center-llc-10",
-      storageBucket: "contract-center-llc-10.firebasestorage.app",
-      messagingSenderId: "323221512767",
-      appId: "1:323221512767:web:6421260f875997dbf64e8a",
-    };
-    const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : JSON.stringify(defaultFirebaseConfig));
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-    let db, auth;
-    let userId = null;
-    let userEmail = null;
-    let isSignInMode = true;
-    let authCheckTimeout = null;
-
-    // search/filter state
-    let currentSearchTerm = '';
-    let currentTagFilter = 'All';
-
-    // -----------------------
-    // DOM refs
-    // -----------------------
-    const postsContainer = document.getElementById('posts-container');
-    const postSection = document.getElementById('post-section');
-    const authCta = document.getElementById('auth-cta');
-    const userInfoSpan = document.getElementById('user-info');
-    const signOutButton = document.getElementById('sign-out-button');
-    const postTagSelect = document.getElementById('post-tag');
-    const tagFilterSelect = document.getElementById('tag-filter');
-    const searchBar = document.getElementById('search-bar');
-    const searchButton = document.getElementById('search-button');
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const noPostsMessage = document.getElementById('no-posts-message');
-
-    // auth modal
-    const authModal = document.getElementById('auth-modal');
-    const authForm = document.getElementById('auth-form');
-    const authTitle = document.getElementById('auth-title');
-    const authSubmitButton = document.getElementById('auth-submit-button');
-    const authSubmitText = document.getElementById('auth-submit-text');
-    const authErrorMessage = document.getElementById('auth-error-message');
-    const toggleAuthModeButton = document.getElementById('toggle-auth-mode');
-    const openAuthModalButton = document.getElementById('open-auth-modal');
-    const authEmailInput = document.getElementById('auth-email');
-    const authPasswordInput = document.getElementById('auth-password');
-    const closeAuthModalButton = document.getElementById('close-auth-modal');
-
-    // user menu
-    const userMenuButton = document.getElementById('user-menu-button');
-    const userMenuDropdown = document.getElementById('user-menu-dropdown');
-    const userAvatar = document.getElementById('user-avatar');
-
-    // profile & thread
-    const profileView = document.getElementById('profile-view');
-    const profileContent = document.getElementById('profile-content');
-    const profileBackBtn = document.getElementById('profile-back');
-    const threadView = document.getElementById('thread-view');
-    const threadContent = document.getElementById('thread-content');
-    const threadBackBtn = document.getElementById('thread-back');
-
-    // followers modal
-    const followersModal = document.getElementById('followers-modal');
-    const followersListEl = document.getElementById('followers-list');
-    const followingListEl = document.getElementById('following-list');
-    const followersModalCloseBtn = document.getElementById('followers-modal-close');
-
-    // -----------------------
-    // Helpers: Firestore refs
-    // -----------------------
-    const getPostRef = (postId) => doc(db, `artifacts/${appId}/public/data/forum_posts`, postId);
-    const getPostsCollection = () => collection(db, `artifacts/${appId}/public/data/forum_posts`);
-    const getCommentsRef = (postId) => collection(db, `artifacts/${appId}/public/data/forum_posts/${postId}/comments`);
-    const getUserRef = (uid) => doc(db, `artifacts/${appId}/public/data/user_profiles`, uid);
-
-    // -----------------------
-    // Small UI helpers
-    // -----------------------
-    function showTemporaryMessage(message, type = 'success') {
-      const temp = document.createElement('div');
-      temp.textContent = message;
-      temp.className = `fixed bottom-5 right-5 p-4 rounded-lg shadow-xl text-white font-semibold z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
-      document.body.appendChild(temp);
-      setTimeout(() => {
-        temp.style.opacity = '0';
-        temp.addEventListener('transitionend', () => temp.remove());
-      }, 3000);
-    }
-
-    function formatTimestamp(timestamp) {
-      if (!timestamp) return 'Just now';
-      if (timestamp.toDate) {
-        return timestamp.toDate().toLocaleString();
-      }
-      const d = new Date(timestamp);
-      return isNaN(d.getTime()) ? 'Unknown' : d.toLocaleString();
-    }
-
-    function escapeHtml(s = '') {
-      return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
-    }
-
-    // -----------------------
-    // Comments
-    // -----------------------
-    function renderComment(commentData) {
-      const el = document.createElement('div');
-      el.className = 'p-3 bg-gray-100 rounded-lg text-sm mb-2';
-      const userName = (commentData.userEmail || 'user@x').split('@')[0];
-      el.innerHTML = `
-        <div class="font-medium flex justify-between items-center mb-1">
-          <span class="text-gray-700">${escapeHtml(userName)}</span>
-          <span class="text-xs text-gray-500">${formatTimestamp(commentData.timestamp)}</span>
-        </div>
-        <p class="text-gray-800 whitespace-pre-wrap">${escapeHtml(commentData.content)}</p>
-      `;
-      return el;
-    }
-
-    function loadComments(postId, container) {
-      if (!db || !postId || !container) return;
-      const q = query(getCommentsRef(postId), orderBy('timestamp', 'asc'));
-      onSnapshot(q, snapshot => {
-        container.innerHTML = '';
-        snapshot.forEach(docSnap => {
-          container.appendChild(renderComment(docSnap.data()));
-        });
-      }, err => console.error('Comments load error', err));
-    }
-
-    function submitComment(postId, inputEl) {
-      return async (e) => {
-        e.preventDefault();
-        if (!userId) { showTemporaryMessage('Sign in to comment', 'error'); return; }
-        const text = (inputEl.value || '').trim();
-        if (!text) return;
-        const ref = getCommentsRef(postId);
-        inputEl.disabled = true;
-        try {
-          await addDoc(ref, { content: text, timestamp: Timestamp.now(), userId, userEmail });
-          inputEl.value = '';
-        } catch (err) {
-          console.error('Failed to add comment', err);
-          showTemporaryMessage('Failed to add comment', 'error');
-        } finally { inputEl.disabled = false; }
-      };
-    }
-
-    // -----------------------
-    // Posts: render & listen
-    // -----------------------
-    function renderPost(postData, postId) {
-      const isUserPost = postData.userId === userId;
-      const displayUserName = (postData.userEmail || 'user@x').split('@')[0];
-      const tagColor = TAG_COLORS[postData.tag] || TAG_COLORS['General'];
-      const commentsDisabled = !!postData.commentsDisabled;
-
-      const postEl = document.createElement('div');
-      postEl.className = 'post bg-white p-5 rounded-xl shadow-md border-t-4 border-primary/50';
-
-      postEl.innerHTML = `
-        <div class="flex justify-between items-start mb-3">
-          <div class="flex-1 min-w-0">
-            <h3 class="text-xl font-bold text-gray-900 truncate">
-              <a href="#post:${postId}" class="hover:underline post-link">${escapeHtml(postData.title)}</a>
-            </h3>
-          </div>
-          <div class="flex items-center space-x-3 ml-4">
-            <span class="text-xs font-semibold px-3 py-1 rounded-full text-white ${tagColor} shadow-md">${escapeHtml(postData.tag)}</span>
-            ${isUserPost ? `
-            <div class="dropdown">
-              <button class="text-gray-500 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition menu-btn">•••</button>
-              <div class="dropdown-content">
-                <button data-action="delete">Delete Post</button>
-                <button data-action="toggle-comments">${commentsDisabled ? 'Enable Comments' : 'Disable Comments'}</button>
-              </div>
-            </div>` : ''}
-          </div>
-        </div>
-
-        <p class="text-gray-700 mb-4 whitespace-pre-wrap">${escapeHtml(postData.content)}</p>
-
-        <div class="text-right text-xs text-gray-400 border-t pt-2 mt-2">
-          Posted by <a href="#" class="font-medium text-gray-600 hover:underline poster-link">${escapeHtml(displayUserName)}</a> on ${formatTimestamp(postData.timestamp)}
-        </div>
-
-        <div class="mt-5 pt-3 border-t border-gray-200">
-          <h4 class="text-lg font-semibold text-gray-800 mb-3">Comments (${commentsDisabled ? 'Disabled' : 'Open'})</h4>
-          <div class="comments-list space-y-2 max-h-48 overflow-y-auto pr-2" style="min-height:24px"></div>
-
-          <form class="mt-4 comment-form ${commentsDisabled || !userId ? 'hidden' : 'flex items-center space-x-2'}">
-            <input type="text" placeholder="Write a comment..." required class="flex-grow p-2 border rounded-lg text-sm comment-input" ${commentsDisabled ? 'disabled' : ''}/>
-            <button type="submit" class="bg-accent hover:bg-secondary text-white font-medium py-2 px-4 rounded-lg text-sm" ${commentsDisabled ? 'disabled' : ''}>Send</button>
-          </form>
-
-          ${!userId && !commentsDisabled ? '<p class="text-sm text-gray-500 mt-4 italic">Sign in to leave a comment.</p>' : ''}
-          ${commentsDisabled ? '<p class="text-sm text-red-500 mt-4 italic">Commenting is currently disabled for this post.</p>' : ''}
-        </div>
-      `;
-
-      // attach handlers
-      const postLink = postEl.querySelector('.post-link');
-      if (postLink) {
-        postLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          openThread(postId);
-        });
-      }
-
-      const posterLink = postEl.querySelector('.poster-link');
-      if (posterLink) {
-        posterLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          openProfile(postData.userId || '', postData.userEmail || '');
-        });
-      }
-
-      // menu
-      const menuBtn = postEl.querySelector('.menu-btn');
-      if (menuBtn) {
-        const dropdown = postEl.querySelector('.dropdown-content');
-        menuBtn.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        });
-        dropdown.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-          if (!confirm('Delete post?')) return;
-          try { await deleteDoc(getPostRef(postId)); showTemporaryMessage('Post deleted','success'); }
-          catch (err) { console.error(err); showTemporaryMessage('Delete failed','error'); }
-        });
-        dropdown.querySelector('[data-action="toggle-comments"]').addEventListener('click', async () => {
-          try {
-            await updateDoc(getPostRef(postId), { commentsDisabled: !commentsDisabled });
-            showTemporaryMessage('Post updated', 'success');
-          } catch (err) { console.error(err); showTemporaryMessage('Update failed','error'); }
-        });
-      }
-
-      // comments container
-      const commentsList = postEl.querySelector('.comments-list');
-      if (commentsList && !commentsDisabled) loadComments(postId, commentsList);
-
-      // comment form
-      const commentForm = postEl.querySelector('.comment-form');
-      const commentInput = postEl.querySelector('.comment-input');
-      if (commentForm && commentInput) {
-        commentForm.addEventListener('submit', submitComment(postId, commentInput));
-      }
-
-      return postEl;
-    }
-
-    function loadPosts() {
-      if (!db) return;
-      loadingIndicator.classList.remove('hidden');
-
-      let q = query(getPostsCollection(), orderBy('timestamp', 'desc'));
-      if (currentTagFilter && currentTagFilter !== 'All') {
-        q = query(getPostsCollection(), where('tag','==',currentTagFilter), orderBy('timestamp','desc'));
-      }
-
-      onSnapshot(q, snapshot => {
-        loadingIndicator.classList.add('hidden');
-        const items = [];
-        snapshot.forEach(s => items.push({ id: s.id, data: s.data() }));
-        // client search
-        const filtered = currentSearchTerm ? items.filter(it => {
-          const t = (it.data.title||'').toLowerCase();
-          const c = (it.data.content||'').toLowerCase();
-          const q = currentSearchTerm.toLowerCase();
-          return t.includes(q) || c.includes(q);
-        }) : items;
-
-        postsContainer.innerHTML = '';
-        if (filtered.length === 0) {
-          noPostsMessage.classList.remove('hidden');
-          return;
-        } else {
-          noPostsMessage.classList.add('hidden');
+        // --- UTILITY FUNCTIONS ---
+        function formatTimestamp(timestamp) {
+            if (timestamp && timestamp.toDate) {
+                return timestamp.toDate().toLocaleString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            }
+            return 'Just now';
         }
-        filtered.forEach(it => postsContainer.appendChild(renderPost(it.data, it.id)));
-      }, err => {
-        console.error('Posts listen error', err);
-        loadingIndicator.innerHTML = `<p class="text-red-500">Error loading posts: ${escapeHtml(err.message)}</p>`;
-      });
-    }
+        
+        function showTemporaryMessage(message, type) {
+            const tempMsg = document.createElement('div');
+            tempMsg.textContent = message;
+            tempMsg.className = `fixed bottom-5 right-5 p-4 rounded-lg shadow-xl text-white font-semibold transition-opacity duration-300 z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            document.body.appendChild(tempMsg);
 
-    // -----------------------
-    // Thread view
-    // -----------------------
-    function openThread(postId) {
-      if (!postId || !db) return;
-      threadContent.innerHTML = '<div class="p-6">Loading thread...</div>';
-      threadView.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-      (async () => {
-        try {
-          const p = await getDoc(getPostRef(postId));
-          if (!p.exists()) { threadContent.innerHTML = '<div class="p-6">Post not found.</div>'; return; }
-          const data = p.data();
-          threadContent.innerHTML = `
-            <div class="bg-white p-6 rounded-lg shadow">
-              <h2 class="text-2xl font-bold mb-2">${escapeHtml(data.title || '')}</h2>
-              <div class="text-sm text-gray-500 mb-4">By ${escapeHtml((data.userEmail||'').split('@')[0])} • ${formatTimestamp(data.timestamp)}</div>
-              <div class="prose">${escapeHtml(data.content || '')}</div>
-            </div>
-            <div id="thread-comments" class="mt-6"></div>
-          `;
-          loadComments(postId, document.getElementById('thread-comments'));
-        } catch (err) {
-          console.error('Failed to open thread', err);
-          threadContent.innerHTML = `<div class="p-6 text-red-500">Failed to load thread.</div>`;
+            setTimeout(() => {
+                tempMsg.style.opacity = '0';
+                tempMsg.addEventListener('transitionend', () => tempMsg.remove());
+            }, 3000);
         }
-      })();
-    }
 
-    // -----------------------
-    // Follow system (clean)
-    // -----------------------
-    async function followUser(targetUid, targetEmail, targetProfileData = {}) {
-      if (!userId || !targetUid || userId === targetUid) return false;
-
-      const now = Timestamp.now();
-      const followerEntry = {
-        uid: userId,
-        email: userEmail,
-        displayName: auth.currentUser?.displayName || (userEmail || '').split('@')[0],
-        photoURL: auth.currentUser?.photoURL || `https://robohash.org/${encodeURIComponent(userEmail||'guest')}.png?size=80x80&set=set3`,
-        followedAt: now
-      };
-      const followingEntry = {
-        uid: targetUid,
-        email: targetEmail,
-        displayName: targetProfileData?.displayName || (targetEmail || '').split('@')[0],
-        photoURL: targetProfileData?.photoURL || `https://robohash.org/${encodeURIComponent(targetEmail||targetUid||'guest')}.png?size=80x80&set=set3`,
-        followedAt: now
-      };
-
-      try {
-        const targetRef = getUserRef(targetUid);
-        const meRef = getUserRef(userId);
-
-        // update target followers
-        await updateDoc(targetRef, {
-          followers: arrayUnion(followerEntry),
-          followersCount: increment(1)
-        }).catch(async (err) => {
-          // if document missing, set it
-          if (err && /not-found|no document/.test(String(err))) {
-            await setDoc(targetRef, { followers: [followerEntry], followersCount: 1 }, { merge: true });
-          } else throw err;
-        });
-
-        // update my following
-        await updateDoc(meRef, {
-          following: arrayUnion(followingEntry),
-          followingCount: increment(1)
-        }).catch(async (err) => {
-          if (err && /not-found|no document/.test(String(err))) {
-            await setDoc(meRef, { following: [followingEntry], followingCount: 1 }, { merge: true });
-          } else throw err;
-        });
-
-        return true;
-      } catch (err) {
-        console.error('Follow failed', err);
-        return false;
-      }
-    }
-
-    async function unfollowUser(targetUid, targetEmail, targetProfileData = {}) {
-      if (!userId || !targetUid || userId === targetUid) return false;
-      try {
-        const targetRef = getUserRef(targetUid);
-        const meRef = getUserRef(userId);
-
-        await updateDoc(targetRef, {
-          followers: arrayRemove({ uid: userId, email: userEmail }),
-          followersCount: increment(-1)
-        }).catch(() => {
-          // fallback: set smaller count
-          // don't throw
-        });
-
-        await updateDoc(meRef, {
-          following: arrayRemove({ uid: targetUid, email: targetEmail }),
-          followingCount: increment(-1)
-        }).catch(() => {});
-
-        return true;
-      } catch (err) {
-        console.error('Unfollow failed', err);
-        return false;
-      }
-    }
-
-    // Setup follow button UI (idempotent)
-    function setupFollowButton(profileUserId, profileEmail, profileDocData = {}) {
-  const btn = document.getElementById('profile-follow');
-  if (!btn) return;
-
-  // currently logged-in user
-  const currentUserId = firebase.auth().currentUser?.uid;
-
-  let isFollowing = Array.isArray(profileDocData?.followers)
-    ? profileDocData.followers.some(f => f.uid === currentUserId)
-    : false;
-
-  function updateUi() {
-    btn.textContent = isFollowing ? 'Following' : '+ Follow';
-    btn.classList.toggle('bg-secondary', !isFollowing);
-    btn.classList.toggle('bg-gray-300', isFollowing);
-  }
-
-  updateUi();
-
-  btn.onclick = async () => {
-    if (!currentUserId) {
-      showTemporaryMessage('Sign in to follow users', 'error');
-      return;
-    }
-
-    btn.disabled = true;
-    try {
-      const userRef = firebase.firestore()
-        .collection('artifacts')
-        .doc('YOUR_APP_ID')        // replace with your appId
-        .collection('public')
-        .doc('data')
-        .collection('user_profiles')
-        .doc(profileUserId);
-
-      if (isFollowing) {
-        // remove follower
-        await userRef.update({
-          followers: firebase.firestore.FieldValue.arrayRemove({ uid: currentUserId, email: profileEmail }),
-          followersCount: firebase.firestore.FieldValue.increment(-1)
-        });
-        isFollowing = false;
-      } else {
-        // add follower
-        await userRef.update({
-          followers: firebase.firestore.FieldValue.arrayUnion({ uid: currentUserId, email: profileEmail }),
-          followersCount: firebase.firestore.FieldValue.increment(1)
-        });
-        isFollowing = true;
-      }
-      updateUi();
-    } catch (err) {
-      console.error('Follow action failed', err);
-      showTemporaryMessage('Action failed', 'error');
-    } finally {
-      btn.disabled = false;
-    }
-  };
-}
-
-
-    // -----------------------
-    // Followers modal rendering
-    // -----------------------
-    function renderPersonEntry(person) {
-      const name = person?.displayName || (person?.email || person?.uid || 'Unknown').split('@')[0];
-      const avatar = person?.photoURL || `https://robohash.org/${encodeURIComponent(person?.email || person?.uid || 'guest')}.png?size=80x80&set=set3`;
-      const el = document.createElement('div');
-      el.className = 'p-2 rounded hover:bg-white cursor-pointer flex items-center gap-3';
-      el.innerHTML = `<img src="${avatar}" class="w-8 h-8 rounded-full border object-cover"/><div class="flex-1"><div class="font-medium text-sm">${escapeHtml(name)}</div><div class="text-xs text-gray-500">${escapeHtml(person?.email || person?.uid || '')}</div></div>`;
-      el.addEventListener('click', () => {
-        openProfile(person?.uid || '', person?.email || '');
-        closeFollowersDialog();
-      });
-      return el;
-    }
-
-    function openFollowersDialog(profileUserId, profileDocData = {}, focus = 'followers') {
-      if (!followersModal) return;
-      followersListEl.innerHTML = '';
-      followingListEl.innerHTML = '';
-
-      const followersArr = Array.isArray(profileDocData?.followers) ? profileDocData.followers.slice() : [];
-      const followingArr = Array.isArray(profileDocData?.following) ? profileDocData.following.slice() : [];
-
-      const normalizeTime = it => {
-        if (!it) return 0;
-        if (it.seconds) return it.seconds * 1000 + (it.nanoseconds || 0) / 1e6;
-        const t = Date.parse(it);
-        return isNaN(t) ? (Number(it) || 0) : t;
-      };
-
-      followersArr.sort((a, b) => normalizeTime(a.followedAt) - normalizeTime(b.followedAt));
-      followingArr.sort((a, b) => normalizeTime(a.followedAt) - normalizeTime(b.followedAt));
-
-      if (followersArr.length === 0) followersListEl.innerHTML = '<div class="text-sm text-gray-500">No followers to display.</div>';
-      else followersArr.forEach(p => followersListEl.appendChild(renderPersonEntry(p)));
-
-      if (followingArr.length === 0) followingListEl.innerHTML = '<div class="text-sm text-gray-500">Not following anyone yet.</div>';
-      else followingArr.forEach(p => followingListEl.appendChild(renderPersonEntry(p)));
-
-      followersModal.style.display = 'flex';
-      followersModal.classList.remove('modal-hidden');
-      if (focus === 'following') followingListEl.scrollTop = 0; else followersListEl.scrollTop = 0;
-    }
-
-    function closeFollowersDialog() {
-      if (!followersModal) return;
-      followersModal.style.display = 'none';
-      followersModal.classList.add('modal-hidden');
-    }
-
-    // -----------------------
-    // Profile rendering (clean)
-    // -----------------------
-    async function openProfile(profileUserId, profileEmail) {
-      if (!db) return;
-      profileContent.innerHTML = `<div class="p-6">Loading profile...</div>`;
-
-      try { location.hash = `user:${profileUserId || profileEmail}`; } catch(_) {}
-
-      profileView.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-
-      let profileDocData = null;
-      try {
-        if (profileUserId) {
-          const udoc = await getDoc(getUserRef(profileUserId));
-          if (udoc.exists()) profileDocData = udoc.data();
+        function populateTagDropdowns() {
+            const createOption = (tag) => `<option value="${tag}">${tag}</option>`;
+            postTagSelect.insertAdjacentHTML('beforeend', TAGS.map(createOption).join(''));
+            tagFilterSelect.insertAdjacentHTML('beforeend', TAGS.map(createOption).join(''));
         }
-      } catch (err) {
-        console.warn('Profile document fetch failed:', err);
-      }
 
-      if (profileUserId) {
-        const local = loadProfileLocal(profileUserId);
-        if (local) {
-          profileDocData = Object.assign({}, profileDocData || {}, local);
-          profileDocData._localOverride = true;
+        // --- COMMENT LOGIC ---
+
+        function renderComment(commentData) {
+            const isUserComment = commentData.userId === userId;
+            const displayUserName = commentData.userEmail.split('@')[0];
+
+            const commentElement = document.createElement('div');
+            commentElement.className = 'p-3 bg-gray-100 rounded-lg text-sm mb-2';
+            
+            commentElement.innerHTML = `
+                <div class="font-medium flex justify-between items-center mb-1">
+                    <span class="${isUserComment ? 'text-accent' : 'text-gray-700'}">${displayUserName}</span>
+                    <span class="text-xs text-gray-500">${formatTimestamp(commentData.timestamp)}</span>
+                </div>
+                <p class="text-gray-800 whitespace-pre-wrap">${commentData.content}</p>
+            `;
+            return commentElement;
         }
-      }
 
-      const displayName = (profileEmail || 'user@unknown').split('@')[0];
-      const fullName = profileDocData?.displayName || displayName;
-      const bio = profileDocData?.bio || '';
-      const avatarSrc = profileDocData?.photoURL || `https://robohash.org/${encodeURIComponent(profileEmail || profileUserId || 'guest')}.png?size=200x200&set=set3`;
-      const joinDate = profileDocData?.joinDate ? new Date(profileDocData.joinDate).toLocaleDateString() : 'Unknown';
-      const followersCount = profileDocData?.followersCount ?? (Array.isArray(profileDocData?.followers) ? profileDocData.followers.length : 0);
-      const followingCount = profileDocData?.followingCount ?? (Array.isArray(profileDocData?.following) ? profileDocData.following.length : 0);
-      const isOwn = userId && profileUserId && userId === profileUserId;
+        function loadComments(postId, commentsContainerElement) {
+            if (!db || !userId) return;
 
-      profileContent.innerHTML = `
-        <div class="flex flex-col sm:flex-row gap-6">
-          <div class="w-full sm:w-1/3 flex flex-col items-center">
-            <img id="profile-avatar-img" src="${avatarSrc}" alt="${escapeHtml(fullName)} avatar" class="w-40 h-40 rounded-full object-cover mb-4 border">
-            <div class="text-center">
-              <div id="profile-fullname" class="text-xl font-bold">${escapeHtml(fullName)}</div>
-              <div id="profile-email" class="text-sm text-gray-500">${escapeHtml(profileEmail || '')}</div>
-              <div id="profile-joined" class="text-xs text-gray-400 mt-2">Joined: ${escapeHtml(joinDate)}</div>
-            </div>
-            <div class="mt-4 w-full flex flex-col gap-2">
-              ${isOwn ? '<button id="profile-edit" class="px-4 py-2 bg-primary text-white rounded">Edit profile</button>' : '<button id="profile-follow" class="px-4 py-2 bg-secondary text-white rounded">+ Follow</button>'}
-            </div>
-          </div>
-          <div class="w-full sm:w-2/3">
-            <div id="profile-bio" class="text-sm text-gray-600 mb-4">${escapeHtml(bio)}</div>
-            <div class="flex gap-6 mb-4 text-sm">
-              <div><button id="profile-following-count-btn" class="font-semibold text-left">${escapeHtml(String(followingCount))}</button> Following</div>
-              <div><button id="profile-followers-count-btn" class="font-semibold text-left">${escapeHtml(String(followersCount))}</button> Followers</div>
-            </div>
-            <hr class="mb-4">
-            <h3 class="text-lg font-bold mb-3">Recent Threads</h3>
-            <div id="profile-threads" class="space-y-4"></div>
-          </div>
-        </div>
-      `;
+            const commentsRef = getCommentsRef(postId);
+            const q = query(commentsRef, orderBy("timestamp", "asc"));
 
-      // Now DOM exists — wire up elements
-      const followBtn = document.getElementById('profile-follow');
-      const followersBtn = document.getElementById('profile-followers-count-btn');
-      const followingBtn = document.getElementById('profile-following-count-btn');
-      const editBtn = document.getElementById('profile-edit');
-
-      if (followBtn) setupFollowButton(profileUserId, profileEmail, profileDocData);
-
-      if (followersBtn) followersBtn.addEventListener('click', () => openFollowersDialog(profileUserId, profileDocData, 'followers'));
-      if (followingBtn) followingBtn.addEventListener('click', () => openFollowersDialog(profileUserId, profileDocData, 'following'));
-      if (editBtn) editBtn.addEventListener('click', () => showProfileEdit(profileUserId, profileEmail, profileDocData || {}));
-
-      renderProfileThreads(profileUserId, profileEmail);
-    }
-
-    function closeProfile() {
-      if (location.hash && location.hash.startsWith('#user:')) history.pushState('', document.title, window.location.pathname + window.location.search);
-      profileView.classList.add('hidden');
-      profileContent.innerHTML = '';
-      document.body.style.overflow = '';
-    }
-
-    // Render profile threads
-    async function renderProfileThreads(profileUserId, profileEmail) {
-      const container = document.getElementById('profile-threads');
-      if (!container) return;
-      container.innerHTML = '<div class="text-sm text-gray-500">Loading threads...</div>';
-      try {
-        const postsRef = getPostsCollection();
-        let q;
-        if (profileUserId) q = query(postsRef, where('userId','==',profileUserId), orderBy('timestamp','desc'));
-        else if (profileEmail) q = query(postsRef, where('userEmail','==',profileEmail), orderBy('timestamp','desc'));
-        else { container.innerHTML = '<div class="text-sm text-gray-500">No threads found.</div>'; return; }
-        const snapshot = await getDocs(q);
-        container.innerHTML = '';
-        if (snapshot.empty) { container.innerHTML = '<div class="text-sm text-gray-500">No threads yet.</div>'; return; }
-        snapshot.forEach(docSnap => {
-          const p = docSnap.data();
-          const tid = docSnap.id;
-          const el = document.createElement('div');
-          el.className = 'p-3 bg-white rounded border hover:bg-gray-50';
-          el.innerHTML = `<a href="#post:${tid}" class="font-medium text-primary hover:underline">${escapeHtml(p.title||'')}</a><div class="text-xs text-gray-500 mt-1">${escapeHtml(p.tag||'')} • ${formatTimestamp(p.timestamp)}</div>`;
-          el.querySelector('a').addEventListener('click', (ev) => { ev.preventDefault(); openThread(tid); });
-          container.appendChild(el);
-        });
-      } catch (err) {
-        console.error('Error loading profile threads:', err);
-        container.innerHTML = `<div class="text-sm text-red-500">Failed to load threads.</div>`;
-      }
-    }
-
-    // Show inline profile edit
-    function showProfileEdit(profileUserId, profileEmail, existing = {}) {
-      const content = profileContent;
-      if (!content) return;
-      const currentName = existing.displayName || (profileEmail||'').split('@')[0];
-      const currentBio = existing.bio || '';
-      const currentPhoto = existing.photoURL || '';
-      content.innerHTML = `
-        <div class="space-y-4">
-          <div class="flex gap-4">
-            <img src="${currentPhoto || `https://robohash.org/${encodeURIComponent(profileEmail || profileUserId || 'guest')}.png?size=200x200&set=set3`}" alt="avatar" class="w-28 h-28 rounded-full object-cover">
-            <div class="flex-1">
-              <label class="block text-sm font-medium">Full name</label>
-              <input id="edit-displayName" class="w-full border rounded p-2" value="${escapeHtml(currentName)}"/>
-              <label class="block text-sm font-medium mt-3">Photo URL</label>
-              <input id="edit-photoURL" class="w-full border rounded p-2" value="${escapeHtml(currentPhoto)}"/>
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium">Bio</label>
-            <textarea id="edit-bio" class="w-full border rounded p-2" rows="4">${escapeHtml(currentBio)}</textarea>
-          </div>
-          <div class="flex gap-2">
-            <button id="edit-save" class="px-4 py-2 bg-primary text-white rounded">Save</button>
-            <button id="edit-cancel" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-          </div>
-        </div>
-      `;
-
-      document.getElementById('edit-cancel').addEventListener('click', () => openProfile(profileUserId, profileEmail));
-
-      document.getElementById('edit-save').addEventListener('click', async () => {
-        if (!userId || userId !== profileUserId) { alert('You can only edit your own profile.'); return; }
-        const newName = document.getElementById('edit-displayName').value.trim();
-        const newBio = document.getElementById('edit-bio').value.trim();
-        const newPhoto = document.getElementById('edit-photoURL').value.trim();
-        try {
-          await updateDoc(getUserRef(profileUserId), { displayName: newName, bio: newBio, photoURL: newPhoto, joinDate: existing.joinDate || serverTimestamp() });
-          showTemporaryMessage('Profile updated','success');
-          openProfile(profileUserId, profileEmail);
-        } catch (err) {
-          console.error('Failed to save profile:', err);
-          showTemporaryMessage('Failed to save profile','error');
-          // fallback local save on permission denied
-          if (err && (err.code === 'permission-denied' || /permission/i.test(String(err)))) {
-            saveProfileLocal(profileUserId, { displayName: newName, bio: newBio, photoURL: newPhoto, joinDate: existing.joinDate || new Date().toISOString() });
-            openProfile(profileUserId, profileEmail);
-            showTemporaryMessage('Saved locally (server denied write).','success');
-          }
+            onSnapshot(q, (snapshot) => {
+                commentsContainerElement.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const comment = doc.data();
+                    commentsContainerElement.appendChild(renderComment(comment));
+                });
+            }, (error) => {
+                console.error("Error listening to comments:", error);
+            });
         }
-      });
-    }
 
-    // local profile fallback helpers
-    function saveProfileLocal(uid, data) { try { localStorage.setItem(`local_profile_${uid}`, JSON.stringify(data)); } catch(e){console.warn(e);} }
-    function loadProfileLocal(uid) { try { const raw = localStorage.getItem(`local_profile_${uid}`); return raw ? JSON.parse(raw) : null; } catch(e){ return null; } }
+        function submitComment(postId, inputElement) {
+            return async (e) => {
+                e.preventDefault();
 
-    // -----------------------
-    // Auth handling
-    // -----------------------
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const email = authEmailInput.value;
-      const password = authPasswordInput.value;
-      authErrorMessage.classList.add('hidden');
-      authSubmitButton.disabled = true;
-      authSubmitText.textContent = isSignInMode ? 'Signing In...' : 'Signing Up...';
-      try {
-        if (isSignInMode) await signInWithEmailAndPassword(auth, email, password);
-        else await createUserWithEmailAndPassword(auth, email, password);
-        closeAuthModal();
-        authEmailInput.value = '';
-        authPasswordInput.value = '';
-        showTemporaryMessage('Signed in successfully','success');
-      } catch (err) {
-        console.error('Authentication error', err);
-        authErrorMessage.textContent = `Error: ${String(err.message || err)}`;
-        authErrorMessage.classList.remove('hidden');
-      } finally {
-        authSubmitButton.disabled = false;
-        authSubmitText.textContent = isSignInMode ? 'Sign In' : 'Sign Up';
-      }
-    }
+                if (!userId) {
+                    showTemporaryMessage("You must be signed in to comment.", 'error');
+                    return;
+                }
 
-    function toggleAuthMode() {
-      isSignInMode = !isSignInMode;
-      if (isSignInMode) { authTitle.textContent = 'Sign In'; authSubmitText.textContent = 'Sign In'; toggleAuthModeButton.textContent = 'Need an account? Sign Up'; }
-      else { authTitle.textContent = 'Create Account'; authSubmitText.textContent = 'Sign Up'; toggleAuthModeButton.textContent = 'Already have an account? Sign In'; }
-      authErrorMessage.classList.add('hidden');
-    }
+                const content = inputElement.value.trim();
+                if (!content) return;
 
-    function closeAuthModal() {
-      authModal.classList.add('modal-hidden');
-      authModal.style.display = 'none';
-      if (authCheckTimeout) { clearTimeout(authCheckTimeout); authCheckTimeout = null; }
-    }
+                const commentsRef = getCommentsRef(postId);
+                inputElement.disabled = true;
 
-    // -----------------------
-    // Init Firebase & bindings
-    // -----------------------
-    async function initFirebase() {
-      try {
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
+                try {
+                    await addDoc(commentsRef, {
+                        content: content,
+                        timestamp: Timestamp.now(),
+                        userId: userId,
+                        userEmail: userEmail
+                    });
 
-        // populate tags
-        TAGS.forEach(tag => postTagSelect.insertAdjacentHTML('beforeend', `<option value="${tag}">${tag}</option>`));
-        TAGS.forEach(tag => tagFilterSelect.insertAdjacentHTML('beforeend', `<option value="${tag}">${tag}</option>`));
+                    inputElement.value = '';
+                } catch (error) {
+                    console.error("Error submitting comment:", error);
+                    showTemporaryMessage(`Failed to submit comment: ${error.message}`, 'error');
+                } finally {
+                    inputElement.disabled = false;
+                }
+            };
+        }
 
-        await setPersistence(auth, browserLocalPersistence);
 
-        onAuthStateChanged(auth, (user) => {
-          if (authCheckTimeout) { clearTimeout(authCheckTimeout); authCheckTimeout = null; }
+        // --- POST MANAGEMENT (CRUD) ---
 
-          if (user) {
-            userId = user.uid;
-            userEmail = user.email || '';
-            userInfoSpan.textContent = userEmail;
-            signOutButton.classList.remove('hidden');
-            postSection.classList.remove('hidden');
-            authCta.classList.add('hidden');
-            authModal.classList.add('modal-hidden'); authModal.style.display = 'none';
-            userAvatar.src = user.photoURL || `https://robohash.org/${encodeURIComponent(userEmail||userId||'guest')}.png?size=80x80&set=set3`;
-            userAvatar.alt = `${(user.email||'user').split('@')[0]}'s avatar`;
-          } else {
-            userId = null; userEmail = null;
-            userInfoSpan.textContent = 'Guest';
-            signOutButton.classList.add('hidden');
-            postSection.classList.add('hidden');
-            authCta.classList.remove('hidden');
-            userAvatar.src = 'https://robohash.org/guest.png?size=80x80&set=set3';
-            // delay showing modal to avoid flicker
-            authCheckTimeout = setTimeout(() => {
-              if (!auth.currentUser) { authModal.classList.remove('modal-hidden'); authModal.style.display = 'flex'; }
-            }, 5000);
-          }
+        async function deletePost(postId) {
+            // Using a simple confirm prompt since complex modals require more code/state
+            if (!confirm("Are you sure you want to delete this post and all its comments?")) return;
+            
+            try {
+                await deleteDoc(getPostRef(postId));
+                showTemporaryMessage("Post deleted successfully!", 'success');
+            } catch (error) {
+                console.error("Error deleting post:", error);
+                showTemporaryMessage(`Failed to delete post: ${error.message}`, 'error');
+            }
+        }
 
-          updateUserMenu();
-          loadPosts();
-        });
+        async function toggleComments(postId, currentStatus) {
+            try {
+                await updateDoc(getPostRef(postId), {
+                    commentsDisabled: !currentStatus
+                });
+                showTemporaryMessage(`Comments successfully ${currentStatus ? 'enabled' : 'disabled'}!`, 'success');
+            } catch (error) {
+                console.error("Error toggling comments:", error);
+                showTemporaryMessage(`Failed to toggle comments: ${error.message}`, 'error');
+            }
+        }
 
-      } catch (err) {
-        console.error('Firebase init failed', err);
-        loadingIndicator.innerHTML = `<p class="text-red-500">Init failed: ${escapeHtml(String(err.message||err))}</p>`;
-      }
+        function handleMenuClick(postId, isCommentsDisabled, menuButtonElement) {
+            const dropdownContainer = menuButtonElement.closest('.dropdown');
+            if (!dropdownContainer) return;
 
-      // event bindings
-      document.getElementById('post-form').addEventListener('submit', submitPost);
-      authForm.addEventListener('submit', handleAuthSubmit);
-      signOutButton.addEventListener('click', async () => { try { await signOut(auth); showTemporaryMessage('Signed out','success'); } catch(e){showTemporaryMessage('Sign out failed','error');} });
-      toggleAuthModeButton.addEventListener('click', toggleAuthMode);
-      closeAuthModalButton.addEventListener('click', closeAuthModal);
-      openAuthModalButton.addEventListener('click', () => { isSignInMode = true; authTitle.textContent = 'Sign In'; authSubmitText.textContent = 'Sign In'; toggleAuthModeButton.textContent = 'Need an account? Sign Up'; authModal.classList.remove('modal-hidden'); authModal.style.display = 'flex'; });
+            const dropdownContent = dropdownContainer.querySelector('.dropdown-content');
+            
+            if (!dropdownContent) return;
 
-      // search & filters
-      tagFilterSelect.addEventListener('change', (e) => { currentTagFilter = e.target.value; loadPosts(); });
-      searchButton.addEventListener('click', () => { currentSearchTerm = (searchBar.value||'').trim(); loadPosts(); });
-      searchBar.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); searchButton.click(); } });
+            // Set up button actions dynamically, calling the now globally exposed functions
+            dropdownContent.innerHTML = `
+                <button onclick="window.deletePost('${postId}')" class="text-red-600 hover:bg-red-100">Delete Post</button>
+                <button onclick="window.toggleComments('${postId}', ${isCommentsDisabled})">
+                    ${isCommentsDisabled ? 'Enable Comments' : 'Disable Comments'}
+                </button>
+            `;
 
-      // user menu
-      function closeUserMenu() { userMenuDropdown.classList.add('hidden'); }
-      function toggleUserMenu(e) { e.stopPropagation(); userMenuDropdown.classList.toggle('hidden'); }
-      userMenuButton.addEventListener('click', toggleUserMenu);
-      document.addEventListener('click', closeUserMenu);
+            // Simple toggle to show/hide the menu manually on button click
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        }
 
-      // profile back & thread back
-      if (profileBackBtn) profileBackBtn.addEventListener('click', closeProfile);
-      if (threadBackBtn) threadBackBtn.addEventListener('click', () => { threadView.classList.add('hidden'); threadContent.innerHTML = ''; document.body.style.overflow = ''; });
 
-      // followers modal close
-      if (followersModalCloseBtn) followersModalCloseBtn.addEventListener('click', closeFollowersDialog);
+        // --- MAIN POST RENDERING AND LISTENING ---
 
-      // build user menu dynamically in updateUserMenu
-    }
+        function renderPost(postData, postId) {
+            const isUserPost = postData.userId === userId;
+            const displayUserName = postData.userEmail.split('@')[0];
+            const tagColor = TAG_COLORS[postData.tag] || TAG_COLORS['General'];
+            const commentsDisabled = postData.commentsDisabled || false;
 
-    // submit new post
-    async function submitPost(e) {
-      e.preventDefault();
-      if (!userId) { showTemporaryMessage('Sign in to post', 'error'); return; }
-      const title = document.getElementById('post-title').value.trim();
-      const content = document.getElementById('post-content').value.trim();
-      const tag = document.getElementById('post-tag').value;
-      if (!title || !content || !tag) { showTemporaryMessage('Fill all fields', 'error'); return; }
+            const postElement = document.createElement('div');
+            postElement.className = 'post bg-white p-5 rounded-xl shadow-md border-t-4 border-primary/50';
+            
+            // Make the title a clickable anchor that opens the thread view
+            postElement.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-xl font-bold text-gray-900 truncate">
+                            <a href="#post:${postId}" onclick="if(window.openThread){window.openThread('${postId}'); return false;}" class="hover:underline">${postData.title}</a>
+                        </h3>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3 ml-4">
+                        <!-- Tag Badge -->
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full text-white ${tagColor} shadow-md">${postData.tag}</span>
 
-      const submitBtn = document.getElementById('submit-button');
-      const submitText = document.getElementById('submit-text');
-      submitBtn.disabled = true; submitText.textContent = 'Posting...';
+                        <!-- Management Menu (Only for post owner) -->
+                        ${isUserPost ? `
+                            <div class="dropdown">
+                                <button class="text-gray-500 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition" onclick="handleMenuClick('${postId}', ${commentsDisabled}, this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                                </button>
+                                <div class="dropdown-content">
+                                    <!-- Content injected by JS -->
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
 
-      try {
-        await addDoc(getPostsCollection(), { title, content, tag, commentsDisabled: false, timestamp: Timestamp.now(), userId, userEmail });
-        document.getElementById('post-title').value = '';
-        document.getElementById('post-content').value = '';
-        document.getElementById('post-tag').value = '';
-        showTemporaryMessage('Post created!', 'success');
-      } catch (err) {
-        console.error('Create post failed', err);
-        showTemporaryMessage('Failed to create post', 'error');
-      } finally {
-        submitBtn.disabled = false; submitText.textContent = 'Submit Post';
-      }
-    }
+                <p class="text-gray-700 mb-4 whitespace-pre-wrap">${postData.content}</p>
+                
+                <div class="text-right text-xs text-gray-400 border-t pt-2 mt-2">
+                    Posted by <a href="#" onclick="if(window.openProfile) { window.openProfile('${postData.userId || ''}', '${postData.userEmail || ''}'); return false; }" class="font-medium text-gray-600 hover:underline">${displayUserName}</a> on ${formatTimestamp(postData.timestamp)}
+                </div>
 
-    // User menu updater
-    function updateUserMenu() {
-      userMenuDropdown.innerHTML = '';
-      if (userId) {
-        userMenuDropdown.innerHTML = `
-          <a href="/auth/" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
-          <a href="/docs/" class="block px-4 py-2 hover:bg-gray-100">Docs</a>
-        `;
-      } else {
-        userMenuDropdown.innerHTML = `<button id="user-menu-signin" class="w-full text-left px-4 py-2 hover:bg-gray-100">Sign in</button>`;
-        const btn = document.getElementById('user-menu-signin');
-        if (btn) btn.addEventListener('click', (ev) => { ev.stopPropagation(); isSignInMode = true; authModal.classList.remove('modal-hidden'); authModal.style.display = 'flex'; });
-      }
-    }
+                <!-- Comments Section Placeholder -->
+                <div class="mt-5 pt-3 border-t border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-3">Comments (${commentsDisabled ? 'Disabled' : 'Open'})</h4>
+                    <div id="comments-list-${postId}" class="comments-list space-y-2 max-h-48 overflow-y-auto pr-2">
+                        <!-- Comments will be injected here -->
+                    </div>
+                    
+                    <!-- Comment Input Form -->
+                    <form id="comment-form-${postId}" class="mt-4 ${commentsDisabled || !userId ? 'hidden' : 'flex items-center space-x-2'}">
+                        <input type="text" id="comment-input-${postId}" placeholder="Write a comment..." required
+                            class="flex-grow p-2 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent text-sm" ${commentsDisabled ? 'disabled' : ''}>
+                        <button type="submit" 
+                            class="bg-accent hover:bg-secondary text-white font-medium py-2 px-4 rounded-lg text-sm transition" ${commentsDisabled ? 'disabled' : ''}>
+                            Send
+                        </button>
+                    </form>
+                    ${!userId && !commentsDisabled ? '<p class="text-sm text-gray-500 mt-4 italic">Sign in to leave a comment.</p>' : ''}
+                    ${commentsDisabled ? '<p class="text-sm text-red-500 mt-4 italic">Commenting is currently disabled for this post.</p>' : ''}
+                </div>
+            `;
+            
+            const commentsListElement = postElement.querySelector(`#comments-list-${postId}`);
+            
+            if (commentsListElement && userId) {
+                loadComments(postId, commentsListElement);
+            }
 
-    // expose some funcs for debug/links
-    window.openProfile = openProfile;
-    window.closeProfile = closeProfile;
-    window.openThread = openThread;
+            const commentForm = postElement.querySelector(`#comment-form-${postId}`);
+            const commentInput = postElement.querySelector(`#comment-input-${postId}`);
+            if (commentForm && commentInput) {
+                commentForm.addEventListener('submit', submitComment(postId, commentInput));
+            }
+            
+            return postElement;
+        }
 
-    // initialize
-    window.addEventListener('load', initFirebase);
-  </script>
+        function loadPosts() {
+            if (!db) return;
+
+            const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
+            
+            let q = query(postsRef, orderBy("timestamp", "desc"));
+            
+            if (currentTagFilter && currentTagFilter !== 'All') {
+                q = query(postsRef, where('tag', '==', currentTagFilter), orderBy("timestamp", "desc"));
+            }
+
+            onSnapshot(q, (snapshot) => {
+                loadingIndicator.classList.add('hidden');
+                
+                let filteredPosts = [];
+
+                snapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postId = doc.id;
+                    
+                    // Apply Client-Side Text Search Filter
+                    if (currentSearchTerm) {
+                        const searchTermLower = currentSearchTerm.toLowerCase();
+                        if (post.title.toLowerCase().includes(searchTermLower) ||
+                            post.content.toLowerCase().includes(searchTermLower)) {
+                            filteredPosts.push({ post, postId });
+                        }
+                    } else {
+                        filteredPosts.push({ post, postId });
+                    }
+                });
+                
+                postsContainer.innerHTML = '';
+
+                if (filteredPosts.length === 0) {
+                    noPostsMessage.classList.remove('hidden');
+                    return;
+                }
+                noPostsMessage.classList.add('hidden');
+
+                filteredPosts.forEach(({ post, postId }) => {
+                    postsContainer.appendChild(renderPost(post, postId));
+                });
+
+            }, (error) => {
+                console.error("Error listening to posts:", error);
+                loadingIndicator.innerHTML = `<p class="text-red-500">Error loading posts: ${error.message}</p>`;
+            });
+        }
+
+        /**
+         * Handles the submission of a new post.
+         */
+        async function submitPost(e) {
+            e.preventDefault();
+
+            if (!userId) {
+                showTemporaryMessage("Error: You must be signed in to post.", 'error');
+                return;
+            }
+
+            const title = document.getElementById('post-title').value.trim();
+            const content = document.getElementById('post-content').value.trim();
+            const tag = document.getElementById('post-tag').value;
+
+            if (!title || !content || !tag) {
+                showTemporaryMessage("Please fill out all fields and select a tag.", 'error');
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitText.textContent = 'Posting...';
+            submitButton.classList.add('opacity-70');
+
+            try {
+                const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
+                
+                await addDoc(postsRef, {
+                    title: title,
+                    content: content,
+                    tag: tag,
+                    commentsDisabled: false,
+                    timestamp: Timestamp.now(),
+                    userId: userId,
+                    userEmail: userEmail
+                });
+
+                document.getElementById('post-title').value = '';
+                document.getElementById('post-content').value = '';
+                document.getElementById('post-tag').value = '';
+                showTemporaryMessage("Post created successfully!", 'success');
+
+            } catch (error) {
+                console.error("Error writing document: ", error);
+                showTemporaryMessage(`Failed to create post: ${error.message}`, 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitText.textContent = 'Submit Post';
+                submitButton.classList.remove('opacity-70');
+            }
+        }
+        
+        // --- AUTHENTICATION LOGIC ---
+
+        function toggleAuthMode() {
+            isSignInMode = !isSignInMode;
+            if (isSignInMode) {
+                authTitle.textContent = 'Sign In';
+                authSubmitText.textContent = 'Sign In';
+                toggleAuthModeButton.textContent = 'Need an account? Sign Up';
+            } else {
+                authTitle.textContent = 'Create Account';
+                authSubmitText.textContent = 'Sign Up';
+                toggleAuthModeButton.textContent = 'Already have an account? Sign In';
+            }
+            authErrorMessage.classList.add('hidden');
+        }
+        
+        function closeAuthModal() {
+            // Hide with both class and inline style to avoid cases where one method doesn't take effect
+            if (authModal) {
+                authModal.classList.add('modal-hidden');
+                authModal.style.display = 'none';
+            }
+            // If the user manually closes it, clear the pending timeout
+            if (authCheckTimeout) {
+                clearTimeout(authCheckTimeout);
+                authCheckTimeout = null;
+            }
+        }
+
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            
+            const email = authEmailInput.value;
+            const password = authPasswordInput.value;
+
+            authErrorMessage.classList.add('hidden');
+            authSubmitButton.disabled = true;
+            authSubmitText.textContent = isSignInMode ? 'Signing In...' : 'Signing Up...';
+
+            try {
+                if (isSignInMode) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                }
+                
+                // Use the centralized close to hide the modal reliably
+                if (window.closeAuthModal) window.closeAuthModal();
+
+                // Clear timeout if any
+                if (authCheckTimeout) {
+                    clearTimeout(authCheckTimeout);
+                    authCheckTimeout = null;
+                }
+
+                // Clear inputs and notify
+                authEmailInput.value = '';
+                authPasswordInput.value = '';
+                showTemporaryMessage("Signed in successfully!", 'success');
+
+
+            } catch (error) {
+                console.error("Authentication error:", error);
+                let message = error.message.replace('Firebase: Error (auth/', '').replace(/\)\.$/, '').replace(/-/g, ' ').toUpperCase();
+                authErrorMessage.textContent = `Error: ${message}`;
+                authErrorMessage.classList.remove('hidden');
+            } finally {
+                authSubmitButton.disabled = false;
+                authSubmitText.textContent = isSignInMode ? 'Sign In' : 'Sign Up';
+            }
+        }
+
+        async function handleSignOut() {
+            try {
+                await signOut(auth);
+                showTemporaryMessage("Signed out successfully.", 'success');
+            } catch (error) {
+                console.error("Error signing out:", error);
+                showTemporaryMessage(`Sign out failed: ${error.message}`, 'error');
+            }
+        }
+
+        /**
+         * Initializes Firebase and sets up authentication listener.
+         */
+        async function initFirebase() {
+            try {
+                setLogLevel('debug');
+                
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                populateTagDropdowns();
+
+                // CRITICAL FIX 1: Set persistence once at the beginning to handle session loading from cache
+                await setPersistence(auth, browserLocalPersistence);
+
+                onAuthStateChanged(auth, (user) => {
+                    // CRITICAL FIX 2: Clear any pending modal display timeout immediately on state change
+                    if (authCheckTimeout) {
+                        clearTimeout(authCheckTimeout);
+                        authCheckTimeout = null;
+                    }
+                    
+                    if (user) {
+                        // User is signed in
+                        userId = user.uid;
+                        userEmail = user.email || 'N/A';
+                        userInfoSpan.textContent = userEmail;
+                        signOutButton.classList.remove('hidden');
+                        postSection.classList.remove('hidden');
+                        authCta.classList.add('hidden');
+                        // Ensure modal is fully hidden
+                        if (authModal) {
+                            authModal.classList.add('modal-hidden');
+                            authModal.style.display = 'none';
+                        }
+                        // Update avatar: prefer provider photoURL, otherwise generate one from email/uid
+                        try {
+                            const seed = user.email || user.uid || 'guest';
+                            if (user.photoURL) {
+                                userAvatar.src = user.photoURL;
+                            } else {
+                                userAvatar.src = `https://robohash.org/${encodeURIComponent(seed)}.png?size=80x80&set=set3`;
+                            }
+                            userAvatar.alt = `${(user.email || 'User').split('@')[0]}'s avatar`;
+                        } catch (err) {
+                            console.error('Error setting avatar:', err);
+                        }
+                    } else {
+                        // User is signed out
+                        userId = null;
+                        userEmail = null;
+                        userInfoSpan.textContent = 'Guest';
+                        signOutButton.classList.add('hidden');
+                        postSection.classList.add('hidden');
+                        authCta.classList.remove('hidden');
+
+                        // set guest avatar
+                        if (userAvatar) {
+                            userAvatar.src = 'https://robohash.org/guest.png?size=80x80&set=set3';
+                            userAvatar.alt = 'Guest avatar';
+                        }
+
+                        // CRITICAL FIX 3: Set a timeout to display the modal after 5 seconds (5000ms)
+                        // This prevents the initial flicker and respects the user's preference.
+                        authCheckTimeout = setTimeout(() => {
+                            // Only show the modal if the user is STILL null after the timeout
+                            if (!auth.currentUser && authModal) { 
+                                authModal.classList.remove('modal-hidden');
+                                authModal.style.display = 'flex'; // match layout (overlay uses flex)
+                            }
+                        }, 5000);
+                    }
+                    
+                    // Ensure the user menu matches current auth state
+                    updateUserMenu();
+
+                    // Load posts only after auth state is determined
+                    loadPosts();
+                });
+                
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                loadingIndicator.innerHTML = `<p class="text-red-500">Initialization failed: ${error.message}</p>`;
+            }
+
+            // --- Event Listeners and Initialization ---
+            // Moved all listeners here to ensure DOM elements are fully loaded before attachment
+            form.addEventListener('submit', submitPost);
+            authForm.addEventListener('submit', handleAuthSubmit);
+            signOutButton.addEventListener('click', handleSignOut);
+            toggleAuthModeButton.addEventListener('click', toggleAuthMode);
+            closeAuthModalButton.addEventListener('click', closeAuthModal);
+            openAuthModalButton.addEventListener('click', () => {
+                // Ensure we show the Sign In mode reliably (avoid toggling logic)
+                isSignInMode = true;
+                authTitle.textContent = 'Sign In';
+                authSubmitText.textContent = 'Sign In';
+                toggleAuthModeButton.textContent = 'Need an account? Sign Up';
+                authErrorMessage.classList.add('hidden');
+                if (authModal) {
+                    authModal.classList.remove('modal-hidden');
+                    authModal.style.display = 'flex';
+                }
+            });
+
+            // Search and Filter Handlers
+            tagFilterSelect.addEventListener('change', (e) => {
+                currentTagFilter = e.target.value;
+                loadPosts();
+            });
+
+            // Search button triggers search; Enter key in input also triggers search
+            if (searchButton) {
+                searchButton.addEventListener('click', () => {
+                    currentSearchTerm = (searchBar && searchBar.value) ? searchBar.value.trim() : '';
+                    loadPosts();
+                });
+            }
+            
+            if (searchBar) {
+                searchBar.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (searchButton) searchButton.click();
+                    }
+                });
+            }
+
+            // New: user menu helpers
+            function closeUserMenu() {
+                if (userMenuDropdown) userMenuDropdown.classList.add('hidden');
+            }
+
+            function toggleUserMenu(e) {
+                // prevent the global click handler from immediately closing it
+                e.stopPropagation();
+                if (userMenuDropdown) userMenuDropdown.classList.toggle('hidden');
+            }
+
+            function updateUserMenu() {
+                if (!userMenuDropdown) return;
+                userMenuDropdown.innerHTML = '';
+
+                if (userId) {
+                    // Signed-in menu
+                    userMenuDropdown.innerHTML = `
+                        <a href="/auth/" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
+                        <a href="/docs/" class="block px-4 py-2 hover:bg-gray-100">Docs</a>
+                    `;
+                    // Links navigate naturally; no extra handlers needed
+                } else {
+                    // Guest menu: Sign in button opens modal
+                    userMenuDropdown.innerHTML = `
+                        <button id="user-menu-signin" class="w-full text-left px-4 py-2 hover:bg-gray-100">Sign in</button>
+                    `;
+                    const signinBtn = document.getElementById('user-menu-signin');
+                    if (signinBtn) {
+                        signinBtn.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            isSignInMode = true;
+                            authTitle.textContent = 'Sign In';
+                            authSubmitText.textContent = 'Sign In';
+                            toggleAuthModeButton.textContent = 'Need an account? Sign Up';
+                            authErrorMessage.classList.add('hidden');
+                            if (authModal) {
+                                authModal.classList.remove('modal-hidden');
+                                authModal.style.display = 'flex';
+                            }
+                            closeUserMenu();
+                        });
+                    }
+                }
+            }
+
+            // Close user menu when clicking anywhere else
+            document.addEventListener('click', () => {
+                closeUserMenu();
+            });
+
+            // Attach toggle handler
+            if (userMenuButton) {
+                userMenuButton.addEventListener('click', toggleUserMenu);
+            }
+        }
+
+        // --- THREAD VIEW (single-post) ---
+        const threadView = document.getElementById('thread-view');
+        const threadContent = document.getElementById('thread-content');
+        const threadBackBtn = document.getElementById('thread-back');
+
+        // --- PROFILE VIEW (single-user) ---
+        const profileView = document.getElementById('profile-view');
+        const profileContent = document.getElementById('profile-content');
+        const profileBackBtn = document.getElementById('profile-back');
+
+        async function openProfile(profileUserId, profileEmail) {
+            if (!db) return;
+            if (profileContent) profileContent.innerHTML = `<div class="p-6">Loading profile...</div>`;
+            // Update hash for direct linking
+            try { location.hash = `user:${profileUserId || profileEmail}`; } catch (e) {}
+
+            // Show overlay and prevent background scroll
+            if (profileView) profileView.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // Basic fields (fall back to robohash avatar and email prefix)
+            const displayName = (profileEmail || 'user@unknown').split('@')[0];
+            let profileDocData = null;
+            try {
+                if (profileUserId) {
+                    const userDoc = await getDoc(getUserRef(profileUserId));
+                    if (userDoc.exists()) profileDocData = userDoc.data();
+                }
+            } catch (err) {
+                console.warn('Profile document fetch failed:', err);
+            }
+
+            // Apply any local edits saved when Firestore write was denied
+            if (profileUserId) {
+                const local = loadProfileLocal(profileUserId);
+                if (local) {
+                    profileDocData = Object.assign({}, profileDocData || {}, local);
+                    // flag for debugging (optional)
+                    profileDocData._localOverride = true;
+                }
+            }
+ 
+            const avatarSrc = (profileDocData && profileDocData.photoURL) ? profileDocData.photoURL : `https://robohash.org/${encodeURIComponent(profileEmail || profileUserId || 'guest')}.png?size=200x200&set=set3`;
+            const fullName = (profileDocData && profileDocData.displayName) ? profileDocData.displayName : displayName;
+            const joinDate = (profileDocData && profileDocData.joinDate) ? new Date(profileDocData.joinDate).toLocaleDateString() : 'Unknown';
+            const bio = (profileDocData && profileDocData.bio) ? profileDocData.bio : (profileDocData && profileDocData.info) ? profileDocData.info : '';
+            const followersCount = (profileDocData && profileDocData.followersCount) ? profileDocData.followersCount : 0;
+            const followingCount = (profileDocData && profileDocData.followingCount) ? profileDocData.followingCount : 0;
+
+            // Edit button only visible to the signed-in user viewing their own profile
+            const isOwn = userId && profileUserId && userId === profileUserId;
+
+            profileContent.innerHTML = `
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="w-full sm:w-1/3 flex flex-col items-center">
+                        <img id="profile-avatar-img" src="${avatarSrc}" alt="${fullName} avatar" class="w-40 h-40 rounded-full object-cover mb-4 border">
+                        <div class="text-center">
+                            <div id="profile-fullname" class="text-xl font-bold">${fullName}</div>
+                            <div id="profile-email" class="text-sm text-gray-500">${profileEmail || ''}</div>
+                            <div id="profile-joined" class="text-xs text-gray-400 mt-2">Joined: ${joinDate}</div>
+                        </div>
+                        <div class="mt-4 w-full flex flex-col gap-2">
+                            ${isOwn ? '<button id="profile-edit" class="px-4 py-2 bg-primary text-white rounded">Edit profile</button>' : '<button id="profile-follow" class="px-4 py-2 bg-secondary text-white rounded">+ Follow</button>'}
+                        </div>
+                    </div>
+                    <div class="w-full sm:w-2/3">
+                        <div id="profile-bio" class="text-sm text-gray-600 mb-4">${bio}</div>
+                        <div class="flex gap-6 mb-4 text-sm">
+                            <div><span id="profile-following-count" class="font-semibold">${followingCount}</span> Following</div>
+                            <div><span id="profile-followers-count" class="font-semibold">${followersCount}</span> Followers</div>
+                        </div>
+                        <hr class="mb-4">
+                        <h3 class="text-lg font-bold mb-3">Recent Threads</h3>
+                        <div id="profile-threads" class="space-y-4">
+                            <!-- Optionally render user's recent threads here by querying posts where userId == profileUserId -->
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Hook follow/edit buttons (UI-only)
+            const followBtn = document.getElementById('profile-follow');
+            // localStorage-based follow state (simple, no backend)
+            const followKey = `follow_${profileUserId || profileEmail}`;
+            function isFollowing() {
+                try { return localStorage.getItem(followKey) === '1'; } catch { return false; }
+            }
+            function setFollowing(val) {
+                try { localStorage.setItem(followKey, val ? '1' : '0'); } catch {}
+            }
+            function refreshFollowUi() {
+                const following = isFollowing();
+                if (followBtn) followBtn.textContent = following ? 'Following' : '+ Follow';
+                const followersEl = document.getElementById('profile-followers-count');
+                if (followersEl) {
+                    const base = parseInt(followersCount || 0, 10);
+                    followersEl.textContent = (base + (isFollowing() ? 1 : 0)).toString();
+                }
+            }
+
+            if (followBtn) {
+                followBtn.addEventListener('click', () => {
+                    setFollowing(!isFollowing());
+                    refreshFollowUi();
+                });
+            }
+            refreshFollowUi();
+
+            const editBtn = document.getElementById('profile-edit');
+            if (editBtn) {
+                editBtn.addEventListener('click', () => {
+                    // show a small inline edit form
+                    showProfileEdit(profileUserId, profileEmail, profileDocData || {});
+                });
+            }
+
+            // Render recent threads
+            renderProfileThreads(profileUserId, profileEmail);
+        }
+
+        // Render user's recent threads (10)
+        async function renderProfileThreads(profileUserId, profileEmail) {
+            const container = document.getElementById('profile-threads');
+            if (!container) return;
+            container.innerHTML = '<div class="text-sm text-gray-500">Loading threads...</div>';
+
+            try {
+                const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
+                let q;
+                if (profileUserId) {
+                    q = query(postsRef, where('userId', '==', profileUserId), orderBy('timestamp', 'desc'));
+                } else if (profileEmail) {
+                    q = query(postsRef, where('userEmail', '==', profileEmail), orderBy('timestamp', 'desc'));
+                } else {
+                    container.innerHTML = '<div class="text-sm text-gray-500">No threads found.</div>';
+                    return;
+                }
+                const snapshot = await getDocs(q);
+                container.innerHTML = '';
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="text-sm text-gray-500">No threads yet.</div>';
+                    return;
+                }
+                snapshot.forEach((docSnap) => {
+                    const p = docSnap.data();
+                    const tid = docSnap.id;
+                    const el = document.createElement('div');
+                    el.className = 'p-3 bg-white rounded border hover:bg-gray-50';
+                    el.innerHTML = `<a href="#post:${tid}" class="font-medium text-primary hover:underline" onclick="if(window.openThread){window.openThread('${tid}');return false;}">${p.title}</a>
+                                    <div class="text-xs text-gray-500 mt-1">${(p.tag || '')} • ${formatTimestamp(p.timestamp)}</div>`;
+                    container.appendChild(el);
+                });
+            } catch (err) {
+                console.error('Error loading profile threads:', err);
+                container.innerHTML = `<div class="text-sm text-red-500">Failed to load threads.</div>`;
+            }
+        }
+
+        // Show inline profile edit form
+        function showProfileEdit(profileUserId, profileEmail, existing = {}) {
+            const content = profileContent;
+            if (!content) return;
+            const currentName = existing.displayName || (profileEmail || '').split('@')[0];
+            const currentBio = existing.bio || '';
+            const currentPhoto = existing.photoURL || '';
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex gap-4">
+                        <img src="${currentPhoto || `https://robohash.org/${encodeURIComponent(profileEmail || profileUserId || 'guest')}.png?size=200x200&set=set3`}" alt="avatar" class="w-28 h-28 rounded-full object-cover">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium">Full name</label>
+                            <input id="edit-displayName" class="w-full border rounded p-2" value="${escapeHtml(currentName)}" />
+                            <label class="block text-sm font-medium mt-3">Photo URL</label>
+                            <input id="edit-photoURL" class="w-full border rounded p-2" value="${escapeHtml(currentPhoto)}" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Bio</label>
+                        <textarea id="edit-bio" class="w-full border rounded p-2" rows="4">${escapeHtml(currentBio)}</textarea>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="edit-save" class="px-4 py-2 bg-primary text-white rounded">Save</button>
+                        <button id="edit-cancel" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('edit-cancel').addEventListener('click', () => {
+                openProfile(profileUserId, profileEmail);
+            });
+
+            document.getElementById('edit-save').addEventListener('click', async () => {
+                if (!userId || userId !== profileUserId) {
+                    alert('You can only edit your own profile.');
+                    return;
+                }
+                const newName = document.getElementById('edit-displayName').value.trim();
+                const newBio = document.getElementById('edit-bio').value.trim();
+                const newPhoto = document.getElementById('edit-photoURL').value.trim();
+                try {
+                    await setDoc(getUserRef(profileUserId), {
+                        displayName: newName,
+                       bio: newBio,
+                      photoURL: newPhoto,
+                        // ensure joinDate exists
+                       joinDate: existing.joinDate || Timestamp.now()
+                    }, { merge: true });
+                    // refresh profile
+                    openProfile(profileUserId, profileEmail);
+                    showTemporaryMessage('Profile updated', 'success');
+                    await setDoc(getUserRef(profileUserId), {
+                        displayName: newName,
+                        bio: newBio,
+                        photoURL: newPhoto,
+                        // ensure joinDate exists
+                        joinDate: existing.joinDate || Timestamp.now()
+                    }, { merge: true });
+                    // refresh profile (server-written)
+                    openProfile(profileUserId, profileEmail);
+                    showTemporaryMessage('Profile updated', 'success');
+                 } catch (err) {
+                    console.error('Failed to save profile:', err);
+                    showTemporaryMessage('Failed to save profile', 'error');
+                    console.error('Failed to save profile:', err);
+                   // If failure was permission-related, persist locally as a fallback
+                    if (err && (err.code === 'permission-denied' || /permission/i.test(err.message || ''))) {
+                        saveProfileLocal(profileUserId, {
+                            displayName: newName,
+                            bio: newBio,
+                            photoURL: newPhoto,
+                            joinDate: existing.joinDate || new Date().toISOString()
+                        });
+                        // reload using local copy
+                        openProfile(profileUserId, profileEmail);
+                        showTemporaryMessage('Profile saved locally (Firestore write denied).', 'success');
+                    } else {
+                        showTemporaryMessage('Failed to save profile', 'error');
+                    }
+                 }
+             });
+         }
+
+        // small helper to avoid XSS when injecting values into inputs
+        function escapeHtml(s) {
+            return (s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+        }
+
+        // Local fallback for profile storage when Firestore write is denied
+        function saveProfileLocal(userId, data) {
+            try {
+                localStorage.setItem(`local_profile_${userId}`, JSON.stringify(data));
+            } catch (e) { console.warn('Failed to save profile locally', e); }
+        }
+        function loadProfileLocal(userId) {
+            try {
+                const raw = localStorage.getItem(`local_profile_${userId}`);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) { return null; }
+        }
+
+        // Close profile overlay and restore page state
+        function closeProfile() {
+            if (location.hash && location.hash.startsWith('#user:')) {
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+            }
+            if (profileView) profileView.classList.add('hidden');
+            if (profileContent) profileContent.innerHTML = '';
+            // restore background scroll
+            document.body.style.overflow = '';
+        }
+
+        // Expose profile functions
+        window.openProfile = openProfile;
+        window.closeProfile = closeProfile;
+        window.renderProfileThreads = renderProfileThreads;
+        // Expose functions globally for dynamically generated HTML to call them reliably
+        window.handleMenuClick = handleMenuClick; 
+        window.deletePost = deletePost;
+        window.toggleComments = toggleComments;
+        // Expose the close function so the modal X (inline onclick) works even before module init finishes
+        window.closeAuthModal = closeAuthModal;
+        // openThread/closeThread already exposed above
+
+        window.onload = initFirebase;
+    </script>
 </body>
 </html>
