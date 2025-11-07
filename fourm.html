@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Community Forum</title>
+    <title>HouseLearning Docs | Community Forum</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/cookiebanner.js"></script>
@@ -76,10 +76,21 @@
     <!-- Header -->
     <header class="bg-primary text-white shadow-lg">
         <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
-            <h1 class="text-2xl font-extrabold tracking-tight">Real-Time Forum</h1>
+            <h1 class="text-2xl font-extrabold tracking-tight">HouseLearning Docs | Forum</h1>
             <div class="text-sm flex items-center">
                 <span class="font-semibold mr-2">Signed in as:</span>
-                <span id="user-info" class="font-mono text-xs bg-primary/80 p-1 rounded-md">Guest</span>
+                <!-- Replaced static avatar+name with a clickable user menu -->
+                <div id="user-menu" class="relative">
+                    <button id="user-menu-button" class="flex items-center focus:outline-none">
+                        <img id="user-avatar" src="https://robohash.org/guest.png?size=80x80&set=set3" alt="Guest avatar" class="w-8 h-8 rounded-full mr-2 bg-white/30 object-cover">
+                        <span id="user-info" class="font-mono text-xs bg-primary/80 p-1 rounded-md">Guest</span>
+                    </button>
+
+                    <!-- Dropdown populated by JS -->
+                    <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-white text-gray-800 rounded shadow-lg z-50">
+                        <!-- JS will inject menu items here -->
+                    </div>
+                </div>
                 <button id="sign-out-button" class="ml-4 px-3 py-1 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium text-sm transition duration-200 hidden">Sign Out</button>
             </div>
         </div>
@@ -126,8 +137,11 @@
             
             <div class="flex flex-col sm:flex-row gap-3 mb-6">
                 <!-- Search Bar -->
-                <input type="text" id="search-bar" placeholder="Search by title or content..."
-                    class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition shadow-sm">
+                <div class="flex w-full">
+                    <input type="text" id="search-bar" placeholder="Search by title or content..."
+                        class="flex-grow p-3 border border-gray-300 rounded-l-lg focus:ring-primary focus:border-primary transition shadow-sm">
+                    <button id="search-button" class="px-4 bg-primary hover:bg-secondary text-white rounded-r-lg ml-2">Search</button>
+                </div>
                 
                 <!-- Tag Filter -->
                 <select id="tag-filter" 
@@ -154,7 +168,7 @@
         <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-100 relative">
             
             <!-- Close Button -->
-            <button id="close-auth-modal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition">
+            <button id="close-auth-modal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition" onclick="if(window.closeAuthModal) window.closeAuthModal()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
             </button>
             
@@ -232,6 +246,7 @@
         const postTagSelect = document.getElementById('post-tag');
         const tagFilterSelect = document.getElementById('tag-filter');
         const searchBar = document.getElementById('search-bar');
+        const searchButton = document.getElementById('search-button');
         
         // Modal Elements
         const authModal = document.getElementById('auth-modal');
@@ -245,6 +260,11 @@
         const authEmailInput = document.getElementById('auth-email');
         const authPasswordInput = document.getElementById('auth-password');
         const closeAuthModalButton = document.getElementById('close-auth-modal');
+
+        // New: avatar / user menu refs
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userMenuDropdown = document.getElementById('user-menu-dropdown');
+        const userAvatar = document.getElementById('user-avatar');
 
         // --- FIREBASE PATHS & HELPERS ---
         const getPostRef = (postId) => doc(db, `artifacts/${appId}/public/data/forum_posts`, postId);
@@ -593,7 +613,11 @@
         }
         
         function closeAuthModal() {
-            authModal.classList.add('modal-hidden');
+            // Hide with both class and inline style to avoid cases where one method doesn't take effect
+            if (authModal) {
+                authModal.classList.add('modal-hidden');
+                authModal.style.display = 'none';
+            }
             // If the user manually closes it, clear the pending timeout
             if (authCheckTimeout) {
                 clearTimeout(authCheckTimeout);
@@ -619,7 +643,16 @@
                     await createUserWithEmailAndPassword(auth, email, password);
                 }
                 
-                // onAuthStateChanged handles hiding the modal now, but we'll clear inputs.
+                // Use the centralized close to hide the modal reliably
+                if (window.closeAuthModal) window.closeAuthModal();
+
+                // Clear timeout if any
+                if (authCheckTimeout) {
+                    clearTimeout(authCheckTimeout);
+                    authCheckTimeout = null;
+                }
+
+                // Clear inputs and notify
                 authEmailInput.value = '';
                 authPasswordInput.value = '';
                 showTemporaryMessage("Signed in successfully!", 'success');
@@ -677,7 +710,23 @@
                         signOutButton.classList.remove('hidden');
                         postSection.classList.remove('hidden');
                         authCta.classList.add('hidden');
-                        authModal.classList.add('modal-hidden'); // Ensure modal is hidden
+                        // Ensure modal is fully hidden
+                        if (authModal) {
+                            authModal.classList.add('modal-hidden');
+                            authModal.style.display = 'none';
+                        }
+                        // Update avatar: prefer provider photoURL, otherwise generate one from email/uid
+                        try {
+                            const seed = user.email || user.uid || 'guest';
+                            if (user.photoURL) {
+                                userAvatar.src = user.photoURL;
+                            } else {
+                                userAvatar.src = `https://robohash.org/${encodeURIComponent(seed)}.png?size=80x80&set=set3`;
+                            }
+                            userAvatar.alt = `${(user.email || 'User').split('@')[0]}'s avatar`;
+                        } catch (err) {
+                            console.error('Error setting avatar:', err);
+                        }
                     } else {
                         // User is signed out
                         userId = null;
@@ -686,17 +735,27 @@
                         signOutButton.classList.add('hidden');
                         postSection.classList.add('hidden');
                         authCta.classList.remove('hidden');
-                        
+
+                        // set guest avatar
+                        if (userAvatar) {
+                            userAvatar.src = 'https://robohash.org/guest.png?size=80x80&set=set3';
+                            userAvatar.alt = 'Guest avatar';
+                        }
+
                         // CRITICAL FIX 3: Set a timeout to display the modal after 5 seconds (5000ms)
                         // This prevents the initial flicker and respects the user's preference.
                         authCheckTimeout = setTimeout(() => {
                             // Only show the modal if the user is STILL null after the timeout
-                            if (!auth.currentUser) { 
+                            if (!auth.currentUser && authModal) { 
                                 authModal.classList.remove('modal-hidden');
+                                authModal.style.display = 'flex'; // match layout (overlay uses flex)
                             }
                         }, 5000);
                     }
                     
+                    // Ensure the user menu matches current auth state
+                    updateUserMenu();
+
                     // Load posts only after auth state is determined
                     loadPosts();
                 });
@@ -714,9 +773,16 @@
             toggleAuthModeButton.addEventListener('click', toggleAuthMode);
             closeAuthModalButton.addEventListener('click', closeAuthModal);
             openAuthModalButton.addEventListener('click', () => {
+                // Ensure we show the Sign In mode reliably (avoid toggling logic)
                 isSignInMode = true;
-                toggleAuthMode();
-                authModal.classList.remove('modal-hidden');
+                authTitle.textContent = 'Sign In';
+                authSubmitText.textContent = 'Sign In';
+                toggleAuthModeButton.textContent = 'Need an account? Sign Up';
+                authErrorMessage.classList.add('hidden');
+                if (authModal) {
+                    authModal.classList.remove('modal-hidden');
+                    authModal.style.display = 'flex';
+                }
             });
 
             // Search and Filter Handlers
@@ -725,16 +791,86 @@
                 loadPosts();
             });
 
-            searchBar.addEventListener('input', (e) => {
-                currentSearchTerm = e.target.value.trim();
-                loadPosts();
+            // Search button triggers search; Enter key in input also triggers search
+            if (searchButton) {
+                searchButton.addEventListener('click', () => {
+                    currentSearchTerm = (searchBar && searchBar.value) ? searchBar.value.trim() : '';
+                    loadPosts();
+                });
+            }
+            
+            if (searchBar) {
+                searchBar.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (searchButton) searchButton.click();
+                    }
+                });
+            }
+
+            // New: user menu helpers
+            function closeUserMenu() {
+                if (userMenuDropdown) userMenuDropdown.classList.add('hidden');
+            }
+
+            function toggleUserMenu(e) {
+                // prevent the global click handler from immediately closing it
+                e.stopPropagation();
+                if (userMenuDropdown) userMenuDropdown.classList.toggle('hidden');
+            }
+
+            function updateUserMenu() {
+                if (!userMenuDropdown) return;
+                userMenuDropdown.innerHTML = '';
+
+                if (userId) {
+                    // Signed-in menu
+                    userMenuDropdown.innerHTML = `
+                        <a href="/auth/" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
+                        <a href="/docs/" class="block px-4 py-2 hover:bg-gray-100">Docs</a>
+                    `;
+                    // Links navigate naturally; no extra handlers needed
+                } else {
+                    // Guest menu: Sign in button opens modal
+                    userMenuDropdown.innerHTML = `
+                        <button id="user-menu-signin" class="w-full text-left px-4 py-2 hover:bg-gray-100">Sign in</button>
+                    `;
+                    const signinBtn = document.getElementById('user-menu-signin');
+                    if (signinBtn) {
+                        signinBtn.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            isSignInMode = true;
+                            authTitle.textContent = 'Sign In';
+                            authSubmitText.textContent = 'Sign In';
+                            toggleAuthModeButton.textContent = 'Need an account? Sign Up';
+                            authErrorMessage.classList.add('hidden');
+                            if (authModal) {
+                                authModal.classList.remove('modal-hidden');
+                                authModal.style.display = 'flex';
+                            }
+                            closeUserMenu();
+                        });
+                    }
+                }
+            }
+
+            // Close user menu when clicking anywhere else
+            document.addEventListener('click', () => {
+                closeUserMenu();
             });
+
+            // Attach toggle handler
+            if (userMenuButton) {
+                userMenuButton.addEventListener('click', toggleUserMenu);
+            }
         }
 
         // Expose functions globally for dynamically generated HTML to call them reliably
         window.handleMenuClick = handleMenuClick; 
         window.deletePost = deletePost;
         window.toggleComments = toggleComments;
+        // Expose the close function so the modal X (inline onclick) works even before module init finishes
+        window.closeAuthModal = closeAuthModal;
 
         window.onload = initFirebase;
     </script>
