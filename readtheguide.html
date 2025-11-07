@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Guide | HouseLearning Docs</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <!-- Configure Tailwind for Inter font and custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2', // A strong blue for links and accents
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font Import -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Sticky Header/Navigation Bar -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo/Site Title -->
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <!-- Nav Links/External Links -->
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Left Sidebar (Documentation Index) - Welcome Guide is highlighted -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Getting Started</h4>
+                        <ul class="space-y-1 text-sm">
+                            <!-- ACTIVE LINK -->
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Welcome Guide</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Installation</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Configuration</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Developer API</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">API Reference</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Authentication</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Data Models</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Support & Help</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="md:col-span-9 space-y-8">
+
+                <!-- Page Content Section: Welcome Guide -->
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Getting Started</p>
+                    <h1 class="text-4xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        Start Reading the Guide: The HouseLearning Philosophy
+                    </h1>
+
+                    <!-- Introduction -->
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        Welcome to HouseLearning, the free, community-driven platform for practical knowledge. This guide will introduce you to our core principles, how the project is structured, and why we rely on **static web technology** to maintain a sustainable, zero-cost environment.
+                    </p>
+
+                    <!-- The Zero-Cost Mission -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">Our Zero-Cost Mission</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            We believe that educational resources should be accessible to everyone, everywhere, without incurring operational costs. By leveraging **GitHub Pages**, we host all documentation as simple, static HTML and Markdown files.
+                        </p>
+                        <ul class="space-y-2 text-gray-700 list-disc list-inside ml-4">
+                            <li><span class="font-semibold">No Databases:</span> We completely avoid complex backend infrastructure like Cloud Firestore, keeping things simple and free.</li>
+                            <li><span class="font-semibold">Pure Static Content:</span> All pages are pre-built, meaning faster loading times and zero server maintenance.</li>
+                            <li><span class="font-semibold">Open and Transparent:</span> Every change is recorded via Git, making contributions easy and transparent.</li>
+                        </ul>
+                    </div>
+
+                    <!-- How to Use These Docs -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">How to Use These Docs</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            This documentation is divided into three main sections to guide both users and contributors.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-1">Getting Started</h3>
+                                <p class="text-gray-600">
+                                    The steps required to clone the repository, run the site locally, and prepare your environment for contribution.
+                                    <a href="installation/repo-git.html" class="text-primary-accent hover:underline font-medium ml-2"> (See Installation)</a>
+                                </p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-1">Developer API</h3>
+                                <p class="text-gray-600">
+                                    For advanced users, this section covers any external APIs or services the project interacts with (though our core is static).
+                                </p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-1">Support & Help</h3>
+                                <p class="text-gray-600">
+                                    Find troubleshooting tips, frequently asked questions, and community channels for getting assistance.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next Step CTA -->
+                    <div class="pt-6 border-t border-gray-200 mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Ready to begin your journey?</p>
+                        <a href="installation/repo-git.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition duration-150">
+                            Next: Installation Guide &rarr;
+                        </a>
+                    </div>
+                </section>
+                <!-- End Page Content Section -->
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Simple Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
