@@ -1025,21 +1025,15 @@ async function followUser(targetUid) {
     if (!auth.currentUser) return alert("Sign in first");
 
     const me = auth.currentUser.uid;
-
-    if (me === targetUid) return; // cannot follow yourself
+    if (me === targetUid) return;
 
     const followingRef = doc(db, `user_profiles/${me}/following/${targetUid}`);
-    const followerRef  = doc(db, `user_profiles/${targetUid}/followers/${me}`);
 
     const meProfileRef     = doc(db, `user_profiles/${me}`);
     const targetProfileRef = doc(db, `user_profiles/${targetUid}`);
 
     try {
         await setDoc(followingRef, {
-            createdAt: Timestamp.now()
-        });
-
-        await setDoc(followerRef, {
             createdAt: Timestamp.now()
         });
 
@@ -1052,12 +1046,12 @@ async function followUser(targetUid) {
         });
 
         return true;
-
     } catch (err) {
         console.error("Follow failed:", err);
         return false;
     }
 }
+
 
 async function unfollowUser(targetUid) {
     if (!auth.currentUser) return;
@@ -1065,14 +1059,12 @@ async function unfollowUser(targetUid) {
     const me = auth.currentUser.uid;
 
     const followingRef = doc(db, `user_profiles/${me}/following/${targetUid}`);
-    const followerRef  = doc(db, `user_profiles/${targetUid}/followers/${me}`);
 
     const meProfileRef     = doc(db, `user_profiles/${me}`);
     const targetProfileRef = doc(db, `user_profiles/${targetUid}`);
 
     try {
         await deleteDoc(followingRef);
-        await deleteDoc(followerRef);
 
         await updateDoc(meProfileRef, {
             followingCount: increment(-1)
