@@ -981,6 +981,7 @@ profileBackBtn.addEventListener('click', () => {
 
             // Hook follow/edit buttons (UI-only)
             const followBtn = document.getElementById('profile-follow');
+            refreshFollowButton(profileUserId);
             // localStorage-based follow state (simple, no backend)
             const followKey = `follow_${profileUserId || profileEmail}`;
             function isFollowing() {
@@ -1018,6 +1019,100 @@ profileBackBtn.addEventListener('click', () => {
             // Render recent threads
             renderProfileThreads(profileUserId, profileEmail);
         }
+// --- FOLLOW SYSTEM (REMOTE, FIRESTORE-BASED) ---
+
+async function followUser(targetUid) {
+    if (!auth.currentUser) return alert("Sign in first");
+
+    const me = auth.currentUser.uid;
+
+    if (me === targetUid) return; // cannot follow yourself
+
+    const followingRef = doc(db, `user_profiles/${me}/following/${targetUid}`);
+    const followerRef  = doc(db, `user_profiles/${targetUid}/followers/${me}`);
+
+    const meProfileRef     = doc(db, `user_profiles/${me}`);
+    const targetProfileRef = doc(db, `user_profiles/${targetUid}`);
+
+    try {
+        await setDoc(followingRef, {
+            createdAt: Timestamp.now()
+        });
+
+        await setDoc(followerRef, {
+            createdAt: Timestamp.now()
+        });
+
+        await updateDoc(meProfileRef, {
+            followingCount: increment(1)
+        });
+
+        await updateDoc(targetProfileRef, {
+            followersCount: increment(1)
+        });
+
+        return true;
+
+    } catch (err) {
+        console.error("Follow failed:", err);
+        return false;
+    }
+}
+
+async function unfollowUser(targetUid) {
+    if (!auth.currentUser) return;
+
+    const me = auth.currentUser.uid;
+
+    const followingRef = doc(db, `user_profiles/${me}/following/${targetUid}`);
+    const followerRef  = doc(db, `user_profiles/${targetUid}/followers/${me}`);
+
+    const meProfileRef     = doc(db, `user_profiles/${me}`);
+    const targetProfileRef = doc(db, `user_profiles/${targetUid}`);
+
+    try {
+        await deleteDoc(followingRef);
+        await deleteDoc(followerRef);
+
+        await updateDoc(meProfileRef, {
+            followingCount: increment(-1)
+        });
+
+        await updateDoc(targetProfileRef, {
+            followersCount: increment(-1)
+        });
+
+        return true;
+
+    } catch (err) {
+        console.error("Unfollow failed:", err);
+        return false;
+    }
+}
+
+// Update UI state on profile view
+async function refreshFollowButton(targetUid) {
+    const me = auth.currentUser?.uid;
+    if (!me) return;
+
+    const followBtn = document.getElementById("profile-follow");
+    if (!followBtn) return;
+
+    const docRef = doc(db, `user_profiles/${me}/following/${targetUid}`);
+    const snap = await getDoc(docRef);
+
+    if (snap.exists()) {
+        followBtn.textContent = "Following";
+        followBtn.classList.remove("bg-secondary");
+        followBtn.classList.add("bg-gray-400");
+        followBtn.onclick = () => unfollowUser(targetUid).then(() => refreshFollowButton(targetUid));
+    } else {
+        followBtn.textContent = "+ Follow";
+        followBtn.classList.remove("bg-gray-400");
+        followBtn.classList.add("bg-secondary");
+        followBtn.onclick = () => followUser(targetUid).then(() => refreshFollowButton(targetUid));
+    }
+}
 
         // Render user's recent threads (10)
         async function renderProfileThreads(profileUserId, profileEmail) {
