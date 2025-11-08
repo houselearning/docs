@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -853,13 +854,14 @@
                 userMenuDropdown.innerHTML = '';
 
                 if (userId) {
-                    // Signed-in menu
-                    userMenuDropdown.innerHTML = `
-                        <a href="/auth/" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
-                        <a href="/docs/" class="block px-4 py-2 hover:bg-gray-100">Docs</a>
-                    `;
-                    // Links navigate naturally; no extra handlers needed
-                } else {
+    userMenuDropdown.innerHTML = `
+        <a href="/auth/" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
+        <a href="/docs/" class="block px-4 py-2 hover:bg-gray-100">Docs</a>
+        <a href="#" onclick="window.openProfile('${userId}', '${userEmail}'); return false;" 
+           class="block px-4 py-2 hover:bg-gray-100">My Profile</a>
+    `;
+}
+ else {
                     // Guest menu: Sign in button opens modal
                     userMenuDropdown.innerHTML = `
                         <button id="user-menu-signin" class="w-full text-left px-4 py-2 hover:bg-gray-100">Sign in</button>
@@ -903,6 +905,9 @@
         const profileView = document.getElementById('profile-view');
         const profileContent = document.getElementById('profile-content');
         const profileBackBtn = document.getElementById('profile-back');
+profileBackBtn.addEventListener('click', () => {
+    if (window.closeProfile) window.closeProfile();
+});
 
         async function openProfile(profileUserId, profileEmail) {
             if (!db) return;
