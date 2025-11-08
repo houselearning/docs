@@ -224,7 +224,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, deleteDoc, updateDoc, doc, getDoc, getDocs, setDoc, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp,  increment, deleteDoc, updateDoc, doc, getDoc, getDocs, setDoc, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONSTANTS AND CONFIGURATION ---
         const TAGS = ['Q&A', 'Bug', 'New Feature', 'Docs Issue', 'Comment', 'General'];
