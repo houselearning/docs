@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | HouseLearning Docs</title>
+
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-grow flex items-center justify-center px-6">
+        <div class="bg-bg-card p-10 rounded-2xl shadow-lg border border-gray-200 max-w-xl text-center">
+            
+            <div class="text-primary-accent font-bold uppercase tracking-wider mb-3 text-sm">
+                Error 404
+            </div>
+
+            <h1 class="text-5xl font-extrabold text-gray-900 mb-4">
+                Page Not Found
+            </h1>
+
+            <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                Looks like you wandered into a section that doesn’t exist. 
+                The page might’ve been moved, renamed, or deleted.
+            </p>
+
+            <a href="/docs/" class="inline-flex items-center px-6 py-3 rounded-xl text-white bg-primary-accent hover:bg-blue-800 font-medium transition">
+                Go Back Home →
+            </a>
+
+            <div class="mt-6 text-sm text-gray-500">
+                If you think this is a mistake, feel free to report it.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
