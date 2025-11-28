@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center | HouseLearning Docs</title>
+
+    <!-- Scripts -->
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Inter Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Sidebar -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Help Center</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg bg-blue-50 text-primary-accent font-semibold">Overview</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Common Issues</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Account Support</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Feature Guides</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Developer Tools</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">API Access</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Debugging</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">CLI Tools</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Support</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="https://houselearning.github.io/docs/fourm.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Forum</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Report a Bug</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Feedback</a></li>
+                        </ul>
+                    </div>
+
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-9 space-y-8">
+
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Support & Help</p>
+                    <h1 class="text-4xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        HouseLearning Help Center
+                    </h1>
+
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        Need answers? You’re in the right spot. This Help Center covers the most common questions, fixes, and how-to guides for everything across the HouseLearning ecosystem.
+                    </p>
+
+                    <!-- Section 1 -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">1. What Is HouseLearning?</h2>
+                        <p class="text-gray-700 leading-relaxed">
+                            HouseLearning is a lightweight learning platform designed to run fully on static files. No databases, no backend headaches, no locked-in systems — just clean HTML, CSS, JS, and community-powered docs.
+                        </p>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">2. How Do I Fix Common Errors?</h2>
+                        <p class="text-gray-700 mb-4">Here are the top issues people hit:</p>
+
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Page not loading:</span> Clear cache or check GitHub Pages build status.</li>
+                            <li><span class="font-semibold">404 links:</span> Remember GitHub Pages is case-sensitive.</li>
+                            <li><span class="font-semibold">Styles missing:</span> Ensure Tailwind CDN loads before custom scripts.</li>
+                            <li><span class="font-semibold">Feedback widget not showing:</span> Your browser might be blocking third-party scripts.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Section 3 -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">3. Account & Profile Support</h2>
+                        <p class="text-gray-700 mb-4">
+                            If you're having issues logging in or managing your profile:
+                        </p>
+
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+                            <li>Double-check your email spelling.</li>
+                            <li>Try resetting your password.</li>
+                            <li>If you're using school Wi-Fi, scripts might be blocked — try mobile data.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Section 4 -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">4. Need Direct Help?</h2>
+                        <p class="text-gray-700 leading-relaxed">
+                            If none of this solves your issue, hit the Contact Support page or open a GitHub issue with detailed steps so the team can reproduce your problem.
+                        </p>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="pt-6 border-t border-gray-200 mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Still stuck?</p>
+                        <p class="text-gray-700 mb-4">
+                            Check the Troubleshooting page — it’s stacked with quick fixes.
+                        </p>
+                        <a href="#" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition duration-150">
+                            Go to Troubleshooting →
+                        </a>
+                    </div>
+
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
