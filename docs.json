@@ -5,13 +5,53 @@
         "link": "/docs/installation/repo-git.html"
     },
     {
-        "title": "API — Authentication",
-        "description": "How tokens, keys, and client auth works.",
-        "link": "/docs/api/reference.html#auth"
+        "title": "HouseLearning Help Center",
+        "description": "Basic issues discussed here.",
+        "link": "/docs/helpcenter/index.html"
     },
     {
         "title": "Developer Guides",
         "description": "Advanced integration patterns and system internals.",
         "link": "/docs/api/dev-guides.html"
-    }
+    },
+    {
+        "title": "HouseLearning Docs",
+        "description": "The official documentary of HouseLearning.",
+        "link": "/docs/api/dev-guides.html"
+    },
+    {
+        "title": "Community Forum",
+        "description": "Talk about developer topics. What's trending?",
+        "link": "/docs/fourm.html"
+    },
+    {
+        "title": "Developer Guides",
+        "description": "Advanced integration patterns and system internals.",
+        "link": "/docs/api/dev-guides.html"
+    },
+    {
+        "title": "API Models",
+        "description": "The structured formats used across all HouseLearning API endpoints. These models define how data is stored, returned, and validated.",
+        "link": "/docs/api/models.html"
+    },
+    {
+        "title": "API Reference",
+        "description": "Everything you need to integrate with HouseLearning’s ecosystem — fully documented, typed, and ready to use.",
+        "link": "/docs/api/reference.html"
+    },
+    {
+        "title": "API Status",
+        "description": "HouseLearning's API Status.",
+        "link": "/docs/api/status.html"
+    },
+    {
+        "title": "Configuration",
+        "description": "Configuration Guide: Setting Up Your Environment",
+        "link": "/docs/installation/config.html"
+    },
+    {
+        "title": "Installation",
+        "description": "Installation Guide: Setting Up for Local Development",
+        "link": "/docs/installation/repo-git.html"
+    },
 ]
