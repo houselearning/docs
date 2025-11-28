@@ -1,0 +1,17 @@
+[
+    {
+        "title": "Installation Guide",
+        "description": "Set up your environment, repo, and core tools.",
+        "link": "/docs/installation/repo-git.html"
+    },
+    {
+        "title": "API — Authentication",
+        "description": "How tokens, keys, and client auth works.",
+        "link": "/docs/api/reference.html#auth"
+    },
+    {
+        "title": "Developer Guides",
+        "description": "Advanced integration patterns and system internals.",
+        "link": "/docs/api/dev-guides.html"
+    }
+]
