@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference | HouseLearning Docs</title>
+    <script src="/cookiebanner.js"></script>
+  <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+
+</head>
+<body class="bg-bg-light font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">Help Center</a>
+                <a href="/docs/configuration/" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">Configuration</a>
+                <a href="/docs/api/" class="text-primary-accent ml-6 font-semibold">API Reference</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-grow px-6 py-12">
+        <div class="max-w-5xl mx-auto">
+            
+            <h1 class="text-5xl font-extrabold text-gray-900 mb-4">
+                API Reference
+            </h1>
+            <p class="text-gray-600 text-lg mb-8">
+                Everything you need to integrate with HouseLearning’s ecosystem — fully documented, typed, and ready to use.
+            </p>
+
+            <!-- Sidebar + Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
+
+                <!-- Sidebar -->
+                <aside class="lg:col-span-1 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm h-fit sticky top-28">
+                    <h2 class="font-bold text-gray-700 mb-4 uppercase text-sm tracking-wider">Endpoints</h2>
+                    <nav class="space-y-3 text-gray-700 text-sm">
+                        <a href="#auth" class="block hover:text-primary-accent">Authentication</a>
+                        <a href="#users" class="block hover:text-primary-accent">Users</a>
+                        <a href="#content" class="block hover:text-primary-accent">Content</a>
+                        <a href="#analytics" class="block hover:text-primary-accent">Analytics</a>
+                    </nav>
+                </aside>
+
+                <!-- Content -->
+                <section class="lg:col-span-3 space-y-20">
+
+                    <!-- AUTH -->
+                    <div id="auth">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Authentication</h2>
+                        <p class="text-gray-600 mb-6 text-lg">Endpoints for signing in, managing tokens, and validating sessions.</p>
+
+                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 mb-10">
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">POST /api/auth/login</h3>
+                            <p class="text-gray-600 mb-4">Login using email and password.</p>
+
+                            <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
+  "email": "user@example.com",
+  "password": "mypassword123"
+}</code></pre>
+
+                            <p class="mt-4 text-gray-600 font-medium">Returns:</p>
+                            <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
+  "token": "abcdef123456",
+  "expiresIn": 3600
+}</code></pre>
+                        </div>
+
+                    </div>
+
+                    <!-- USERS -->
+                    <div id="users">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Users</h2>
+                        <p class="text-gray-600 mb-6 text-lg">Endpoints related to user info, profiles, accounts, and preferences.</p>
+
+                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">GET /api/users/{id}</h3>
+                            <p class="text-gray-600 mb-4">Gets public data about the specified user.</p>
+
+                            <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
+  "id": "6741",
+  "name": "Neil Narwhal",
+  "joined": "2025-03-09"
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div id="content">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Content</h2>
+                        <p class="text-gray-600 mb-6 text-lg">Endpoints for docs, lessons, and data retrieval.</p>
+
+                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">GET /api/content/docs</h3>
+                            <p class="text-gray-600 mb-4">Returns a list of all available documentation pages.</p>
+                        </div>
+
+                    </div>
+
+                    <!-- ANALYTICS -->
+                    <div id="analytics">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Analytics</h2>
+                        <p class="text-gray-600 mb-6 text-lg">Track usage, impressions, and performance.</p>
+
+                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">GET /api/analytics/views</h3>
+                            <p class="text-gray-600 mb-4">Gets total page views for your project.</p>
+                        </div>
+
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
