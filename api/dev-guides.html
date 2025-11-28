@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Guides | HouseLearning Docs</title>
+
+    <script src="/cookiebanner.js"></script>
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+
+</head>
+<body class="bg-bg-light font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+            <nav>
+                <a href="/docs/configuration/" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">Configuration</a>
+                <a href="/docs/api/" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">API</a>
+                <a href="#" class="text-primary-accent ml-6 font-semibold">Developer Guides</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-grow px-6 py-12">
+        <div class="max-w-5xl mx-auto">
+
+            <h1 class="text-5xl font-extrabold text-gray-900 mb-4">
+                Developer Guides
+            </h1>
+
+            <p class="text-gray-600 text-lg mb-12">
+                Deep-dive into everything you need to build integrations, tools, and apps 
+                on top of the HouseLearning ecosystem — from authentication to webhooks,
+                from performance tuning to advanced API usage.
+            </p>
+
+            <!-- Grid of Guides -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Guide Card -->
+                <a href="#authentication" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Authentication</h2>
+                    <p class="text-gray-600 text-sm">
+                        Learn how to authenticate users and protect API routes safely.
+                    </p>
+                </a>
+
+                <a href="#fetching" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Fetching Data</h2>
+                    <p class="text-gray-600 text-sm">
+                        Query lessons, users, analytics, and more using REST endpoints.
+                    </p>
+                </a>
+
+                <a href="#webhooks" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Webhooks</h2>
+                    <p class="text-gray-600 text-sm">
+                        React to real-time events like new lessons, profile changes, and analytics updates.
+                    </p>
+                </a>
+
+                <a href="#sdk" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">SDK Usage</h2>
+                    <p class="text-gray-600 text-sm">
+                        Optional JavaScript helper functions for working with the API.
+                    </p>
+                </a>
+
+                <a href="#rate-limits" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Rate Limits</h2>
+                    <p class="text-gray-600 text-sm">
+                        Understand how rate limiting works and how to stay efficient.
+                    </p>
+                </a>
+
+                <a href="#errors" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Error Handling</h2>
+                    <p class="text-gray-600 text-sm">
+                        Properly detect and respond to API error states.
+                    </p>
+                </a>
+
+            </div>
+
+            <!-- Detailed Sections -->
+            <div class="mt-20 space-y-32">
+
+                <!-- AUTH SECTION -->
+                <section id="authentication">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Authentication</h2>
+                    <p class="text-gray-600 text-lg mb-6">
+                        Authenticating with the HouseLearning API is simple: send the user’s token 
+                        in the <code class="bg-gray-200 rounded px-1">Authorization</code> header.
+                    </p>
+
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>GET /api/v1/user/me
+Authorization: Bearer &lt;token&gt;
+</code></pre>
+
+                    <p class="text-gray-600 mt-6">
+                        Tokens expire every 24 hours.  
+                        Refresh tokens last 30 days.
+                    </p>
+                </section>
+
+                <!-- FETCHING DATA -->
+                <section id="fetching">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Fetching Data</h2>
+                    <p class="text-gray-600 text-lg mb-6">
+                        You can fetch any model using the REST endpoints. Here's a basic lesson fetch:
+                    </p>
+
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>GET /api/v1/lessons?id=LSN-103
+Authorization: Bearer &lt;token&gt;
+</code></pre>
+                </section>
+
+                <!-- WEBHOOKS -->
+                <section id="webhooks">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Webhooks</h2>
+                    <p class="text-gray-600 text-lg mb-6">
+                        Webhooks notify your server in real time when certain events occur.
+                    </p>
+
+                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
+                        <li>user.created</li>
+                        <li>user.updated</li>
+                        <li>lesson.published</li>
+                        <li>lesson.updated</li>
+                        <li>analytics.hit</li>
+                    </ul>
+
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto mt-6"><code>{
+  "event": "lesson.published",
+  "timestamp": "2024-04-10T18:21:00Z",
+  "lessonId": "LSN-103"
+}</code></pre>
+                </section>
+
+                <!-- SDK -->
+                <section id="sdk">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">SDK Usage</h2>
+                    <p class="text-gray-600 text-lg mb-6">
+                        The optional SDK speeds up development:
+                    </p>
+
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>import { HL } from "houselearning-sdk";
+
+const hl = new HL("your_api_key");
+
+const user = await hl.user.me();
+</code></pre>
+                </section>
+
+                <!-- RATE LIMITS -->
+                <section id="rate-limits">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Rate Limits</h2>
+                    <p class="text-gray-600 text-lg mb-6">
+                        HouseLearning uses a rolling 1-minute window:
+                    </p>
+
+                    <ul class="text-gray-700 space-y-2">
+                        <li><strong>100 requests/min</strong> — Free Tier</li>
+                        <li><strong>600 requests/min</strong> — Pro Tier</li>
+                        <li><strong>Unlimited*</strong> — Enterprise</li>
+                    </ul>
+                </section>
+
+                <!-- ERRORS -->
+                <section id="errors">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Error Handling</h2>
+                    <p class="text-gray-600 text-lg mb-6">
+                        All errors follow a consistent schema:
+                    </p>
+
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
+  "error": true,
+  "code": 403,
+  "message": "Missing or invalid token"
+}</code></pre>
+
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
