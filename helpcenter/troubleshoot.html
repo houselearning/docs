@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Troubleshooting | HouseLearning Docs</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <script src="https://houselearning.github.io/feedback.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/docs/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" 
+                   class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" 
+                   class="text-gray-600 hover:text-primary-accent transition font-medium ml-6" 
+                   target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <section class="bg-white p-10 rounded-xl shadow-lg border border-gray-100">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Troubleshooting</h1>
+            <p class="text-lg text-gray-700 mb-6">
+                Running into bugs, weird behavior, or “why does this hate me?” moments?  
+                This page packs fixes for the most common issues across the platform.
+            </p>
+
+            <p class="text-gray-600">
+                If your issue isn’t listed, scroll down — we’ve got options for community support and direct help.
+            </p>
+        </section>
+
+        <!-- Common Issues -->
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Most Common Issues</h2>
+
+            <div class="space-y-6">
+
+                <!-- Issue Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Page Not Loading / White Screen</h3>
+                    <p class="text-gray-600 mb-3 text-sm">This usually happens due to missing scripts, invalid JSON files, or an HTML build error.</p>
+                    <ul class="list-disc ml-5 text-gray-600 text-sm space-y-1">
+                        <li>Open your browser dev tools → Console → check for errors</li>
+                        <li>Make sure all local paths begin with <code>/docs/…</code></li>
+                        <li>Verify your <code>docs.json</code> file is valid (no trailing commas!)</li>
+                        <li>Clear cache: <strong>CTRL + Shift + R</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Issue Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Search Bar Shows No Results</h3>
+                    <p class="text-gray-600 mb-3 text-sm">If your new page isn’t appearing in search:</p>
+                    <ul class="list-disc ml-5 text-gray-600 text-sm space-y-1">
+                        <li>Open <code>docs.json</code> and make sure the entry exists</li>
+                        <li>Confirm your <code>title</code>, <code>path</code>, and <code>tags</code> fields are correct</li>
+                        <li>Ensure the search script is correctly linked</li>
+                    </ul>
+                </div>
+
+                <!-- Issue Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Styles Not Loading</h3>
+                    <p class="text-gray-600 text-sm mb-3">
+                        99% of the time it’s either a missing Tailwind CDN import or an empty PurgeCSS build (if using a pipeline).
+                    </p>
+                    <ul class="list-disc ml-5 text-gray-600 text-sm space-y-1">
+                        <li>Make sure your Tailwind CDN is loaded at the top of the page</li>
+                        <li>Check for network errors — maybe GitHub Pages is rate-limiting</li>
+                        <li>Try loading the page in an incognito tab</li>
+                    </ul>
+                </div>
+
+                <!-- Issue Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">GitHub Pages Not Updating</h3>
+                    <p class="text-gray-600 mb-3 text-sm">GitHub Pages is slow sometimes.</p>
+                    <ul class="list-disc ml-5 text-gray-600 text-sm space-y-1">
+                        <li>Wait 15–60 seconds after pushing</li>
+                        <li>Force reload with <strong>CTRL + Shift + R</strong></li>
+                        <li>Verify your repo settings → Pages → branch set correctly</li>
+                        <li>Make sure there’s an <code>index.html</code> in every folder</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- More Help -->
+        <section class="mt-12 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Need More Help?</h2>
+            <p class="text-gray-700 mb-6">
+                If something is still acting cursed, hit one of the options below.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="bg-bg-card p-6 rounded-xl shadow-md border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Community Forum</h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Ask questions, share issues, and get help from other developers.
+                    </p>
+                    <a href="/docs/fourm.html" 
+                       class="text-primary-accent text-sm font-medium hover:text-blue-700">
+                       Visit the Forum →
+                    </a>
+                </div>
+
+                <div class="bg-bg-card p-6 rounded-xl shadow-md border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Contact Support</h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Our support team can help with advanced or account-related problems.
+                    </p>
+                    <a href="https://bit.ly/houselearningdocssupport" 
+                       class="text-primary-accent text-sm font-medium hover:text-blue-700">
+                       Reach Out →
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
