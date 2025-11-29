@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeLibrary | HouseLearning Docs</title>
+
+  <script src="https://houselearning.github.io/feedback.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/cookiebanner.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-accent': '#1C64F2',
+            'bg-light': '#F9FAFB',
+            'bg-card': '#FFFFFF',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+  </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+      <nav>
+        <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">Help Center</a>
+        <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content Grid -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+      <!-- Sidebar -->
+      <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+        <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">SafeLibrary Index</h3>
+        <nav class="space-y-2">
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Overview</a></li>
+            <li><a href="#audio" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Audio Library</a></li>
+            <li><a href="#books" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Books / Videos</a></li>
+            <li><a href="#programs" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Interactive Programs</a></li>
+            <li><a href="#images" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Safe Images</a></li>
+            <li><a href="#ai" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Safe AI Tools</a></li>
+            <li><a href="#reporting" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Report Unsafe Content</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="md:col-span-9 space-y-8">
+
+        <!-- Overview Section -->
+        <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">SafeLibrary</p>
+          <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">SafeLibrary – What It Is</h1>
+          <p class="text-lg text-gray-700 leading-relaxed mb-6">
+            SafeLibrary is HouseLearning’s safe, curated digital resource hub — built for learners, creators, and educators.
+            It bundles together audio, books, interactive programs, images, and kid-friendly AI tools — all under a safe, moderated environment.
+            Everything is hand-picked or filtered to avoid inappropriate content and keep learning spaces clean.
+          </p>
+          <p class="text-gray-700 leading-relaxed">
+            Below you’ll find detailed descriptions of each section, how they work, and how to report anything that slipped through.
+          </p>
+        </section>
+
+        <!-- Audio Library -->
+        <section id="audio" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Audio Library</h2>
+          <p class="text-gray-700 mb-4">
+            A collection of safe, royalty-free sound effects and ambient audio perfect for projects, games, or relaxation.  
+            All audio has been reviewed to ensure no inappropriate or copyrighted content — safe for classroom and public use.
+          </p>
+          <p class="text-gray-600 italic mb-2">Example uses:</p>
+          <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+            <li>Background music for games or interactive apps</li>
+            <li>Sound effects for buttons, alerts, transitions</li>
+            <li>Ambient loops for study or relaxation</li>
+          </ul>
+        </section>
+
+        <!-- Books / Videos Library -->
+        <section id="books" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Books / Audiobooks / Videos</span></h2>
+          <p class="text-gray-700 mb-4">
+            A curated library of free literature, audiobooks, and educational video content.  
+            Everything is safe, age-appropriate, and checked for copyright or licensing issues.  
+            Great for self-learning, reading practice, or multimedia study sessions.
+          </p>
+          <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+            <li>Classic public-domain books</li>
+            <li>Educational audiobooks and read-alongs</li>
+            <li>Instructional or documentary videos (math, science, history, etc.)</li>
+          </ul>
+        </section>
+
+        <!-- Interactive Programs -->
+        <section id="programs" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Interactive Programs</h2>
+          <p class="text-gray-700 mb-4">
+            Browser-based interactive tools like learning games, quizzes, simulations — all built or approved by HouseLearning.  
+            They’re sandboxed, safe, and optimized for both fun and educational value.
+          </p>
+          <p class="text-gray-600 italic">Use them for:</p>
+          <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+            <li>Math / science practice games</li>
+            <li>Learning modules with quizzes</li>
+            <li>Interactive tutorials (coding, logic, creativity)</li>
+          </ul>
+        </section>
+
+        <!-- Safe Images -->
+        <section id="images" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Safe Images Library</h2>
+          <p class="text-gray-700 mb-4">
+            A gallery of hundreds of images cleared for free use — school projects, slides, backgrounds, game development, and more.  
+            All images are vetted to ensure no explicit or inappropriate content.
+          </p>
+          <p class="text-gray-600 italic">Typical uses:</p>
+          <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+            <li>Illustrations for lessons or games</li>
+            <li>Background assets for web pages/apps</li>
+            <li>Visual aids for educational content</li>
+          </ul>
+        </section>
+
+        <!-- Safe AI Tools -->
+        <section id="ai" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Safe AI Tools</h2>
+          <p class="text-gray-700 mb-4">
+            Kid-friendly AI-powered tools: generation, assistance, chatbots, or creative helpers — all filtered through SafeLibrary’s moderation system.  
+            Designed to help learners explore, create, and experiment while staying within safe boundaries.
+          </p>
+          <p class="text-gray-600 italic">What’s included:</p>
+          <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+            <li>AI writing assistants (for essays, projects)</li>
+            <li>Image / art generation under safe filters</li>
+            <li>Coding helper bots (for safe beginner code prompts)</li>
+          </ul>
+        </section>
+
+        <!-- Reporting Unsafe Content -->
+        <section id="reporting" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Reporting Unsafe Content</h2>
+          <p class="text-gray-700 mb-4">
+            If you find something that violates our content standards (explicit material, copyright issues, malware, etc.), please let us know.  
+            SafeLibrary relies on community vigilance + automatic filters to stay clean.
+          </p>
+          <a href="https://forms.gle/MxtTqJcDg5Ujr1qP6" target="_blank"
+             class="inline-flex items-center px-5 py-3 bg-primary-accent text-white rounded-xl shadow hover:bg-blue-800 transition">
+            Report Unsafe Item →
+          </a>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+      &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+    </div>
+  </footer>
+
+</body>
+</html>
