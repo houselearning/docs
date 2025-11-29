@@ -78,5 +78,10 @@
         "title": "Embedding the Feedback Widget",
         "description": "The HouseLearning Feedback Widget lets you collect quick thoughts, bug reports, and improvement ideas from visitors directly on your site.",
         "link": "/docs/intro/feedback-script-add.html"
+    },
+    {
+        "title": "HouseLearning's GitHub Repositories",
+        "description": "Human-first learning. Bite-sized lessons that actually stick.",
+        "link": "https://github.com/houselearning?link-ref=docs"
     }
 ]
