@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedding the Feedback Widget | HouseLearning Docs</title>
+
+    <!-- Feedback widget -->
+    <script src="https://houselearning.github.io/feedback.js"></script>
+
+    <!-- Cookie banner (optional, recommended) -->
+    <script src="/cookiebanner.js"></script>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Inter font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto px-6 py-12">
+
+        <!-- Header Title -->
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+            Embedding the Feedback Widget
+        </h1>
+
+        <p class="text-lg text-gray-700 leading-relaxed mb-8">
+            The HouseLearning Feedback Widget lets you collect quick thoughts, bug reports, and improvement ideas from visitors directly on your site. It’s lightweight, fast, and requires zero setup.
+        </p>
+
+        <!-- IMAGE + DESCRIPTION -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-12">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-3">What It Looks Like</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    When you embed the widget, the feedback window will open randomly, providing you with the same window HouseLearning & SafeLibrary uses.
+                </p>
+            </div>
+
+            <img src="img/feedback-preview.png"
+                 alt="Feedback Widget Preview"
+                 class="rounded-xl shadow-lg border border-gray-200">
+        </div>
+
+        <!-- EMBED SECTION -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">How to Embed the Widget</h2>
+
+        <p class="text-gray-700 mb-3">
+            Drop this script anywhere in your <code class="bg-gray-200 px-1 rounded">head</code> or right before the <code class="bg-gray-200 px-1 rounded">body</code> ends:
+        </p>
+
+        <pre class="bg-gray-900 text-gray-200 p-4 rounded-lg overflow-x-auto mb-6">
+<code>&lt;script src="https://houselearning.github.io/feedback.js"&gt;&lt;/script&gt;</code>
+        </pre>
+
+        <p class="text-gray-700 leading-relaxed mb-8">
+            No initialization. No configuration. The widget activates automatically.
+            You can use it on **any website**, including static HTML, GitHub Pages, and frameworks.
+        </p>
+
+        <!-- CREDITS -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Required Credit</h2>
+
+        <p class="text-gray-700 leading-relaxed mb-4">
+            To legally use the HouseLearning Feedback Widget on your site, you must include attribution.  
+        </p>
+
+        <p class="text-gray-700 mb-4">Place the credit in your footer:</p>
+
+        <pre class="bg-gray-900 text-gray-200 p-4 rounded-lg overflow-x-auto mb-6">
+<code>&lt;p&gt;Feedback system provided by &lt;a href="https://houselearning.github.io/" target="_blank"&gt;HouseLearning&lt;/a&gt;.&lt;/p&gt;</code>
+        </pre>
+
+        <p class="text-gray-700 leading-relaxed mb-8">
+            That’s it — one line.  
+            As long as the credit is visible on your site, you’re fully cleared to use, modify, and embed the widget.
+        </p>
+
+        <!-- OPTIONAL -->
+        <h2 class="text-xl font-bold text-gray-800 mb-2">Optional Enhancements</h2>
+
+        <ul class="list-disc ml-6 text-gray-700 space-y-2">
+            <li>Show cookie consent automatically with <code>/cookiebanner.js</code></li>
+            <li>Customize position using CSS overrides</li>
+            <li>Add analytics around widget usage</li>
+        </ul>
+
+        <!-- END -->
+        <div class="mt-12 border-t pt-6">
+            <p class="text-gray-700 font-medium">
+                Need help customizing the widget?
+            </p>
+            <a href="https://houselearning.github.io/docs/helpcenter/troubleshoot.html"
+               class="text-primary-accent hover:underline font-semibold">
+                Visit Troubleshooting →
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
