@@ -68,5 +68,10 @@
         "title": "HouseLearning Forum Guidelines",
         "description": "These guidelines help keep the HouseLearning Forum clean, respectful, and actually useful.",
         "link": "/docs/intro/fourm-guidelines.html"
+    },
+    {
+        "title": "SafeLibrary",
+        "description": "SafeLibrary is HouseLearning’s safe, curated digital resource hub — built for learners, creators, and educators.",
+        "link": "/docs/intro/safelibrary.html"
     }
 ]
