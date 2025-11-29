@@ -73,5 +73,15 @@
         "title": "SafeLibrary",
         "description": "SafeLibrary is HouseLearning’s safe, curated digital resource hub — built for learners, creators, and educators.",
         "link": "/docs/intro/safelibrary.html"
+    },
+    {
+        "title": "HouseLearning Feedback Window",
+        "description": "The **Feedback Window** is the little pop-up you see at the bottom-right of HouseLearning pages.",
+        "link": "/docs/intro/feedback.html"
+    },
+    {
+        "title": "Embedding the Feedback Widget",
+        "description": "The HouseLearning Feedback Widget lets you collect quick thoughts, bug reports, and improvement ideas from visitors directly on your site.",
+        "link": "/docs/intro/feedback-script-add.html"
     }
 ]
