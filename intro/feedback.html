@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Window | HouseLearning Docs</title>
+
+    <!-- Feedback Script -->
+    <script src="https://houselearning.github.io/feedback.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Cookie Banner -->
+    <script src="/cookiebanner.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+
+    <!-- Inter Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Sticky Navigation -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Sidebar -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Core Features</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Feedback Window</a></li>
+                            <li><a href="/docs/interface/notifications.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Notifications</a></li>
+                            <li><a href="/docs/interface/account.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Account Settings</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Help & Support</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/support/troubleshooting.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="/docs/support/faq.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="/docs/support/contact.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-9 space-y-8">
+
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">User Interface</p>
+
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        The HouseLearning Feedback Window
+                    </h1>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                        <!-- Text Content -->
+                        <div>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                The **Feedback Window** is the little pop-up you see at the bottom-right of HouseLearning pages. It's our lightweight, zero-cost way to gather suggestions, bug reports, and user ratings — all without needing a backend.
+                            </p>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">Why It Exists</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                HouseLearning uses things like Google Analytics and Firebase to run. We want to know how we are doing as a site & as a team.
+                                That means we needed a feedback system that:
+                            </p>
+
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>loads instantly on every page</li>
+                                <li>stores responses locally until submitted</li>
+                                <li>runs on pure JavaScript without a backend</li>
+                                <li>feels familiar — like Google's “Send Feedback” popout</li>
+                            </ul>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">How It Works</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                When you click the **feedback button**, the script opens a smooth, animated panel where you can:
+                            </p>
+
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>rate your experience</li>
+                                <li>send a message or suggestion</li>
+                                <li>report issues or broken pages</li>
+                            </ul>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Where Your Feedback Goes</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Feedback is sent to a GitHub endpoint used by HouseLearning maintainers.  
+                                No personal data. No tracking. Just your message — that’s it.
+                            </p>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="flex justify-center items-start">
+                            <img src="img/feedback-window.png" alt="Feedback Window UI" class="rounded-xl shadow-lg border border-gray-200 max-w-full">
+                        </div>
+
+                    </div>
+
+                    <div class="pt-6 border-t mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Want to learn how to add it to your own page?</p>
+                        <a href="feedback-script-add.html" class="inline-flex items-center px-6 py-3 font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            How? →
+                        </a>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
