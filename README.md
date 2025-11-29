@@ -24,7 +24,7 @@ npx serve .
 ```
 # or use VS Code Live Server
 
-## 📁 Project Structure
+## 📁 Project Structure (soon to update)
 ```
 /docs
   /getting-started
