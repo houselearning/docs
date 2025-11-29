@@ -25,11 +25,6 @@
         "link": "/docs/fourm.html"
     },
     {
-        "title": "Developer Guides",
-        "description": "Advanced integration patterns and system internals.",
-        "link": "/docs/api/dev-guides.html"
-    },
-    {
         "title": "API Models",
         "description": "The structured formats used across all HouseLearning API endpoints. These models define how data is stored, returned, and validated.",
         "link": "/docs/api/models.html"
