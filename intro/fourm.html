@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum Basics | HouseLearning Docs</title>
+
+    <!-- Feedback + Tailwind -->
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Inter Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Sidebar -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+
+                <nav class="space-y-2">
+
+                    <!-- Getting Started -->
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Getting Started</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/welcome.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Welcome Guide</a></li>
+                            <li><a href="/docs/installation/repo-git.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Installation</a></li>
+                            <li><a href="/docs/config/" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Configuration</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Developer API -->
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Developer API</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/api/reference.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">API Reference</a></li>
+                            <li><a href="/docs/api/auth.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Authentication</a></li>
+                            <li><a href="/docs/api/models.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Data Models</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Support -->
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Support & Help</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/helpcenter/troubleshooting.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="/docs/helpcenter/faq.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="/docs/helpcenter/contact.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Community -->
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Community</h4>
+                        <ul class="space-y-1 text-sm">
+                            <!-- ACTIVE -->
+                            <li><a href="#" class="block p-2 rounded-lg bg-blue-50 text-primary-accent font-semibold">Forum Basics</a></li>
+                            <li><a href="/docs/intro/fourm-guidelines.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Community Guidelines</a></li>
+                        </ul>
+                    </div>
+
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-9 space-y-8">
+
+                <!-- Forum Basics Page -->
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Community</p>
+
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        HouseLearning Forum Basics
+                    </h1>
+
+                    <!-- Intro -->
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        The HouseLearning Forum is where users share solutions, ask questions, collaborate,
+                        and help move the community forward. This guide walks you through posting,
+                        replying, categories, safety tips, and how to get the most out of the space.
+                    </p>
+
+                    <!-- Section: What the Forum Is -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">What the Forum Is</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            The forum acts as a lightweight, public discussion board for everything
+                            related to HouseLearning. Whether you're reporting a bug, helping someone fix
+                            an issue, or showcasing something cool you built — this is the place.
+                        </p>
+
+                        <ul class="space-y-2 text-gray-700 list-disc list-inside ml-4">
+                            <li>Ask for guidance on using HouseLearning features</li>
+                            <li>Request help debugging code or integrations</li>
+                            <li>Report bugs with details and steps to reproduce</li>
+                            <li>Share tips, templates, or community resources</li>
+                            <li>Participate in general discussion</li>
+                        </ul>
+                    </div>
+
+                    <!-- Section: Creating an Account -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">Creating an Account</h2>
+                        <p class="text-gray-700 mb-3">
+                            To post on the forum, you’ll need a HouseLearning account. The signup process is quick:
+                            just email + password. After logging in, you'll get access to posting, replying,
+                            votes, notifications, and bookmarks.
+                        </p>
+                        <p class="text-gray-600">
+                            Account creation helps reduce spam and keeps the forum safe and organized.
+                        </p>
+                    </div>
+
+                    <!-- Section: Posting a Question -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">Posting Your First Question</h2>
+                        <p class="text-gray-700 mb-4">
+                            Asking good questions leads to fast, accurate answers. Here’s how to write a post
+                            people will actually respond to:
+                        </p>
+
+                        <div class="space-y-2 ml-4">
+                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-lg font-semibold">1. Be Clear</h3>
+                                <p class="text-gray-600">Explain the issue in one or two sentences.</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-lg font-semibold">2. Add Details</h3>
+                                <p class="text-gray-600">Include steps, screenshots, or your setup.</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <h3 class="text-lg font-semibold">3. Include Code (if relevant)</h3>
+                                <p class="text-gray-600">Use code blocks for readability.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Replies -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">Replying to People</h2>
+                        <p class="text-gray-700 mb-4">
+                            Replies keep the forum alive. When responding:
+                        </p>
+
+                        <ul class="space-y-2 text-gray-700 list-disc ml-4">
+                            <li>Keep the conversation friendly and constructive</li>
+                            <li>Answer the specific question asked</li>
+                            <li>Format code properly</li>
+                            <li>Upvote helpful responses</li>
+                            <li>Keep threads on-topic</li>
+                        </ul>
+                    </div>
+
+                    <!-- Section: Categories -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">Forum Categories</h2>
+                        <p class="text-gray-700 mb-4">
+                            Posts are split into categories to make navigation easier:
+                        </p>
+
+                        <ul class="space-y-2 text-gray-700 list-disc ml-4">
+                            <li><strong>General Help:</strong> Questions about using HouseLearning</li>
+                            <li><strong>Bugs & Issues:</strong> Something broke? Drop it here</li>
+                            <li><strong>Feature Requests:</strong> Suggest improvements or tools</li>
+                            <li><strong>Guides & Tips:</strong> Community-created tutorials</li>
+                            <li><strong>Showcase:</strong> Share your projects</li>
+                        </ul>
+                    </div>
+
+                    <!-- Section: Notifications -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">Notifications</h2>
+                        <p class="text-gray-700">
+                            You’ll get notified when someone replies to your post, tags you, or reacts.
+                            Notification settings can be adjusted in your profile.
+                        </p>
+                    </div>
+
+                    <!-- Section: Safety -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">Safety & Guidelines</h2>
+                        <p class="text-gray-700">
+                            Don’t share personal info, passwords, or sketchy links. Mods keep things clean,
+                            but basic internet safety still applies.
+                        </p>
+                    </div>
+
+                    <!-- CTA to Troubleshooting -->
+                    <div class="p-6 bg-gray-50 rounded-xl border border-gray-200 mt-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Still stuck?</h2>
+                        <p class="text-gray-700 mb-4">Check the Troubleshooting page — it’s stacked with quick fixes.</p>
+                        <a href="/docs/helpcenter/troubleshoot.html" class="inline-flex items-center px-5 py-3 text-white bg-primary-accent rounded-lg shadow hover:bg-blue-800 transition">
+                            Go to Troubleshooting →
+                        </a>
+                    </div>
+
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
