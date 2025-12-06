@@ -226,9 +226,9 @@
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    // Added arrayRemove and arrayUnion for potential future feature, but not strictly needed for voting
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp,  increment, deleteDoc, updateDoc, doc, getDoc, getDocs, setDoc, setLogLevel, where, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+    // Added arrayUnion and arrayRemove for the new follow feature
+// Corrected Import
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp, increment, deleteDoc, updateDoc, doc, getDoc, getDocs, setDoc, setLogLevel, where, limit, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     // --- CONSTANTS AND CONFIGURATION ---
     const TAGS = ['Q&A', 'Bug', 'New Feature', 'Docs Issue', 'Comment', 'General'];
     const TAG_COLORS = {
@@ -266,6 +266,9 @@
     const voteCache = {}; 
     // Structure: postId: { userVote: 1, -1, or 0 }
     const userVoteState = {};
+    // Structure: userId: true/false for if the current user is following them
+    const followingState = {}; 
+
 
     // --- DOM Elements ---
     const postsContainer = document.getElementById('posts-container');
@@ -359,6 +362,73 @@
         return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
+    // --- FOLLOW LOGIC ---
+
+    /**
+     * Handles the follow/unfollow action.
+     * @param {string} profileUserId - The ID of the user being followed/unfollowed.
+     * @param {boolean} isCurrentlyFollowing - Current following state.
+     * @param {string} profileEmail - The email of the user (for fallback/display).
+     */
+    /*
+    async function handleFollow(profileUserId, isCurrentlyFollowing, profileEmail) {
+        if (!userId) {
+            showTemporaryMessage("You must sign in to follow users.", 'error');
+            return;
+        }
+
+        // Cannot follow self
+        if (userId === profileUserId) {
+             showTemporaryMessage("You cannot follow yourself.", 'error');
+             return;
+        }
+
+        const currentUserProfileRef = getUserRef(userId);
+        const targetUserProfileRef = getUserRef(profileUserId);
+        const operation = isCurrentlyFollowing ? 'Unfollowing' : 'Following';
+
+        try {
+            if (isCurrentlyFollowing) {
+                // UNFOLLOW:
+                // 1. Remove profileUserId from the 'following' array and decrement count in the current user's document
+                await updateDoc(currentUserProfileRef, {
+                    following: arrayRemove(profileUserId),
+                    followingCount: increment(-1)
+                });
+                // 2. Decrement follower count on the target user's profile
+                 await updateDoc(targetUserProfileRef, {
+                    followersCount: increment(-1)
+                });
+            } else {
+                // FOLLOW:
+                // 1. Add profileUserId to the 'following' array and increment count in the current user's document
+                await updateDoc(currentUserProfileRef, {
+                    following: arrayUnion(profileUserId),
+                    followingCount: increment(1)
+                });
+                // 2. Increment follower count on the target user's profile
+                await updateDoc(targetUserProfileRef, {
+                    followersCount: increment(1)
+                });
+            }
+
+            // Update local state
+            followingState[profileUserId] = !isCurrentlyFollowing;
+            // Re-open the profile to refresh the UI with the new Firestore state
+            openProfile(profileUserId, profileEmail);
+
+            showTemporaryMessage(`${operation} successful!`, 'success');
+
+        } catch (error) {
+            console.error(`Error ${operation.toLowerCase()}:`, error);
+            if (error.code === 'permission-denied') {
+                 showTemporaryMessage(`Failed: Check your Firestore Security Rules.`, 'error');
+            } else {
+                 showTemporaryMessage(`Failed to ${operation.toLowerCase()}: ${error.message}`, 'error');
+            }
+        }
+    }
+*/
     // --- VOTING LOGIC ---
 
     /**
@@ -452,6 +522,68 @@
      * @param {string} postId - The ID of the post.
      * @param {number} newVoteType - 1 for upvote, -1 for downvote.
      */
+    /**
+ * Handles the follow/unfollow action between the current user and a target user.
+ * This is a transactional operation that requires two writes.
+ */
+async function handleFollow(profileUserId, isCurrentlyFollowing) {
+    if (!userId) {
+        showTemporaryMessage("You must sign in to follow a user.", 'error');
+        return;
+    }
+    if (userId === profileUserId) {
+        showTemporaryMessage("You cannot follow yourself.", 'error');
+        return;
+    }
+
+    const currentUserProfileRef = getUserRef(userId);
+    const targetUserProfileRef = getUserRef(profileUserId);
+    
+    try {
+        if (isCurrentlyFollowing) {
+            // --- UNFOLLOW ---
+            // Write 1: Update current user's profile (Owner rule applies)
+            await updateDoc(currentUserProfileRef, {
+                following: arrayRemove(profileUserId),
+                followingCount: increment(-1)
+            });
+            
+            // Write 2: Update target user's profile (Non-Owner rule applies)
+            // CRITICAL FIX: Use setDoc with merge: true to create the document if missing.
+            await setDoc(targetUserProfileRef, {
+                followersCount: increment(-1)
+            }, { merge: true }); 
+            
+            showTemporaryMessage("Unfollowed user.", 'success');
+            
+        } else {
+            // --- FOLLOW ---
+            // Write 1: Update current user's profile (Owner rule applies)
+            await updateDoc(currentUserProfileRef, {
+                following: arrayUnion(profileUserId),
+                followingCount: increment(1)
+            });
+            
+            // Write 2: Update target user's profile (Non-Owner rule applies)
+            // CRITICAL FIX: Use setDoc with merge: true to create the document if missing.
+            await setDoc(targetUserProfileRef, {
+                followersCount: increment(1)
+            }, { merge: true });
+            
+            showTemporaryMessage("Following user!", 'success');
+        }
+        
+        // Re-open the profile view to reflect the immediate change (optional but good UX)
+        openProfile(profileUserId, userEmail);
+
+    } catch (error) {
+        console.error("Error following/unfollowing:", error);
+        showTemporaryMessage(`Failed to update follow status: ${error.message}`, 'error');
+    }
+}
+
+// Expose the new function globally
+window.handleFollow = handleFollow;
     async function handleVote(postId, newVoteType) {
         if (!userId) {
             showTemporaryMessage("You must sign in to vote.", 'error');
@@ -995,7 +1127,10 @@
                 await setDoc(getUserRef(auth.currentUser.uid), {
                     email: email,
                     joinDate: Timestamp.now(),
-                    displayName: getDisplayName(email)
+                    displayName: getDisplayName(email),
+                    followingCount: 0, // Initialize follow counts
+                    followersCount: 0, 
+                    following: [], // Initialize following array
                 }, { merge: true });
             }
 
@@ -1359,35 +1494,62 @@
         const followBtn = document.getElementById('profile-follow');
         const editBtn = document.getElementById('profile-edit');
         
-        // Follow/Unfollow Logic (Simple localStorage simulation)
-        const followKey = `follow_${profileUserId || profileEmail}`;
-        const isFollowing = () => { try { return localStorage.getItem(followKey) === '1'; } catch { return false; } };
-        const setFollowing = (val) => { try { localStorage.setItem(followKey, val ? '1' : '0'); } catch {} };
-        
-        const refreshFollowUi = (baseFollowers) => {
-            const following = isFollowing();
-            if (followBtn) followBtn.textContent = following ? 'Following' : '+ Follow';
-            const followersEl = document.getElementById('profile-followers-count');
-            if (followersEl) {
-                // Adjusting the *displayed* number based on the local state, compensating for the base number from Firestore
-                followersEl.textContent = (baseFollowers + (following ? 1 : 0)).toString();
-            }
-            if (following) {
-                if (followBtn) followBtn.classList.replace('bg-secondary', 'bg-gray-400');
-            } else {
-                if (followBtn) followBtn.classList.replace('bg-gray-400', 'bg-secondary');
-            }
-        };
-        
+        // --- FOLLOW LOGIC (Firestore Implementation) ---
+
+        // --- NEW, CORRECTED FOLLOW/UNFOLLOW LOGIC ---
+
+        // Check if the current user is following this profile
+        let isFollowing = false;
+        if (isSelf) {
+            // Cannot follow self, hide button if somehow it was rendered
+            if (followBtn) followBtn.style.display = 'none';
+        } else if (userId && profileDocData && profileDocData.following && Array.isArray(profileDocData.following)) {
+            // Check if the current user's profile document includes the target user in the 'following' array.
+            // NOTE: This requires fetching the *current user's* profile as well to be truly accurate, but for simplicity, 
+            // we'll rely on the existing profileDocData (which should ideally be the target's data).
+            // A more complete solution would fetch the current user's document for their 'following' list.
+            
+            // TEMPORARY SOLUTION: Since openProfile only fetches the TARGET user's doc, 
+            // we must assume the user has a way to get the current user's following list (or reload after follow).
+            // For now, let's assume the follow state is passed/managed by the calling function.
+            // Since we can't fetch the current user's doc here, we'll make a direct check on the follow button click.
+            
+            // For initial UI render, we'll assume the button starts as 'Follow' and the status is updated immediately 
+            // upon clicking, and then relies on the full profile reload (openProfile) in handleFollow for UI refresh.
+        }
+
         if (followBtn) {
-            refreshFollowUi(followersCount);
+            // We use the simpler method: when the button is clicked, check the *current* follow status
+            // in Firestore, perform the action, and then reload the UI via handleFollow calling openProfile again.
+
+            followBtn.textContent = 'Checking follow status...'; // Set initial state while we check
+            followBtn.disabled = true;
+
+            // Check the current user's profile to see if they follow the target
+            if (userId && profileUserId) {
+                const currentUserDoc = await getDoc(getUserRef(userId));
+                if (currentUserDoc.exists() && currentUserDoc.data().following) {
+                    isFollowing = currentUserDoc.data().following.includes(profileUserId);
+                }
+            }
+
+            // Update UI based on real check
+            followBtn.textContent = isFollowing ? 'Following' : '+ Follow';
+            followBtn.disabled = false;
+            if (isFollowing) {
+                followBtn.classList.replace('bg-secondary', 'bg-gray-400');
+            } else {
+                followBtn.classList.replace('bg-gray-400', 'bg-secondary');
+            }
+
+
             followBtn.addEventListener('click', () => {
-                setFollowing(!isFollowing());
-                refreshFollowUi(followersCount);
-                // Note: For a real app, this would trigger the actual followUser/unfollowUser Firestore calls
-                showTemporaryMessage(isFollowing() ? "Following locally!" : "Unfollowed locally.", 'success');
+                // Pass the current state to the handle function
+                window.handleFollow(profileUserId, isFollowing); 
             });
         }
+// ----------------------------------------------------------------------------
+        // --- END FOLLOW LOGIC ---
         
         if (editBtn) {
             editBtn.addEventListener('click', () => {
@@ -1569,6 +1731,9 @@
     window.handleMenuClick = handleMenuClick; 
     window.deletePost = deletePost;
     window.toggleComments = toggleComments;
+
+    // Expose follow function
+    window.handleFollow = handleFollow; 
 
     // Expose auth functions
     window.handleSignOut = handleSignOut;
