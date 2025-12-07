@@ -88,5 +88,10 @@
         "title": "HouseLearning's Youtube Channel",
         "description": "@officialhouselearning",
         "link": "https://bit.ly/hslrn-yt"
+    },
+    {
+        "title": "HouseLearning Chrome Extension",
+        "description": "HouseLearning Chrome Extension — What & Why",
+        "link": "https://houselearning.github.io/docs/intro/extension.html"
     }
 ]
