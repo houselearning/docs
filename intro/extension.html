@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview | HouseLearning Docs</title>
+
+    <!-- Feedback Script -->
+    <script src="https://houselearning.github.io/feedback.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Cookie Banner -->
+    <script src="/cookiebanner.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Inter Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Sticky Navigation -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Sidebar -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Core Modules</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Overview</a></li>
+                            <li><a href="/docs/intro/installation.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Installation</a></li>
+                            <li><a href="/docs/intro/usage.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Usage Guide</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Support & Resources</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/support/troubleshooting.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="/docs/support/faq.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="/docs/support/contact.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-9 space-y-8">
+
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Extension Overview</p>
+
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        HouseLearning Chrome Extension — What & Why
+                    </h1>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                        <!-- Text Content -->
+                        <div>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                The HouseLearning Chrome Extension is a lightweight browser add-on that enhances your browsing experience when using HouseLearning. It is designed to integrate smoothly with the rest of the HouseLearning ecosystem, offering quick access to learning tools or content without leaving your current tab.
+                            </p>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">Why Use This Extension</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                While everything on HouseLearning works as web pages, a Chrome Extension lets us:
+                            </p>
+
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>provide instant access to important HouseLearning features from the toolbar</li>
+                                <li>enable browser-level integrations (bookmarks, quick launch, shortcuts)</li>
+                                <li>optimize experience for returning users (cache data, smooth navigation)</li>
+                            </ul>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Core Features</h2>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>Feature A — [placeholder for real feature]</li>
+                                <li>Feature B — [placeholder for real feature]</li>
+                                <li>Feature C — [placeholder for real feature]</li>
+                            </ul>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Getting Started</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Clone or download the extension repository from GitHub, then load it in Chrome via “Load unpacked extension” (from `chrome://extensions`). Since HouseLearning is a static-site ecosystem, no backend or server setup is required. :contentReference[oaicite:1]{index=1}
+                            </p>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Safety & Privacy</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The extension runs entirely client-side (pure JavaScript), and does not require any server — aligning with how the rest of HouseLearning works. :contentReference[oaicite:2]{index=2}
+                            </p>
+                        </div>
+
+                        <!-- Image / Illustration Placeholder -->
+                        <div class="flex justify-center items-start">
+                            <img src="img/extension-overview.png" alt="HouseLearning Extension UI" class="rounded-xl shadow-lg border border-gray-200 max-w-full">
+                        </div>
+
+                    </div>
+
+                    <div class="pt-6 border-t mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Want to see installation steps?</p>
+                        <a href="/docs/intro/installation.html" class="inline-flex items-center px-6 py-3 font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            Installation → 
+                        </a>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2025 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
