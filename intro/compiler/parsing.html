@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntax & Semantic Analysis | HouseLearning Docs</title>
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Compiler Documentation</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/intro/compiler/index.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Overview</a></li>
+                            <li><a href="/docs/intro/compiler/lexical-analysis.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Lexical Analysis</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Syntax & Semantic Analysis</a></li>
+                            <li><a href="/docs/intro/compiler/optimization.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Code Generation & Optimization</a></li>
+                            <li><a href="https://houselearning.github.io/home/computerscience/compiler?ref=docs" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">HouseLearning Compiler</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Help & Support</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/support/troubleshooting.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="/docs/support/faq.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="/docs/support/contact.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+            <main class="md:col-span-9 space-y-8">
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Compiler Documentation</p>
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        Syntax & Semantic Analysis
+                    </h1>
+                    <div class="grid grid-cols-1 gap-8">
+                        <div>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                After Lexical Analysis turns raw code into tokens, the next critical steps in the HouseLearning compilation pipeline are **Syntax Analysis** (Parsing) and **Semantic Analysis**. These phases determine if the program is both grammatically correct and logically sound.
+                            </p>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">Phase 2: Syntax Analysis (Parsing)</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The parser takes the stream of tokens and checks if they conform to the formal grammar rules of the programming language. Think of it like checking if a sentence is grammatically correct.
+                            </p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">The Abstract Syntax Tree (AST)</h3>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The primary output of the parser is the **Abstract Syntax Tree (AST)**. The AST is a hierarchical, tree-like representation of the source code that captures the necessary structural elements of the program without including every detail from the tokens (like parentheses or semicolons). 
+                            </p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Goal:** To impose a meaningful structure on the sequence of tokens.</li>
+                                <li>**Error Handling:** If the parser finds an error—like a missing semicolon or mismatched parentheses—it throws a **Syntax Error**, which prevents further compilation.</li>
+                            </ul>
+                            
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Phase 3: Semantic Analysis</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Semantic Analysis ensures the program is logically consistent and meaningful. While the syntax checker ensures the form is correct, the semantic checker ensures the content makes sense.
+                            </p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">Key Semantic Checks</h3>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Type Checking:** Ensuring operators are applied to compatible data types (e.g., preventing the addition of a string and an integer unless explicitly supported).</li>
+                                <li>**Declaration Checking:** Verifying that all variables, functions, and classes are properly declared before they are used.</li>
+                                <li>**Scope Checking:** Confirming that identifiers are used within their correct defined scope.</li>
+                            </ul>
+                            
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Impact on the Piston API Call</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Only after passing both Syntax and Semantic Analysis is the code considered fully validated for compilation. The validated AST is then used to generate the intermediate code that the HouseLearning Engine ultimately prepares to send to the Piston API for the final execution step. If a Syntax or Semantic Error is found, the user receives the error immediately, and no request is sent to the Piston API. This saves resources and provides faster feedback.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Move on to the final stages of the compilation process:</p>
+                        <a href="optimization.html" class="inline-flex items-center px-6 py-3 font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            Code Generation & Optimization →
+                        </a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>

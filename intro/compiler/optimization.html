@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Generation & Optimization | HouseLearning Docs</title>
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Compiler Documentation</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/intro/compiler/index.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Overview</a></li>
+                            <li><a href="/docs/intro/compiler/lexical-analysis.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Lexical Analysis</a></li>
+                            <li><a href="/docs/intro/compiler/parsing.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Syntax & Semantic Analysis</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Code Generation & Optimization</a></li>
+                            <li><a href="https://houselearning.github.io/home/computerscience/compiler?ref=docs" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">HouseLearning Compiler</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Help & Support</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/support/troubleshooting.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="/docs/support/faq.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="/docs/support/contact.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+            <main class="md:col-span-9 space-y-8">
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Compiler Documentation</p>
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        Code Generation & Optimization
+                    </h1>
+                    <div class="grid grid-cols-1 gap-8">
+                        <div>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                The final stages of the HouseLearning compilation process involve translating the semantically validated code into a form the computer can run efficiently. This is accomplished through Intermediate Code Generation, Optimization, and final Target Code Generation.
+                            </p>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">Phase 4: Intermediate Code Generation</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The compiler first translates the Abstract Syntax Tree (AST) into **Intermediate Code** (IR). This is a machine-independent code that sits between the source code and the final machine code.
+                            </p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Benefit:** Allows the compiler to focus on optimizing the code without worrying about the specific CPU architecture.</li>
+                                <li>**Format:** Often uses a three-address code (3AC) format, where each instruction has at most three operands.</li>
+                            </ul>
+                            
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Phase 5: Code Optimization</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                This phase takes the Intermediate Code and applies various techniques to make the resulting program run faster, use less memory, or both, without changing its observable output. This is a critical step before handing code off to the Piston API.
+                            </p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">Common Optimization Techniques</h3>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Dead Code Elimination:** Removing code that is never executed (e.g., code after a `return` statement or unreachable conditional branches).</li>
+                                <li>**Constant Folding:** Evaluating constant expressions at compile time rather than runtime. For example, replacing `x = 5 * 10;` with `x = 50;`.</li>
+                                <li>**Loop Optimization:** Techniques like code motion (moving loop-invariant computations outside the loop) to reduce redundant calculations.</li>
+                            </ul>
+                            
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Phase 6: Target Code Generation & Piston</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The final phase converts the optimized Intermediate Code into the final machine code (often assembly language first) suitable for the execution environment.
+                            </p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Machine-Specific:** This is the only machine-dependent phase, focusing on efficient register allocation and instruction selection for the target architecture.</li>
+                                <li>**HouseLearning & Piston:** Once the optimized code is generated, the HouseLearning Engine packages this code (and any necessary configuration) and submits it to the **Piston API** for remote execution. Piston provides the runtime environment (interpreter or compiler/linker/runner) that executes the final code and sends the output back to the user.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">You have completed the compiler documentation overview!</p>
+                        <a href="/docs/compiler/index.html" class="inline-flex items-center px-6 py-3 font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            Back to Overview →
+                        </a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>

@@ -93,5 +93,30 @@
         "title": "HouseLearning Chrome Extension",
         "description": "HouseLearning Chrome Extension — What & Why",
         "link": "https://houselearning.github.io/docs/intro/extension.html"
+    },
+        {
+        "title": "Overview: The Compilation Process",
+        "description": "The compilation process is generally broken down into several sequential phases, each transforming the code into a representation closer to the final executable form...",
+        "link": "https://houselearning.github.io/docs/intro/compiler/index.html"
+    },
+        {
+        "title": "Lexical Analysis: The Scanning Phase",
+        "description": "The lexical analyzer (scanner) essentially turns meaningless characters into recognizable building blocks for the next stage of the compiler...",
+        "link": "/docs/intro/compiler/lexical-analysis.html"
+    },
+        {
+        "title": "Code Generation & Optimization | HouseLearning Docs",
+        "description": "The final stages of the HouseLearning compilation process involve translating the semantically validated code into a form the computer can run efficiently...",
+        "link": "/docs/intro/compiler/optimization.html"
+    },
+        {
+        "title": "Syntax & Semantic Analysis",
+        "description": "After Lexical Analysis turns raw code into tokens, the next critical steps in the HouseLearning compilation pipeline are Syntax Analysis...",
+        "link": "/docs/intro/compiler/parsing.html"
+    },
+        {
+        "title": "Visual Studio Web | Master Resizable Edition v5.0",
+        "description": "The HouseLearning Compiler (not to be confused with Visual Studio Code)",
+        "link": "https://houselearning.github.io/home/computerscience/compiler?ref=docs-search"
     }
 ]

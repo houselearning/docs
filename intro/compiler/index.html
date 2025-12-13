@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Compiler | HouseLearning Docs</title>
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Compiler Documentation</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Overview</a></li>
+                            <li><a href="/docs/intro/compiler/lexical-analysis.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Lexical Analysis</a></li>
+                            <li><a href="/docs/intro/compiler/parsing.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Syntax & Semantic Analysis</a></li>
+                            <li><a href="/docs/intro/compiler/optimization.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Code Generation & Optimization</a></li>
+                            <li><a href="https://houselearning.github.io/home/computerscience/compiler?ref=docs" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">HouseLearning Compiler</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Help & Support</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/support/troubleshooting.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="/docs/support/faq.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="/docs/support/contact.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+            <main class="md:col-span-9 space-y-8">
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Compiler Documentation</p>
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        Overview: The Compilation Process
+                    </h1>
+                    <div class="grid grid-cols-1 gap-8">
+                        <div>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                A **compiler** is a special program that translates code written in a high-level programming language (like C++, Java, or C#) into machine code (binary instructions) that a computer's processor can execute directly.
+                            </p>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">The Role of the HouseLearning Engine</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The HouseLearning platform utilizes a sophisticated compiler and interpreter system—the **HouseLearning Engine**—to handle a wide variety of programming languages. When you press 'Run' or 'Debug', the engine manages the entire process from source code to execution, providing traceable output.
+                            </p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">Compiler vs. Interpreter</h3>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Compiler:** Translates the *entire* program into machine code before execution begins. (e.g., C++, C#)</li>
+                                <li>**Interpreter:** Translates and executes the program code *line by line*. (e.g., Python, JavaScript)</li>
+                                <li>The HouseLearning Engine transparently handles both processes depending on the file type you are working with.</li>
+                            </ul>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Phases of Compilation</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The compilation process is generally broken down into several sequential phases, each transforming the code into a representation closer to the final executable form:
+                            </p>
+                            <ol class="list-decimal list-inside text-gray-700 space-y-3 ml-2">
+                                <li>
+                                    <span class="font-semibold">Lexical Analysis (Scanning):</span> The compiler reads the source code and groups characters into meaningful sequences called *tokens*. This is where simple errors like invalid characters are caught.
+                                </li>
+                                <li>
+                                    <span class="font-semibold">Syntax Analysis (Parsing):</span> The tokens are checked against the rules of the language's grammar. A parse tree (or syntax tree) is constructed to represent the hierarchical structure of the program.
+                                </li>
+                                <li>
+                                    <span class="font-semibold">Semantic Analysis:</span> The compiler checks for meaning and consistency (e.g., type checking, ensuring variables are declared before use).
+                                </li>
+                                <li>
+                                    <span class="font-semibold">Intermediate Code Generation:</span> The high-level source code is translated into a machine-independent intermediate representation (IR).
+                                </li>
+                                <li>
+                                    <span class="font-semibold">Code Optimization:</span> The IR is analyzed and transformed to improve the performance, speed, or size of the resulting machine code.
+                                </li>
+                                <li>
+                                    <span class="font-semibold">Target Code Generation:</span> The optimized IR is translated into the target machine's instruction set (assembly or machine code).
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Ready to dive deeper into the first phase?</p>
+                        <a href="lexical-analysis.html" class="inline-flex items-center px-6 py-3 font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            Lexical Analysis →
+                        </a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>

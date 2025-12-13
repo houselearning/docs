@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lexical Analysis | HouseLearning Docs</title>
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">
+                HouseLearning Docs
+            </a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Compiler Documentation</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="index.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Overview</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Lexical Analysis</a></li>
+                            <li><a href="/docs/intro/compiler/parsing.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Syntax & Semantic Analysis</a></li>
+                            <li><a href="/docs/intro/compiler/optimization.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Code Generation & Optimization</a></li>
+                            <li><a href="https://houselearning.github.io/home/computerscience/compiler?ref=docs" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">HouseLearning Compiler</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Help & Support</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="/docs/support/troubleshooting.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+                            <li><a href="/docs/support/faq.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">FAQ</a></li>
+                            <li><a href="/docs/support/contact.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Contact Support</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+            <main class="md:col-span-9 space-y-8">
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Compiler Documentation</p>
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        Lexical Analysis: The Scanning Phase
+                    </h1>
+                    <div class="grid grid-cols-1 gap-8">
+                        <div>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                **Lexical Analysis**, also known as scanning, is the first phase of the HouseLearning compilation process. Its job is to read the raw source code, which is a stream of characters, and group them into logical units called **tokens**.
+                            </p>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">Input, Process, and Output</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The lexical analyzer (scanner) essentially turns meaningless characters into recognizable building blocks for the next stage of the compiler.
+                            </p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Input:** A file containing raw source code (e.g., `if (x == 5)`).</li>
+                                <li>**Process:** Stripping out comments and whitespace, recognizing patterns, and grouping characters.</li>
+                                <li>**Output:** A stream of tokens (e.g., `[KEYWORD, "if"]`, `[PUNCTUATION, "("]`, `[IDENTIFIER, "x"]`, `[OPERATOR, "=="]`, `[LITERAL, "5"]`, `[PUNCTUATION, ")"]`).</li>
+                            </ul>
+
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">Token Types</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Tokens fall into a few primary categories that define their role in the program structure:
+                            </p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 ml-1">
+                                <li>**Keywords:** Reserved words in the language (e.g., `class`, `public`, `if`, `while`).</li>
+                                <li>**Identifiers:** Names used for variables, functions, or classes (e.g., `myVariable`, `calculateArea`).</li>
+                                <li>**Literals:** Fixed values (e.g., numbers like `10` or strings like `"Hello"`).</li>
+                                <li>**Operators:** Symbols that represent computations or comparisons (e.g., `+`, `-`, `=`, `==`).</li>
+                                <li>**Punctuation:** Separators and structural symbols (e.g., `{`, `(`, `;`, `,`).</li>
+                            </ul>
+                            
+                            <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-3">The Piston API Connection</h2>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                The HouseLearning Engine uses the **Piston API** for code execution across various languages. Crucially, the code that is sent to the Piston API for compilation or execution has already successfully passed the Lexical Analysis phase. This ensures that the code submitted to Piston is structurally sound in terms of tokenization, allowing the API to focus purely on the subsequent parsing, compilation, and execution of the program.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Continue to the next phase of the compiler:</p>
+                        <a href="parsing.html" class="inline-flex items-center px-6 py-3 font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            Syntax & Semantic Analysis →
+                        </a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2024 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>
