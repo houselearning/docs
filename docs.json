@@ -22,7 +22,7 @@
     {
         "title": "Community Forum",
         "description": "Talk about developer topics. What's trending?",
-        "link": "/docs/fourm.html"
+        "link": "/docs/forum.html"
     },
     {
         "title": "API Models",
@@ -57,12 +57,12 @@
     {
         "title": "HouseLearning Forum Basics",
         "description": "The HouseLearning Forum is where users share solutions, ask questions, collaborate, and help move the community forward.",
-        "link": "/docs/intro/fourm.html"
+        "link": "/docs/intro/forum.html"
     },
     {
         "title": "HouseLearning Forum Guidelines",
         "description": "These guidelines help keep the HouseLearning Forum clean, respectful, and actually useful.",
-        "link": "/docs/intro/fourm-guidelines.html"
+        "link": "/docs/intro/forum-guidelines.html"
     },
     {
         "title": "SafeLibrary",
