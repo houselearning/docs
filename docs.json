@@ -5,6 +5,16 @@
         "link": "/docs/installation/repo-git.html"
     },
     {
+        "title": "HouseLearning Partner Program Docs",
+        "description": "HouseLearning partners with educational organizations, content creators, and educators to provide enhanced learning opportunities for students.",
+        "link": "/docs/intro/partners.html"
+    },
+    {
+        "title": "HouseLearning Partner Program",
+        "description": "Join our network of educational partners to collaborate, share content, and grow together.",
+        "link": "/partners.html"
+    },
+    {
         "title": "HouseLearning Help Center",
         "description": "Basic issues discussed here.",
         "link": "/docs/helpcenter/index.html"
