@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HouseLearning Partner Program | Docs</title>
+
+  <script src="https://houselearning.github.io/feedback.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/cookiebanner.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-accent': '#1C64F2',
+            'bg-light': '#F9FAFB',
+            'bg-card': '#FFFFFF',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+  </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <a href="/" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+      <nav>
+        <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">Help Center</a>
+        <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent ml-6 font-medium">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content Grid -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+      <!-- Sidebar -->
+      <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+        <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Partner Program Index</h3>
+        <nav class="space-y-2">
+          <ul class="space-y-1 text-sm">
+            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Overview</a></li>
+            <li><a href="#what" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">What Being a Partner Means</a></li>
+            <li><a href="#how" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">How to Become a Partner</a></li>
+            <li><a href="#upload" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Upload Your PDF</a></li>
+            <li><a href="/partners" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Visit the Partner's Page</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="md:col-span-9 space-y-8">
+
+        <!-- Overview Section -->
+        <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">HouseLearning</p>
+          <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">Partner Program Overview</h1>
+          <p class="text-lg text-gray-700 leading-relaxed mb-6">
+            HouseLearning partners with educational organizations, content creators, and educators to provide enhanced learning opportunities for students.  
+            By joining our partner network, you gain access to resources, support, and a platform to share and expand educational content worldwide.
+          </p>
+          <p class="text-gray-700 leading-relaxed">
+            Below are details on what being a partner entails, how to become one, and how to submit your completed partnership form.
+          </p>
+        </section>
+
+        <!-- What Being a Partner Means -->
+        <section id="what" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">What Being a Partner Means</h2>
+          <p class="text-gray-700 mb-4">
+            Partners enjoy benefits such as domain support (*.houselearning.org), access to additional lesson content, blog contributions, interactive programs, GitHub inclusion, and more.
+          </p>
+          <ul class="list-disc list-inside ml-4 space-y-2 text-gray-700">
+            <li>Exclusive access to educational resources</li>
+            <li>Opportunities to contribute to interactive learning programs</li>
+            <li>Recognition on the HouseLearning platform and GitHub</li>
+            <li>Collaborative support for projects and content</li>
+          </ul>
+        </section>
+
+        <!-- How to Become a Partner -->
+        <section id="how" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">How to Become a Partner</h2>
+          <p class="text-gray-700 mb-4">
+            1. Download the Partnership Form below. <br>
+            2. Fill in all required fields and ensure the verification code is included. <br>
+            3. Upload the completed PDF using the section below to join our network.
+          </p>
+          <a href="https://houselearning.org/meta/partner-form.pdf" target="_blank"
+             class="inline-flex items-center px-5 py-3 bg-primary-accent text-white rounded-xl shadow hover:bg-blue-800 transition">
+            Download PDF Form →
+          </a>
+        </section>
+
+        <!-- Upload PDF -->
+        <section id="upload" class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Upload Your Completed PDF</h2>
+          <div id="dropzone" class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center text-gray-600 cursor-pointer hover:bg-gray-50 transition">
+            Drag & Drop PDF here<br>or Click to Browse
+            <input type="file" id="fileInput" accept="application/pdf" class="hidden">
+          </div>
+
+          <div class="w-full bg-gray-200 rounded h-4 mt-4">
+            <div id="progressBar" class="bg-primary-accent h-4 w-0 rounded transition-all"></div>
+          </div>
+
+          <div id="status" class="mt-3 text-sm"></div>
+          <div class="g-recaptcha mt-3" data-sitekey="6LeNBUwsAAAAAMwDhp2LCD6iy_uDg0exFUxqNfFi"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+      &copy; 2026 HouseLearning Foundation. All Rights Reserved.
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+  </script>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDoXSwni65CuY1_32ZE8B1nwfQO_3VNpTw",
+    authDomain: "contract-center-llc-10.firebaseapp.com",
+    projectId: "contract-center-llc-10",
+    storageBucket: "contract-center-llc-10.firebasestorage.app",
+    messagingSenderId: "323221512767",
+    appId: "1:323221512767:web:6421260f875997dbf64e8a",
+    measurementId: "G-S2RJ0C6BWH"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const dropzone = document.getElementById("dropzone");
+  const fileInput = document.getElementById("fileInput");
+  const statusEl = document.getElementById("status");
+  const progressBar = document.getElementById("progressBar");
+
+  function updateProgress(percent) { progressBar.style.width = percent + "%"; }
+  function resetProgress() { updateProgress(0); }
+
+  async function handleFile(file) {
+    const captchaResponse = grecaptcha.getResponse();
+    if (!captchaResponse) {
+      statusEl.textContent = "Please complete the CAPTCHA.";
+      statusEl.className = "text-red-600";
+      return;
+    }
+    if (!file || file.type !== "application/pdf") {
+      statusEl.textContent = "Please select a valid PDF.";
+      statusEl.className = "text-red-600";
+      return;
+    }
+
+    statusEl.textContent = "Processing PDF...";
+    resetProgress();
+
+    const reader = new FileReader();
+    reader.onprogress = (e) => { if(e.lengthComputable) updateProgress((e.loaded/e.total)*20); };
+    reader.onload = async () => {
+      try {
+        const arrayBuffer = reader.result;
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let markdownContent = "";
+        let slides = [];
+        const maxSlides = 2;
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+
+          // Markdown
+          const content = await page.getTextContent();
+          markdownContent += content.items.map(item => item.str).join("\n") + "\n";
+
+          // Slides (base64)
+          if (i <= maxSlides) {
+            const viewport = page.getViewport({ scale: 2 });
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            await page.render({ canvasContext: ctx, viewport }).promise;
+            slides.push(canvas.toDataURL("image/png"));
+          }
+
+          updateProgress(20 + (i/pdf.numPages)*80);
+        }
+
+        if(!markdownContent.includes("35105")){
+          statusEl.textContent = "Verification code not found in PDF.";
+          statusEl.className = "text-red-600";
+          resetProgress();
+          return;
+        }
+
+        await addDoc(collection(db, "partner-deals"), {
+          fileName: file.name,
+          verified: true,
+          captchaToken: captchaResponse,
+          markdownContent,
+          slides,
+          submittedAt: serverTimestamp()
+        });
+
+        statusEl.textContent = "Uploaded! We'll review within 2–3 days.";
+        statusEl.className = "text-green-600";
+        updateProgress(100);
+        grecaptcha.reset();
+
+      } catch(err){
+        statusEl.textContent = "Error processing PDF: "+err;
+        statusEl.className = "text-red-600";
+        resetProgress();
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  dropzone.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => handleFile(fileInput.files[0]));
+  dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("bg-gray-50"); });
+  dropzone.addEventListener("dragleave", () => { dropzone.classList.remove("bg-gray-50"); });
+  dropzone.addEventListener("drop", (e) => { e.preventDefault(); dropzone.classList.remove("bg-gray-50"); handleFile(e.dataTransfer.files[0]); });
+  </script>
+
+</body>
+</html>
