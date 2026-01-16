@@ -384,57 +384,44 @@ async function handleFollow(profileUserId, isCurrentlyFollowing) {
         return;
     }
 
-    // Reference to the current user (Owner rules apply)
     const currentUserProfileRef = getUserRef(userId);
-    // Reference to the target user (Non-Owner rules apply)
     const targetUserProfileRef = getUserRef(profileUserId);
     
     try {
         if (isCurrentlyFollowing) {
             // --- UNFOLLOW ---
-            // 1. Update current user's following list (Standard updateDoc)
+            // Update YOUR profile (Owner rule applies: can update following list)
             await updateDoc(currentUserProfileRef, {
                 following: arrayRemove(profileUserId),
                 followingCount: increment(-1)
             });
             
-            // 2. Decrement target user's follower count
-            // We use setDoc + merge to avoid "No document to update" errors
+            // Update TARGET profile (Non-Owner rule: MUST ONLY contain followersCount)
             await setDoc(targetUserProfileRef, {
                 followersCount: increment(-1)
             }, { merge: true }); 
             
-            showTemporaryMessage("Unfollowed user.", 'success');
-            
         } else {
             // --- FOLLOW ---
-            // 1. Update current user's following list
+            // Update YOUR profile
             await updateDoc(currentUserProfileRef, {
                 following: arrayUnion(profileUserId),
                 followingCount: increment(1)
             });
             
-            // 2. Increment target user's follower count
-            // We use setDoc + merge to create the doc if it's the user's first follower
-// Correct: Only sending followersCount to the person being followed
-await setDoc(targetUserProfileRef, {
-    followersCount: increment(1) 
-}, { merge: true });
-            
-            showTemporaryMessage("Following user!", 'success');
+            // Update TARGET profile (Strict: No extra fields allowed)
+            await setDoc(targetUserProfileRef, {
+                followersCount: increment(1)
+            }, { merge: true });
         }
         
-        // Refresh the profile view to show the new counts
-        openProfile(profileUserId, userEmail);
+        showTemporaryMessage(isCurrentlyFollowing ? "Unfollowed." : "Following!", 'success');
+        openProfile(profileUserId, userEmail); // Refresh UI
 
     } catch (error) {
-        console.error("Error following/unfollowing:", error);
-        // Specifically check for permission errors to help debugging
-        if (error.code === 'permission-denied') {
-            showTemporaryMessage("Permission denied. Check if you are trying to update extra fields.", 'error');
-        } else {
-            showTemporaryMessage(`Failed to update follow status: ${error.message}`, 'error');
-        }
+        console.error("Follow error:", error);
+        // This triggers if you send fields other than 'followersCount' to the target
+        showTemporaryMessage(`Permission Denied: Ensure no extra fields are being sent.`, 'error');
     }
 }
 
