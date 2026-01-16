@@ -416,9 +416,10 @@ async function handleFollow(profileUserId, isCurrentlyFollowing) {
             
             // 2. Increment target user's follower count
             // We use setDoc + merge to create the doc if it's the user's first follower
-            await setDoc(targetUserProfileRef, {
-                followersCount: increment(1)
-            }, { merge: true });
+// Correct: Only sending followersCount to the person being followed
+await setDoc(targetUserProfileRef, {
+    followersCount: increment(1) 
+}, { merge: true });
             
             showTemporaryMessage("Following user!", 'success');
         }
