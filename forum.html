@@ -370,65 +370,75 @@ import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp
      * @param {boolean} isCurrentlyFollowing - Current following state.
      * @param {string} profileEmail - The email of the user (for fallback/display).
      */
-    /*
-    async function handleFollow(profileUserId, isCurrentlyFollowing, profileEmail) {
-        if (!userId) {
-            showTemporaryMessage("You must sign in to follow users.", 'error');
-            return;
+/**
+ * Handles the follow/unfollow action between the current user and a target user.
+ * Matches the "Artifact User Profile" security rules.
+ */
+async function handleFollow(profileUserId, isCurrentlyFollowing) {
+    if (!userId) {
+        showTemporaryMessage("You must sign in to follow a user.", 'error');
+        return;
+    }
+    if (userId === profileUserId) {
+        showTemporaryMessage("You cannot follow yourself.", 'error');
+        return;
+    }
+
+    // Reference to the current user (Owner rules apply)
+    const currentUserProfileRef = getUserRef(userId);
+    // Reference to the target user (Non-Owner rules apply)
+    const targetUserProfileRef = getUserRef(profileUserId);
+    
+    try {
+        if (isCurrentlyFollowing) {
+            // --- UNFOLLOW ---
+            // 1. Update current user's following list (Standard updateDoc)
+            await updateDoc(currentUserProfileRef, {
+                following: arrayRemove(profileUserId),
+                followingCount: increment(-1)
+            });
+            
+            // 2. Decrement target user's follower count
+            // We use setDoc + merge to avoid "No document to update" errors
+            await setDoc(targetUserProfileRef, {
+                followersCount: increment(-1)
+            }, { merge: true }); 
+            
+            showTemporaryMessage("Unfollowed user.", 'success');
+            
+        } else {
+            // --- FOLLOW ---
+            // 1. Update current user's following list
+            await updateDoc(currentUserProfileRef, {
+                following: arrayUnion(profileUserId),
+                followingCount: increment(1)
+            });
+            
+            // 2. Increment target user's follower count
+            // We use setDoc + merge to create the doc if it's the user's first follower
+            await setDoc(targetUserProfileRef, {
+                followersCount: increment(1)
+            }, { merge: true });
+            
+            showTemporaryMessage("Following user!", 'success');
         }
+        
+        // Refresh the profile view to show the new counts
+        openProfile(profileUserId, userEmail);
 
-        // Cannot follow self
-        if (userId === profileUserId) {
-             showTemporaryMessage("You cannot follow yourself.", 'error');
-             return;
-        }
-
-        const currentUserProfileRef = getUserRef(userId);
-        const targetUserProfileRef = getUserRef(profileUserId);
-        const operation = isCurrentlyFollowing ? 'Unfollowing' : 'Following';
-
-        try {
-            if (isCurrentlyFollowing) {
-                // UNFOLLOW:
-                // 1. Remove profileUserId from the 'following' array and decrement count in the current user's document
-                await updateDoc(currentUserProfileRef, {
-                    following: arrayRemove(profileUserId),
-                    followingCount: increment(-1)
-                });
-                // 2. Decrement follower count on the target user's profile
-                 await updateDoc(targetUserProfileRef, {
-                    followersCount: increment(-1)
-                });
-            } else {
-                // FOLLOW:
-                // 1. Add profileUserId to the 'following' array and increment count in the current user's document
-                await updateDoc(currentUserProfileRef, {
-                    following: arrayUnion(profileUserId),
-                    followingCount: increment(1)
-                });
-                // 2. Increment follower count on the target user's profile
-                await updateDoc(targetUserProfileRef, {
-                    followersCount: increment(1)
-                });
-            }
-
-            // Update local state
-            followingState[profileUserId] = !isCurrentlyFollowing;
-            // Re-open the profile to refresh the UI with the new Firestore state
-            openProfile(profileUserId, profileEmail);
-
-            showTemporaryMessage(`${operation} successful!`, 'success');
-
-        } catch (error) {
-            console.error(`Error ${operation.toLowerCase()}:`, error);
-            if (error.code === 'permission-denied') {
-                 showTemporaryMessage(`Failed: Check your Firestore Security Rules.`, 'error');
-            } else {
-                 showTemporaryMessage(`Failed to ${operation.toLowerCase()}: ${error.message}`, 'error');
-            }
+    } catch (error) {
+        console.error("Error following/unfollowing:", error);
+        // Specifically check for permission errors to help debugging
+        if (error.code === 'permission-denied') {
+            showTemporaryMessage("Permission denied. Check if you are trying to update extra fields.", 'error');
+        } else {
+            showTemporaryMessage(`Failed to update follow status: ${error.message}`, 'error');
         }
     }
-*/
+}
+
+// Expose the function globally for the HTML buttons
+window.handleFollow = handleFollow;
     // --- VOTING LOGIC ---
 
     /**
