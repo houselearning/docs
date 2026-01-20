@@ -1,6 +1,6 @@
 // --- Configuration ---
         const HOUSELEARNING_ORG = 'HouseLearning';
-        const WEBSITE_URL = 'https://houselearning.github.io';
+        const WEBSITE_URL = 'https://houselearning.org';
         const GITHUB_API_URL = 'https://api.github.com';
         const WEBSITE_STATUS_ELEMENT = document.getElementById('website-status');
         const STATUS_TEXT = document.getElementById('status-text');
