@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Up Your Page | HouseLearning Docs</title>
+
+    <!-- Libraries -->
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/docs/" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Sidebar -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+
+                <nav class="space-y-2 text-sm">
+                    <div>
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">SafeLibrary</h4>
+                        <ul class="space-y-1">
+                            <li><a href="index.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Pages Hosting</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Setup & Deployment</a></li>
+                            <li><a href="usage.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Usage</a></li>
+                            <li><a href="overview.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Overview</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-9 space-y-8">
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+
+                    <!-- TIP BANNER -->
+                    <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-900">
+                        <strong>Tip:</strong>
+                        Learning how to create your first website?
+                        <a href="https://www.houselearning.org/home/computerscience/web-dev/"
+                           class="underline font-semibold hover:text-blue-700">
+                            Click Here
+                        </a>
+                    </div>
+
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">
+                        Getting Started
+                    </p>
+
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        How to Set Up Your Page
+                    </h1>
+
+                    <p class="text-lg text-gray-700 leading-relaxed mb-8">
+                        This guide walks you through setting up your first HouseLearning Page — from preparing files
+                        to publishing your site live. No servers, no frameworks, no nonsense.
+                    </p>
+
+                    <!-- Section 1 -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">1. Understand What You’re Deploying</h2>
+                        <p class="text-gray-700 mb-4">
+                            HouseLearning Pages hosts <strong>static websites</strong>. That means:
+                        </p>
+
+                        <ul class="list-disc list-inside ml-4 text-gray-700 space-y-2">
+                            <li>HTML for structure</li>
+                            <li>CSS for styling</li>
+                            <li>JavaScript for interactivity</li>
+                        </ul>
+
+                        <p class="text-gray-600 mt-3">
+                            There is no backend execution. If it runs in a browser, it works here.
+                        </p>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">2. Required Files</h2>
+                        <p class="text-gray-700 mb-4">
+                            Every site must include an entry point:
+                        </p>
+
+                        <div class="bg-gray-800 text-white p-4 rounded-xl text-sm overflow-x-auto">
+<pre>
+index.html   ← required
+styles.css   ← optional
+script.js    ← optional
+</pre>
+                        </div>
+
+                        <p class="text-gray-600 mt-3">
+                            If <code class="bg-gray-100 p-1 rounded">index.html</code> is missing, the site will not load.
+                        </p>
+                    </div>
+
+                    <!-- Section 3 -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">3. Creating Your Site</h2>
+                        <p class="text-gray-700 mb-4">
+                            From the Pages dashboard:
+                        </p>
+
+                        <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                            <li>Click <strong>Create New Site</strong></li>
+                            <li>Choose a site name (used in the URL)</li>
+                            <li>The system provisions storage instantly</li>
+                        </ol>
+
+                        <p class="text-gray-600 mt-3">
+                            Site names are URL-safe and permanent.
+                        </p>
+                    </div>
+
+                    <!-- Section 4 -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">4. Uploading Files (Best Practices)</h2>
+                        <p class="text-gray-700 mb-4">
+                            Upload your files exactly as they should exist on the site.
+                        </p>
+
+                        <ul class="list-disc list-inside ml-4 text-gray-700 space-y-2">
+                            <li>Use relative paths (<code>./styles.css</code>)</li>
+                            <li>Keep filenames lowercase</li>
+                            <li>Avoid spaces in filenames</li>
+                            <li>Organize images into folders</li>
+                        </ul>
+                    </div>
+
+                    <!-- Section 5 -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">5. Deployment & What Happens Behind the Scenes</h2>
+                        <p class="text-gray-700 mb-4">
+                            When you deploy:
+                        </p>
+
+                        <ul class="list-disc list-inside ml-4 text-gray-700 space-y-2">
+                            <li>Your files are validated</li>
+                            <li>A GitHub Action commits them</li>
+                            <li>GitHub Pages publishes the site</li>
+                        </ul>
+
+                        <p class="text-gray-600 mt-3">
+                            Average deployment time is under 30 seconds.
+                        </p>
+                    </div>
+
+                    <!-- Section 6 -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">6. Common Setup Mistakes</h2>
+                        <ul class="list-disc list-inside ml-4 text-gray-700 space-y-2">
+                            <li>Missing <code>index.html</code></li>
+                            <li>Broken file paths</li>
+                            <li>Using server-only features</li>
+                            <li>Uploading unsupported file types</li>
+                        </ul>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="pt-6 border-t border-gray-200 mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">
+                            Setup complete
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            Learn how to manage and update your page after deployment.
+                        </p>
+
+                        <a href="/docs/safelibrary/usage.html"
+                           class="inline-flex items-center px-6 py-3 rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            Go to Usage →
+                        </a>
+                    </div>
+
+                </section>
+            </main>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2026 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
