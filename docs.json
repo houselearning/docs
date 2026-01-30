@@ -102,12 +102,12 @@
     {
         "title": "HouseLearning Chrome Extension",
         "description": "HouseLearning Chrome Extension — What & Why",
-        "link": "https://houselearning.github.io/docs/intro/extension.html"
+        "link": "https://houselearning.org/docs/intro/extension.html"
     },
         {
         "title": "Overview: The Compilation Process",
         "description": "The compilation process is generally broken down into several sequential phases, each transforming the code into a representation closer to the final executable form...",
-        "link": "https://houselearning.github.io/docs/intro/compiler/index.html"
+        "link": "https://houselearning.org/docs/intro/compiler/index.html"
     },
         {
         "title": "Lexical Analysis: The Scanning Phase",
@@ -125,8 +125,33 @@
         "link": "/docs/intro/compiler/parsing.html"
     },
         {
+        "title": "SafeLibrary Pages | HouseLearning Docs",
+        "description": "HouseLearning Pages is a static site platform — users log in, upload HTML/CSS/JS files, and deploy.",
+        "link": "/docs/intro/pages/"
+    },
+        {
         "title": "Visual Studio Web | Master Resizable Edition v5.0",
         "description": "The HouseLearning Compiler (not to be confused with Visual Studio Code)",
-        "link": "https://houselearning.github.io/home/computerscience/compiler?ref=docs-search"
-    }
+        "link": "https://houselearning.org/home/computerscience/compiler?ref=docs-search"
+    },
+        {
+        "title": "SafeLibrary Pages | Overview",
+        "description": "SafeLibrary is the security and validation layer behind HouseLearning Pages.",
+        "link": "/docs/intro/pages/overview.html"
+    },
+        {
+        "title": "How to Set Up Your Page",
+        "description": "This guide walks you through setting up your first HouseLearning Page — from preparing files to publishing your site live.",
+        "link": "/docs/intro/pages/setup.html"
+    },
+        {
+        "title": "HouseLearning Pages Usage Guide",
+        "description": "This guide explains how to actually use HouseLearning Pages after setup — from creating sites to uploading files and managing deployments.",
+        "link": "/docs/intro/pages/usage.html"
+    },
+        {
+        "title": "HouseLearning Pages",
+        "description": "The official site",
+        "link": "https://pages.houselearning.org/?ref=docs-search"
+    },
 ]
