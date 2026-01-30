@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLibrary Pages | HouseLearning Docs</title>
+
+    <!-- Libraries -->
+    <script src="https://houselearning.github.io/feedback.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/cookiebanner.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-accent': '#1C64F2',
+                        'bg-light': '#F9FAFB',
+                        'bg-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+
+<body class="bg-bg-light font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="/docs/" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+            <nav>
+                <a href="/docs/helpcenter/" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">Help Center</a>
+                <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+            <!-- Sidebar -->
+            <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+
+                <nav class="space-y-2">
+                    <div class="pt-2">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">SafeLibrary Docs</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li><a href="overview.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Overview</a></li>
+                            <li><a href="setup.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Setup & Deployment</a></li>
+                            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Pages Hosting</a></li>
+                            <li><a href="usage.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Usage</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-9 space-y-8">
+                <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+
+                    <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">
+                        SafeLibrary Pages Hosting
+                    </p>
+
+                    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+                        Hosting SafeLibrary with HouseLearning Pages
+                    </h1>
+
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        HouseLearning Pages lets users publish static sites — including SafeLibrary builds — with zero server configs.  
+                        It’s a free static hosting layer on top of GitHub Pages that stores site files, deploys them via GitHub Actions, and serves them under `pages.houselearning.org`. 
+                    </p>
+
+                    <!-- Section: What Is Pages Hosting -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">1. What Is HouseLearning Pages?</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            HouseLearning Pages is a static site platform — users log in, upload HTML/CSS/JS files, and deploy. Your site is automatically published under the `pages.houselearning.org` domain with no backend to manage.
+                        </p>
+                    </div>
+
+                    <!-- Section: How It Works -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">2. How It Works</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            The hosting workflow is simple:
+                        </p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                            <li>Log in at <code class="bg-gray-100 p-1 rounded">https://pages.houselearning.org</code>.</li>
+                            <li>Create a new site and upload your HTML/CSS/JS files.</li>
+                            <li>Deploy — a GitHub Action writes your files into the repository and GitHub Pages serves them.</li>
+                            <li>Your site goes live under a predictable URL like <code class="bg-gray-100 p-1 rounded">pages.houselearning.org/{username}/{siteSlug}/</code>.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Section: Safelibrary-Upload-PGS Repo Summary -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">3. safelibrary-upload-pgs Repo Overview</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            The `safelibrary-upload-pgs` project contains the code and workflows that power Pages deployment for SafeLibrary sites.  
+                            It defines how user site files get committed via a GitHub Action, how Firebase/Firestore storage is structured, and the GitHub Pages hosting pipeline.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            Key bits:
+                        </p>
+                        <ul class="list-disc list-inside ml-4 text-gray-700 space-y-2">
+                            <li>Hosting platform logic for static sites.</li>
+                            <li>GitHub Action to deploy user uploads to Pages. </li>
+                            <li>Firestore users/sites/files backend model. </li>
+                        </ul>
+                    </div>
+
+                    <!-- Section: Quick Setup Example -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">4. Quick Start Example</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            To host SafeLibrary or any static site:
+                        </p>
+                        <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                            <li>Log into HouseLearning Pages.</li>
+                            <li>Create a new site project.</li>
+                            <li>Upload HTML/CSS/JS files (e.g., your SafeLibrary build).</li>
+                            <li>Hit “Deploy” and wait for GitHub Pages to serve it live.</li>
+                        </ol>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="pt-6 border-t border-gray-200 mt-8">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">
+                            Need more?
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            Check out the SafeLibrary overview or browse other docs to expand your content library.
+                        </p>
+
+                        <a href="https://www.houselearning.org/docs/intro/safelibrary.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-primary-accent hover:bg-blue-800 transition">
+                            View SafeLibrary Overview →
+                        </a>
+                    </div>
+
+                </section>
+            </main>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            &copy; 2026 HouseLearning Foundation. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
