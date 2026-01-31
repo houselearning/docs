@@ -89,7 +89,7 @@ Open an issue or hit the feedback popup in the docs.
 
 ## 📜 License
 
-MIT — do your thing.
+MIT Licence.
 
 ## 💬 Final Note
 
