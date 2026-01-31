@@ -89,7 +89,7 @@ Open an issue or hit the feedback popup in the docs.
 
 ## 📜 License
 
-MIT Licence.
+Apache Licence 2.0.
 
 ## 💬 Final Note
 
