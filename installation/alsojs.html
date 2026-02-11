@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Also.js Plugin Docs | HouseLearning Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    // If Firebase is already initialized, use it
+    let app;
+    try {
+      app = initializeApp({
+   apiKey: "AIzaSyDoXSwni65CuY1_32ZE8B1nwfQO_3VNpTw",
+    authDomain: "contract-center-llc-10.firebaseapp.com",
+    projectId: "contract-center-llc-10",
+    storageBucket: "contract-center-llc-10.firebasestorage.app",
+    messagingSenderId: "323221512767",
+    appId: "1:323221512767:web:6421260f875997dbf64e8a",
+      });
+    } catch(e) {
+      console.warn("[Also.js Docs] Firebase may already be initialized");
+      app = null;
+    }
+
+    const db = getDatabase(app);
+
+    // Function to render available pages dynamically
+    window.renderAvailablePages = () => {
+      const container = document.getElementById("available-pages-list");
+      const pagesRef = ref(db, "AlsoJsPageLogs");
+
+      onValue(pagesRef, (snapshot) => {
+        container.innerHTML = ""; // clear list
+        if (!snapshot.exists()) {
+          container.innerHTML = "<li class='text-gray-700'>No pages logged yet.</li>";
+          return;
+        }
+
+        snapshot.forEach((child) => {
+          const data = child.val();
+          const li = document.createElement("li");
+          li.className = "text-gray-700";
+          li.textContent = data.pageURL + " (" + new Date(data.dateLogged).toLocaleString() + ")";
+          container.appendChild(li);
+        });
+      });
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+  </style>
+</head>
+<body class="bg-bg-light font-sans min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-10 bg-white shadow-md border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <a href="/docs" class="text-2xl font-extrabold text-gray-800 tracking-tight">HouseLearning Docs</a>
+      <nav>
+        <a href="https://github.com/houselearning" target="_blank" class="text-gray-600 hover:text-primary-accent transition duration-150 font-medium ml-6">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+      <!-- Sidebar -->
+      <aside class="md:col-span-3 bg-bg-card p-6 rounded-xl shadow-lg h-fit">
+        <h3 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">Documentation Index</h3>
+        <nav class="space-y-2">
+          <ul class="space-y-1 text-sm">
+            <li><a href="https://houselearning.org/docs/helpcenter/troubleshoot.html" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Troubleshooting</a></li>
+            <li><a href="#istl" class="block p-2 rounded-lg text-gray-700 hover:bg-gray-100">Configuration</a></li>
+            <li><a href="#" class="block p-2 rounded-lg text-primary-accent bg-blue-50 font-semibold">Also.js Docs</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="md:col-span-9 space-y-8">
+
+        <!-- Also.js Docs Section -->
+        <section class="bg-bg-card p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100">
+          <p class="text-sm font-semibold text-primary-accent uppercase tracking-wider mb-2">Getting Started</p>
+          <h1 class="text-4xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b pb-3">
+            Also.js Plugin Documentation
+          </h1>
+
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">Overview</h2>
+            <p class="text-gray-700 leading-relaxed">
+              <strong>Also.js</strong> is a JavaScript plugin that integrates with HouseLearning to provide:
+            </p>
+            <ul class="list-disc list-inside ml-4 mt-3 text-gray-700 space-y-1">
+              <li>Firebase authentication tracking</li>
+              <li>DevTools detection & logging</li>
+              <li>Console paste tracking</li>
+              <li>Full-page translation using Google Translate API</li>
+              <li>Single-page logging (once per page forever) to Firebase</li>
+            </ul>
+          </div>
+
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3" id="istl">Installation</h2>
+            <p class="text-gray-700 mb-4">
+              Include the plugin in your HTML:
+            </p>
+            <div class="bg-gray-800 p-4 rounded-xl shadow-inner overflow-x-auto mb-2">
+              <code class="text-white block whitespace-pre-wrap">&lt;script type="module" src="https://www.houselearning.org/also.js"&gt;&lt;/script&gt;</code>
+            </div>
+          </div>
+
+          <!-- Available Pages Section -->
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">Available Pages</h2>
+            <p class="text-gray-700 mb-2">
+              Below are all pages where Also.js has been logged at least once:
+            </p>
+            <ul id="available-pages-list" class="list-disc list-inside ml-4">
+              <li class="text-gray-700">Loading pages...</li>
+            </ul>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+      &copy; 2026 HouseLearning Foundation. All Rights Reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    // Call render function after page load
+    renderAvailablePages();
+  </script>
+</body>
+</html>
