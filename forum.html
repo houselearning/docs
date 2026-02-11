@@ -1166,6 +1166,16 @@ window.handleFollow = handleFollow;
      * Initializes Firebase and sets up authentication listener.
      */
     async function initFirebase() {
+        // Helper to safely escape text before inserting into HTML
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         try {
             setLogLevel('debug');
             const app = initializeApp(firebaseConfig);
@@ -1221,7 +1231,8 @@ window.handleFollow = handleFollow;
             });
         } catch (error) {
             console.error("Firebase initialization failed:", error);
-            loadingIndicator.innerHTML = `<p class="text-red-500">Initialization failed: ${error.message}</p>`;
+            const safeMessage = escapeHtml(error && error.message ? error.message : error);
+            loadingIndicator.innerHTML = `<p class="text-red-500">Initialization failed: ${safeMessage}</p>`;
         }
 
         // --- Event Listeners and Initialization ---
