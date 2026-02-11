@@ -10,6 +10,11 @@
         "link": "/docs/intro/partners.html"
     },
     {
+        "title": "Also.js Plugin Docs",
+        "description": "A language support provider.",
+        "link": "/docs/installation/alsojs.html"
+    },
+    {
         "title": "HouseLearning Partner Program",
         "description": "Join our network of educational partners to collaborate, share content, and grow together.",
         "link": "/partners.html"
