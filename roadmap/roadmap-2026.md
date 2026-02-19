@@ -16,6 +16,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [ ] Fix the lesson of the day lessons
 - [ ] Add notification system (*50/50 completed*)
 ## March 2026
+- [ ] Start HouseLearning Courses (*courses.houselearning.org*)
 - [ ] Add HouseLearning Quiz Mode
 - [ ] Add Lesson Tracking
 - [ ] Add SafeAI Comeback 2.0 (*yes, we're bringing back SafeAI*)
@@ -28,6 +29,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [ ] Add Grade 5 Lessons
 - [ ] Celebrate our birthday 🎂
 - [ ] Finish videos for Grade 5 Lessons
+- [ ] Promote HouseLearning Courses (for everyone 8+)
 ## April 2026
 - [ ] Analytics Check
 - [ ] HouseLearning en Español
@@ -85,6 +87,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
  - [ ] Finish Grade 7 Science Lessons
  - [ ] Check CS Courses for Accuracy
  - [ ] Add Turkish Language Support
+ - [ ] Publish CS Courses to HL Courses Library
 ## August 2026
  - [ ] Finish HouseLearning App
  - [ ] Start Grade 8 Science Lessons
@@ -99,6 +102,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
  - [ ] Finish Grade 10 Science Lessons
  - [ ] Draft Automated Moderation for HouseLearning
 ## September 2026
+ - [ ] Add Grades K - 12 Math/Science Lesson Courses to HouseLearning Courses Searchbar
  - [ ] Publish SafeMod 0.0.96
  - [ ] Publish SafeAI 0.0.50 to Hugging Face (*~50 Million Params*)
  - [ ] Start Grade 11 Science Lessons
