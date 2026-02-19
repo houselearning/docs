@@ -10,7 +10,7 @@ This roadmap includes the upcoming things that are happening in the next twelve 
 - [x] Fix C# Lesson Issues
 - [x] Remove the old *we're making updates* banner
 - [x] Create an advertisement campaign
-- [ ] Finish videos for Grade 2 Courses
+- [x] Finish videos for Grade 2 Courses
 - [ ] Add Grade 3 Lessons
 - [ ] Finish videos for Grade 3 Lessons
 - [ ] Fix the lesson of the day lessons
@@ -139,6 +139,7 @@ This roadmap includes the upcoming things that are happening in the next twelve 
  - [ ] RTDB Check
 ## December 2026
  - [ ] Analytics Check
+ - [ ] Start the HouseLearning Assessments
  - [ ] Rennovate low-rated games
  - [ ] Add Auto-Theme Generator for website (*christmas, halloween, 4th of july, etc*)
  - [ ] Review HouseLearning Courses
@@ -148,5 +149,6 @@ This roadmap includes the upcoming things that are happening in the next twelve 
  - [ ] Add new years theme
  - [ ] Draft HouseLearning Plus (*paid version*)
  - [ ] Make SafeAI Pro 1 a HouseLearning Plus Exclusive (*in draft*)
+ - [ ] Upgrade Teacher Dashboard Assets & Resources
  - [ ] Celebrate the New Years
 ## Check the 2027 Roadmap for more information
