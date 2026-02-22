@@ -16,8 +16,8 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [ ] Fix the lesson of the day lessons
 - [ ] Add notification system (*50/50 completed*)
 ## March 2026
-- [ ] Start HouseLearning Courses (*courses.houselearning.org*)
 - [ ] Add HouseLearning Quiz Mode
+- [ ] Start HouseLearning Courses (*courses.houselearning.org*)
 - [ ] Add Lesson Tracking
 - [ ] Add SafeAI Comeback 2.0 (*yes, we're bringing back SafeAI*)
 - [ ] Add GitHub Actions Misspelling Tracker
