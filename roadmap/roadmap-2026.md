@@ -13,8 +13,8 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [x] Finish videos for Grade 2 Courses
 - [X] Add Grade 3 Lessons
 - [ ] Finish videos for Grade 3 Lessons
+- [ ] Fix HouseLearning Classroom UI, Button Position & Post Loading
 - [ ] Fix the lesson of the day lessons
-- [ ] Add notification system (*50/50 completed*)
 ## March 2026
 - [ ] Add HouseLearning Quiz Mode
 - [ ] Start HouseLearning Courses (*courses.houselearning.org*)
@@ -47,6 +47,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [ ] Publish HouseLearning API
 - [ ] Fix HouseLearning Chrome Extension & Publish V 2.0
 ## May 2026
+ - [ ] Add notification system (*50/50 completed*)
  - [ ] Add Grade 9 Lessons
  - [ ] Finish Grade 9 Lessons
  - [ ] Cookbook Automation 1.25
