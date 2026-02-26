@@ -12,12 +12,13 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [x] Create an advertisement campaign
 - [x] Finish videos for Grade 2 Courses
 - [X] Add Grade 3 Lessons
-- [ ] Add sitemap
+- [X] Add sitemap
 - [ ] Finish videos for Grade 3 Lessons
 - [ ] Fix HouseLearning Classroom UI, Button Position & Post Loading
 - [ ] Fix the lesson of the day lessons
 ## March 2026
 - [ ] Fix SEO & Accessibility
+- [ ] The Un-Rot Project. **READ MORE: [Click Here](https://blogger.houselearning.org/2026/02/the-un-rot-project-reclaiming-modern.html)**
 - [ ] Add HouseLearning Quiz Mode
 - [ ] Start HouseLearning Courses (*courses.houselearning.org*)
 - [ ] Add Lesson Tracking
@@ -144,6 +145,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
  - [ ] Add HouseLearning Chrome Extension to Chrome Web Store
  - [ ] Firebase Check
  - [ ] RTDB Check
+ - [ ] Add HouseLearning Quiz Mode
 ## December 2026
  - [ ] Analytics Check
  - [ ] Start the HouseLearning Assessments
@@ -156,6 +158,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
  - [ ] Add new years theme
  - [ ] Draft HouseLearning Plus (*paid version*)
  - [ ] Make SafeAI Pro 1 a HouseLearning Plus Exclusive (*in draft*)
+ - [ ] Make the Un-Rot Project a Paid HouseLearning Plus Exclusive
  - [ ] Upgrade Teacher Dashboard Assets & Resources
  - [ ] Celebrate the New Years
 ## Check the 2027 Roadmap for more information
