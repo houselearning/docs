@@ -15,7 +15,7 @@ This repo gives you:
 
 Clone the repo and launch the docs locally:
 ```
-git clone https://github.com/your/repo.git
+git clone https://github.com/houselearning/docs.git
 cd docs
 ```
 Preview the docs:
