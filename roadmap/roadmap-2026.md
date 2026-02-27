@@ -13,7 +13,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [x] Finish videos for Grade 2 Courses
 - [X] Add Grade 3 Lessons
 - [X] Add sitemap
-- [ ] Finish videos for Grade 3 Lessons
+- [X] Finish videos for Grade 3 Lessons
 - [ ] Fix HouseLearning Classroom UI, Button Position & Post Loading
 - [ ] Fix the lesson of the day lessons
 ## March 2026
