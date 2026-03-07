@@ -18,9 +18,8 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [X] Fix the lesson of the day lessons
 ## March 2026
 - [X] Fix SEO & Accessibility
-- [ ] The Un-Rot Project. **READ MORE: [Click Here](https://blogger.houselearning.org/2026/02/the-un-rot-project-reclaiming-modern.html)**
-- [ ] Add HouseLearning Quiz Mode
-- [ ] Start HouseLearning Courses (*courses.houselearning.org*)
+- [x] The Un-Rot Project. **READ MORE: [Click Here](https://blogger.houselearning.org/2026/02/the-un-rot-project-reclaiming-modern.html)**
+- [x] Add HouseLearning Quiz Mode
 - [ ] Add SafeAI Comeback 2.0 (*yes, we're bringing back SafeAI*)
 - [ ] Add GitHub Actions Misspelling Tracker
 - [ ] Launch HouseLearning Courses
@@ -64,6 +63,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
  - [ ] Add 2 Placeholder Math Games
  - [ ] Add Grade K Math Lessons
 ## June 2026
+ - [ ] Start HouseLearning Courses (*courses.houselearning.org*)
  - [ ] Finish Grade K Math Lessons
  - [ ] Wrap up Math
  - [ ] Add Grade K Science Lessons
