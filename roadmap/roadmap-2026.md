@@ -30,7 +30,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [ ] Add Grade 5 Lessons
 - [ ] Celebrate our birthday 🎂
 - [ ] Finish videos for Grade 5 Lessons
-- [ ] Promote HouseLearning Courses (for everyone 8+)
+- [ ] Fix HouseLearning Chrome Extension & Publish V 2.0
 ## April 2026
 - [ ] Analytics Check
 - [ ] HouseLearning en Español
@@ -46,7 +46,6 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [ ] Finish Grade 8 Lessons
 - [ ] Draft HouseLearning API
 - [ ] Publish HouseLearning API
-- [ ] Fix HouseLearning Chrome Extension & Publish V 2.0
 ## May 2026
  - [ ] Add notification system (*50/50 completed*)
  - [ ] Add Grade 9 Lessons
