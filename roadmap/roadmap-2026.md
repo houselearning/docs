@@ -20,8 +20,8 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [X] Fix SEO & Accessibility
 - [x] The Un-Rot Project. **READ MORE: [Click Here](https://blogger.houselearning.org/2026/02/the-un-rot-project-reclaiming-modern.html)**
 - [x] Add HouseLearning Quiz Mode
-- [ ] Add SafeAI Comeback 2.0 (*yes, we're bringing back SafeAI*)
-- [ ] Add GitHub Actions Misspelling Tracker
+- [X] Add SafeAI Comeback 2.0 (*yes, we're bringing back SafeAI*)
+- [X] Add GitHub Actions Misspelling Tracker
 - [ ] Launch HouseLearning Courses
 - [ ] Add Grade 4 Lessons
 - [ ] Finish videos for Grade 4 Lessons
