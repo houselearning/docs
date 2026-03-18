@@ -23,7 +23,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [X] Add SafeAI Comeback 2.0 (*yes, we're bringing back SafeAI*)
 - [X] Add GitHub Actions Misspelling Tracker
 - [X] Launch HouseLearning Courses
-- [ ] Add Grade 4 Lessons
+- [X] Add Grade 4 Lessons
 - [ ] Finish videos for Grade 4 Lessons
 - [ ] Start Advertisement Campaign 2.0
 - [ ] Add Homework Tutor 0.0.96 for SafeAI
