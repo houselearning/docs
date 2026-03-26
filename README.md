@@ -1,4 +1,6 @@
 # HouseLearning Docs
+> NOTE: HOUSELEARNING API COMING SOON!
+
 Welcome to the official documentation for **HouseLearning** — the platform packed with tools, guides, APIs, and developer resources that help you build, ship, and level up faster.
 
 This repo gives you:
