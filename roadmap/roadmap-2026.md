@@ -24,16 +24,16 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [X] Add GitHub Actions Misspelling Tracker
 - [X] Launch HouseLearning Courses
 - [X] Add Grade 4 Lessons
-- [ ] Finish videos for Grade 4 Lessons
+- [X] Finish videos for Grade 4 Lessons
 - [X] Start Advertisement Campaign 2.0
-- [X] Add Homework Tutor 0.0.96 for SafeAI ⏱️
-- [ ] Add Grade 5 Lessons
+- [] Add Homework Tutor 0.0.96 for SafeAI ⏱️
+- [X] Add Grade 5 Lessons
 - [X] Celebrate our birthday 🎂
-- [ ] Finish videos for Grade 5 Lessons
-- [ ] Fix HouseLearning Chrome Extension & Publish V 2.0 ⏱️
+- [X] Finish videos for Grade 5 Lessons
+- [] Fix HouseLearning Chrome Extension & Publish V 2.0 ⏱️
 ## April 2026
 - [x] Analytics Check
-- [ ] HouseLearning en Español
+- [ ] HouseLearning en Español ⏱️
 - [ ] HouseLearning Cookbook Automated System
 - [ ] Draft HouseLearning API
 - [ ] Add Grade 6 Lessons
