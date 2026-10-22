@@ -51,8 +51,9 @@
                 API Reference
             </h1>
             <p class="text-gray-600 text-lg mb-8">
-                Everything you need to integrate with HouseLearning’s ecosystem — fully documented, typed, and ready to use.
+                Current Firebase HTTP and callable function contracts. HouseLearning does not currently expose the fictional REST routes previously listed here.
             </p>
+            <p class="mb-8"><a class="font-semibold text-primary-accent underline" href="openapi.json">Download the OpenAPI 3.1 specification</a></p>
 
             <!-- Sidebar + Content -->
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
@@ -61,79 +62,75 @@
                 <aside class="lg:col-span-1 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm h-fit sticky top-28">
                     <h2 class="font-bold text-gray-700 mb-4 uppercase text-sm tracking-wider">Endpoints</h2>
                     <nav class="space-y-3 text-gray-700 text-sm">
-                        <a href="#auth" class="block hover:text-primary-accent">Authentication</a>
-                        <a href="#users" class="block hover:text-primary-accent">Users</a>
-                        <a href="#content" class="block hover:text-primary-accent">Content</a>
-                        <a href="#analytics" class="block hover:text-primary-accent">Analytics</a>
+                        <a href="#transport" class="block hover:text-primary-accent">Transport and auth</a>
+                        <a href="#assistant" class="block hover:text-primary-accent">SafeAI assistant</a>
+                        <a href="#notifications" class="block hover:text-primary-accent">Notifications</a>
+                        <a href="#moderation" class="block hover:text-primary-accent">Moderation</a>
                     </nav>
                 </aside>
 
                 <!-- Content -->
                 <section class="lg:col-span-3 space-y-20">
 
-                    <!-- AUTH -->
-                    <div id="auth">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Authentication</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Endpoints for signing in, managing tokens, and validating sessions.</p>
-
-                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 mb-10">
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">POST /api/auth/login</h3>
-                            <p class="text-gray-600 mb-4">Login using email and password.</p>
-
-                            <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "email": "user@example.com",
-  "password": "mypassword123"
-}</code></pre>
-
-                            <p class="mt-4 text-gray-600 font-medium">Returns:</p>
-                            <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "token": "abcdef123456",
-  "expiresIn": 3600
-}</code></pre>
+                    <section id="transport" class="scroll-mt-28">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Transport and authentication</h2>
+                        <div class="space-y-4 text-gray-700">
+                            <p>The static website is hosted by GitHub Pages. Firebase provides the backend services; there is no HouseLearning `/api/auth/login`, `/api/users/{id}`, `/api/content/docs`, or `/api/analytics/views` route.</p>
+                            <p>Sign users in with Firebase Authentication. Firestore reads and writes use the Firebase SDK and are governed by the deployed Firestore security rules. Do not put service-account credentials, Gemini keys, webhook tokens, or admin claims in browser code.</p>
+                            <p>Firebase HTTPS function URLs are generated for the configured Firebase project and region. Use the URL printed by `firebase deploy --only functions:<function-name>`; do not infer a production URL from the GitHub Pages hostname.</p>
                         </div>
+                    </section>
 
-                    </div>
-
-                    <!-- USERS -->
-                    <div id="users">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Users</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Endpoints related to user info, profiles, accounts, and preferences.</p>
-
-                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">GET /api/users/{id}</h3>
-                            <p class="text-gray-600 mb-4">Gets public data about the specified user.</p>
-
-                            <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "id": "6741",
-  "name": "Neil Narwhal",
-  "joined": "2025-03-09"
-}</code></pre>
+                    <section id="assistant" class="scroll-mt-28">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">SafeAI assistant</h2>
+                        <div class="bg-white border border-gray-200 shadow-sm rounded-xl p-6">
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">HTTP POST `assistant`</h3>
+                            <p class="text-gray-600 mb-4">Accepts a JSON request with `message` (or `prompt`), optional `subject`, `pageTitle`, `grade`, `language`, `sourceUrls`, `sourceEntries`, and `siteKnowledge`. The endpoint validates HouseLearning source URLs and returns a JSON object containing `text` and `suggestions`.</p>
+                            <pre class="bg-gray-900 text-white p-4 rounded-lg text-sm overflow-x-auto"><code>const response = await fetch('https://us-central1-contract-center-llc-10.cloudfunctions.net/assistant', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    message: 'Explain how fractions are equivalent.',
+    subject: 'math',
+    grade: 'Grade 5',
+    language: 'en',
+    tutorMode: true
+  })
+});
+const result = await response.json();</code></pre>
+                            <p class="mt-4 text-sm text-gray-600">The current endpoint does not require Firebase Authentication. `tutorMode` requests guided hints; it is not an authorization boundary or a substitute for server-side safety controls.</p>
                         </div>
-                    </div>
+                    </section>
 
-                    <!-- CONTENT -->
-                    <div id="content">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Content</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Endpoints for docs, lessons, and data retrieval.</p>
-
-                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">GET /api/content/docs</h3>
-                            <p class="text-gray-600 mb-4">Returns a list of all available documentation pages.</p>
+                    <section id="notifications" class="scroll-mt-28">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Notifications</h2>
+                        <div class="space-y-4">
+                            <article class="bg-white border border-gray-200 shadow-sm rounded-xl p-6">
+                                <h3 class="font-bold text-xl mb-2 text-gray-900">HTTP GET `getNotificationImage`</h3>
+                                <p class="text-gray-700">Requires `Authorization: Bearer &lt;Firebase ID token&gt;` and query parameters `notificationId` and `imageIndex`. The function verifies the token and confirms that the notification belongs to that user before returning PNG, JPEG, GIF, or WebP bytes. It returns 401 for missing/invalid authentication, 404 for inaccessible media, and 400 for invalid parameters.</p>
+                            </article>
+                            <article class="bg-white border border-gray-200 shadow-sm rounded-xl p-6">
+                                <h3 class="font-bold text-xl mb-2 text-gray-900">HTTP POST `receivePushNotificationEmail`</h3>
+                                <p class="text-gray-700">A SendGrid Inbound Parse webhook that accepts multipart email data. The query token must match the Firebase secret `PUSH_EMAIL_WEBHOOK_SECRET`; the sender and subject must satisfy the allowlist described in the HouseLearning Home README. Keep the secret in Firebase Secret Manager and SendGrid configuration, never in client code.</p>
+                            </article>
                         </div>
+                    </section>
 
-                    </div>
-
-                    <!-- ANALYTICS -->
-                    <div id="analytics">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Analytics</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Track usage, impressions, and performance.</p>
-
-                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">GET /api/analytics/views</h3>
-                            <p class="text-gray-600 mb-4">Gets total page views for your project.</p>
+                    <section id="moderation" class="scroll-mt-28">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Moderation</h2>
+                        <p class="text-gray-700 mb-6">Public Gists and Forum contributions are written with a pending status and remain hidden until a trusted moderator reviews them. This zero-inference workflow uses Firebase Authentication, Firestore reads/writes, and security rules only; it makes no Gemini calls and requires no new Cloud Functions.</p>
+                        <div class="space-y-4">
+                            <article class="bg-white border border-gray-200 shadow-sm rounded-xl p-6">
+                                <h3 class="font-bold text-xl mb-2 text-gray-900">Gists and Forum moderator queues</h3>
+                                <p class="text-gray-700">Recognized administrators review pending items in the Gists or Forum UI. Approval/block writes are direct Firebase SDK updates protected by Firestore rules. Rules require an admin identity, a pending/review state, a valid decision/category, the reviewer UID, and a server timestamp. Client users cannot self-approve or modify review metadata.</p>
+                            </article>
+                            <article class="bg-white border border-gray-200 shadow-sm rounded-xl p-6">
+                                <h3 class="font-bold text-xl mb-2 text-gray-900">Legacy content migration</h3>
+                                <p class="text-gray-700">Use the repository's Admin SDK migration commands once with an authorized service account to queue older public content that has no moderation state. They make bounded Firestore writes and do not invoke an AI model.</p>
+                            </article>
                         </div>
-
-                    </div>
+                        <p class="mt-6 text-sm text-amber-800">Moderation is not automated classification. Ambiguous content requires a person to review it. Deploy only the required Firestore rules and indexes; no moderation function deployment is needed.</p>
+                    </section>
 
                 </section>
             </div>

@@ -54,9 +54,9 @@
             </h1>
 
             <p class="text-gray-600 text-lg mb-10">
-                The structured formats used across all HouseLearning API endpoints.  
-                These models define how data is stored, returned, and validated.
+                Schemas for the Firebase HTTPS functions currently documented by HouseLearning. User profiles, lessons, and analytics are not exposed through a public HouseLearning REST API.
             </p>
+            <p class="mb-10"><a class="text-blue-700 underline" href="openapi.json">See the complete OpenAPI 3.1 specification</a></p>
 
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
 
@@ -64,122 +64,65 @@
                 <aside class="lg:col-span-1 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm h-fit sticky top-28">
                     <h2 class="font-bold text-gray-700 mb-4 uppercase text-sm tracking-wider">Models</h2>
                     <nav class="space-y-3 text-gray-700 text-sm">
-                        <a href="#user" class="block hover:text-primary-accent">User</a>
-                        <a href="#lesson" class="block hover:text-primary-accent">Lesson</a>
-                        <a href="#analytics" class="block hover:text-primary-accent">Analytics</a>
-                        <a href="#error" class="block hover:text-primary-accent">Error Response</a>
+                        <a href="#assistant-request" class="block hover:text-primary-accent">Assistant request</a>
+                        <a href="#assistant-response" class="block hover:text-primary-accent">Assistant response</a>
+                        <a href="#notification-delivery" class="block hover:text-primary-accent">Notification delivery</a>
+                        <a href="#errors" class="block hover:text-primary-accent">Errors and authorization</a>
                     </nav>
                 </aside>
 
                 <!-- CONTENT -->
                 <section class="lg:col-span-3 space-y-20">
 
-                    <!-- USER MODEL -->
-                    <div id="user">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">User</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Represents an authenticated or public user.</p>
+                    <div id="assistant-request">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Assistant request</h2>
+                        <p class="text-gray-600 mb-6 text-lg">The unauthenticated <code>assistant</code> HTTPS function accepts a JSON object with a non-empty <code>message</code> or <code>prompt</code>. Optional context fields include subject, grade, source URLs, and tutor mode.</p>
 
                         <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">User Object</h3>
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">Example</h3>
 
                             <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "id": "5351",
-  "name": "Alex",
-  "email": "alex@example.com",
-  "joined": "2023-10-14T05:22:00Z",
-  "role": "student",
-  "avatar": "https://cdn.houselearning.io/avatars/5351.png"
+  "message": "Explain equivalent fractions.",
+  "subject": "math",
+  "grade": "Grade 5",
+  "language": "en",
+  "tutorMode": true
 }</code></pre>
-
-                            <p class="mt-6 font-semibold text-gray-800">Fields</p>
-                            <ul class="mt-3 text-gray-700 space-y-2">
-                                <li><b>id</b> — Unique user UUID</li>
-                                <li><b>name</b> — Display name</li>
-                                <li><b>email</b> — Login email</li>
-                                <li><b>joined</b> — ISO string of create date</li>
-                                <li><b>role</b> — student, teacher, admin</li>
-                                <li><b>avatar</b> — URL for profile image</li>
-                            </ul>
                         </div>
                     </div>
 
-                    <!-- LESSON MODEL -->
-                    <div id="lesson">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Lesson</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Represents educational content inside HouseLearning.</p>
+                    <div id="assistant-response">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Assistant response</h2>
+                        <p class="text-gray-600 mb-6 text-lg">Successful assistant requests return generated text and a suggestions array.</p>
 
                         <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">Lesson Object</h3>
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">Example</h3>
 
                             <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "id": "LSN-103",
-  "title": "Introduction to Math",
-  "path": "/lessons/math/intro",
-  "type": "lesson",
-  "isQuizAttached": true,
-  "updatedAt": "2024-03-02T14:10:00Z"
+  "text": "Equivalent fractions name the same amount...",
+  "suggestions": []
 }</code></pre>
-
-                            <ul class="mt-6 text-gray-700 space-y-2">
-                                <li><b>id</b> — Unique lesson ID</li>
-                                <li><b>title</b> — Human-readable title</li>
-                                <li><b>path</b> — URL path for the content</li>
-                                <li><b>type</b> — lesson, quiz, worksheet</li>
-                                <li><b>isQuizAttached</b> — Boolean</li>
-                                <li><b>updatedAt</b> — Last modified timestamp</li>
-                            </ul>
                         </div>
                     </div>
 
-                    <!-- ANALYTICS MODEL -->
-                    <div id="analytics">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Analytics</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Tracks page views and engagement.</p>
+                    <div id="notification-delivery">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Notification delivery</h2>
+                        <p class="text-gray-600 mb-6 text-lg">The inbound notification-email function returns the number of recipient notifications created. Notification reads and updates use Firebase SDK operations protected by Firestore rules.</p>
 
                         <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
 
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">Analytics Object</h3>
+                            <h3 class="font-bold text-xl mb-2 text-gray-900">Example</h3>
 
                             <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "path": "/docs/getting-started",
-  "views": 1284,
-  "uniqueUsers": 412,
-  "lastView": "2024-04-10T18:20:00Z"
+  "ok": true,
+  "recipientCount": 12
 }</code></pre>
-
-                            <ul class="mt-6 text-gray-700 space-y-2">
-                                <li><b>path</b> — URL path being tracked</li>
-                                <li><b>views</b> — Total visits</li>
-                                <li><b>uniqueUsers</b> — Count of distinct visitors</li>
-                                <li><b>lastView</b> — Timestamp of most recent hit</li>
-                            </ul>
                         </div>
                     </div>
 
-                    <!-- ERROR MODEL -->
-                    <div id="error">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Error Response</h2>
-                        <p class="text-gray-600 mb-6 text-lg">Returned whenever an endpoint fails.</p>
-
-                        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
-
-                            <h3 class="font-bold text-xl mb-2 text-gray-900">Error Object</h3>
-
-                            <pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "error": true,
-  "code": 404,
-  "message": "Resource not found",
-  "docs": "/docs/api/errors"
-}</code></pre>
-
-                            <ul class="mt-6 text-gray-700 space-y-2">
-                                <li><b>error</b> — Always true</li>
-                                <li><b>code</b> — HTTP status code</li>
-                                <li><b>message</b> — Human-readable explanation</li>
-                                <li><b>docs</b> — Related documentation link</li>
-                            </ul>
-
-                        </div>
+                    <div id="errors">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Errors and authorization</h2>
+                        <p class="text-gray-600 mb-6 text-lg">Error status codes and response formats are endpoint-specific; consult the OpenAPI specification. The notification image endpoint requires a Firebase ID token and returns media only to the notification recipient. The assistant endpoint is public and may incur model-provider usage.</p>
                     </div>
 
                 </section>

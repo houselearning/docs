@@ -54,9 +54,7 @@
             </h1>
 
             <p class="text-gray-600 text-lg mb-12">
-                Deep-dive into everything you need to build integrations, tools, and apps 
-                on top of the HouseLearning ecosystem — from authentication to webhooks,
-                from performance tuning to advanced API usage.
+                Integration guidance for the Firebase HTTPS functions currently published by HouseLearning. See the <a class="underline" href="reference.html">API reference</a> and <a class="underline" href="openapi.json">OpenAPI specification</a> for the supported contracts.
             </p>
 
             <!-- Grid of Guides -->
@@ -66,35 +64,35 @@
                 <a href="#authentication" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
                     <h2 class="text-xl font-bold text-gray-900 mb-2">Authentication</h2>
                     <p class="text-gray-600 text-sm">
-                        Learn how to authenticate users and protect API routes safely.
+                        Use Firebase Authentication tokens for endpoints that require a signed-in user.
                     </p>
                 </a>
 
                 <a href="#fetching" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
                     <h2 class="text-xl font-bold text-gray-900 mb-2">Fetching Data</h2>
                     <p class="text-gray-600 text-sm">
-                        Query lessons, users, analytics, and more using REST endpoints.
+                        Generate SafeAI responses with the public assistant function; query Firestore through its SDK.
                     </p>
                 </a>
 
                 <a href="#webhooks" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
                     <h2 class="text-xl font-bold text-gray-900 mb-2">Webhooks</h2>
                     <p class="text-gray-600 text-sm">
-                        React to real-time events like new lessons, profile changes, and analytics updates.
+                        Configure the supported notification-email webhook without exposing its secret.
                     </p>
                 </a>
 
                 <a href="#sdk" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
                     <h2 class="text-xl font-bold text-gray-900 mb-2">SDK Usage</h2>
                     <p class="text-gray-600 text-sm">
-                        Optional JavaScript helper functions for working with the API.
+                        Use the Firebase JavaScript SDK for Authentication and Firestore; no separate HouseLearning REST SDK is published.
                     </p>
                 </a>
 
                 <a href="#rate-limits" class="block bg-white p-6 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition">
                     <h2 class="text-xl font-bold text-gray-900 mb-2">Rate Limits</h2>
                     <p class="text-gray-600 text-sm">
-                        Understand how rate limiting works and how to stay efficient.
+                        Respect Firebase and model-provider quotas; HouseLearning does not publish custom request limits.
                     </p>
                 </a>
 
@@ -114,17 +112,15 @@
                 <section id="authentication">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">Authentication</h2>
                     <p class="text-gray-600 text-lg mb-6">
-                        Authenticating with the HouseLearning API is simple: send the user’s token 
-                        in the <code class="bg-gray-200 rounded px-1">Authorization</code> header.
+                        The SafeAI assistant is unauthenticated. The notification-image function requires a Firebase ID token and only returns media belonging to that signed-in user.
                     </p>
 
-<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>GET /api/v1/user/me
-Authorization: Bearer &lt;token&gt;
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>GET https://us-central1-contract-center-llc-10.cloudfunctions.net/getNotificationImage?notificationId=NOTIFICATION_ID&amp;imageIndex=0
+Authorization: Bearer &lt;Firebase ID token&gt;
 </code></pre>
 
                     <p class="text-gray-600 mt-6">
-                        Tokens expire every 24 hours.  
-                        Refresh tokens last 30 days.
+                        Obtain and refresh ID tokens through Firebase Authentication. Never place service-account credentials, webhook secrets, or Gemini keys in browser code.
                     </p>
                 </section>
 
@@ -132,11 +128,18 @@ Authorization: Bearer &lt;token&gt;
                 <section id="fetching">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">Fetching Data</h2>
                     <p class="text-gray-600 text-lg mb-6">
-                        You can fetch any model using the REST endpoints. Here's a basic lesson fetch:
+                                                The assistant accepts JSON. It does not expose REST endpoints for arbitrary lessons, users, or analytics; use the relevant Firebase SDK and security rules for those services.
                     </p>
 
-<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>GET /api/v1/lessons?id=LSN-103
-Authorization: Bearer &lt;token&gt;
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>POST https://us-central1-contract-center-llc-10.cloudfunctions.net/assistant
+Content-Type: application/json
+
+{
+    "message": "Explain equivalent fractions.",
+    "subject": "math",
+    "grade": "Grade 5",
+    "tutorMode": true
+}
 </code></pre>
                 </section>
 
@@ -144,36 +147,28 @@ Authorization: Bearer &lt;token&gt;
                 <section id="webhooks">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">Webhooks</h2>
                     <p class="text-gray-600 text-lg mb-6">
-                        Webhooks notify your server in real time when certain events occur.
+                        The supported inbound webhook receives notification email through SendGrid Inbound Parse. It is not a general event-subscription service.
                     </p>
 
-                    <ul class="list-disc ml-6 text-gray-700 space-y-2">
-                        <li>user.created</li>
-                        <li>user.updated</li>
-                        <li>lesson.published</li>
-                        <li>lesson.updated</li>
-                        <li>analytics.hit</li>
-                    </ul>
-
-<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto mt-6"><code>{
-  "event": "lesson.published",
-  "timestamp": "2024-04-10T18:21:00Z",
-  "lessonId": "LSN-103"
-}</code></pre>
+                    <p class="text-gray-700">Configure the deployed <code>receivePushNotificationEmail</code> URL and its <code>PUSH_EMAIL_WEBHOOK_SECRET</code> in the mail provider. The sender and subject are allowlisted; accepted subjects are <code>@everyone</code>, <code>@admins-only</code>, <code>@students</code>, <code>@teachers</code>, and <code>@user user@example.com</code>. Keep the token in secret storage, not in client code or public documentation.</p>
                 </section>
 
                 <!-- SDK -->
                 <section id="sdk">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">SDK Usage</h2>
                     <p class="text-gray-600 text-lg mb-6">
-                        The optional SDK speeds up development:
+                                                No standalone <code>houselearning-sdk</code> is published. Use Firebase's supported SDKs with the project's configured Firebase app:
                     </p>
 
-<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>import { HL } from "houselearning-sdk";
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>import { getAuth } from 'firebase/auth';
+import { collection, getFirestore, query, where } from 'firebase/firestore';
 
-const hl = new HL("your_api_key");
-
-const user = await hl.user.me();
+const auth = getAuth(app);
+const db = getFirestore(app);
+const notifications = query(
+    collection(db, 'notifications'),
+    where('recipientUid', '==', auth.currentUser.uid)
+);
 </code></pre>
                 </section>
 
@@ -181,28 +176,23 @@ const user = await hl.user.me();
                 <section id="rate-limits">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">Rate Limits</h2>
                     <p class="text-gray-600 text-lg mb-6">
-                        HouseLearning uses a rolling 1-minute window:
+                        HouseLearning does not publish custom per-tier request limits for these functions. Firebase and the configured model provider apply their own quotas and billing rules; check those limits before enabling production traffic.
                     </p>
-
-                    <ul class="text-gray-700 space-y-2">
-                        <li><strong>100 requests/min</strong> — Free Tier</li>
-                        <li><strong>600 requests/min</strong> — Pro Tier</li>
-                        <li><strong>Unlimited*</strong> — Enterprise</li>
-                    </ul>
                 </section>
 
                 <!-- ERRORS -->
                 <section id="errors">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">Error Handling</h2>
                     <p class="text-gray-600 text-lg mb-6">
-                        All errors follow a consistent schema:
+                                                Error formats depend on the endpoint. The assistant returns JSON errors for invalid requests and model failures; the notification functions return endpoint-specific HTTP status codes and text or JSON bodies. Handle the HTTP status before parsing a response.
                     </p>
 
-<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>{
-  "error": true,
-  "code": 403,
-  "message": "Missing or invalid token"
-}</code></pre>
+<pre class="bg-gray-900 text-white p-4 rounded-xl text-sm overflow-x-auto"><code>const response = await fetch(endpoint, options);
+if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`HouseLearning request failed (${response.status}): ${detail}`);
+}
+</code></pre>
 
                 </section>
 

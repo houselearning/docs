@@ -1,0 +1,183 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "HouseLearning Firebase Functions API",
+    "version": "1.0.0",
+    "description": "HTTP function contracts implemented by the HouseLearning Firebase Functions project. Firebase Authentication and Firestore SDK operations remain SDK contracts, not REST routes. The documented functions must be deployed before these URLs are available."
+  },
+  "servers": [
+    {
+      "url": "https://us-central1-contract-center-llc-10.cloudfunctions.net",
+      "description": "Default Firebase Functions region for the configured HouseLearning project"
+    }
+  ],
+  "paths": {
+    "/assistant": {
+      "post": {
+        "operationId": "generateAssistantResponse",
+        "summary": "Generate a SafeAI response",
+        "description": "Accepts educational prompts. HouseLearning sitemap URLs are the only URLs eligible for inclusion in responses. The endpoint does not require Firebase Authentication; tutorMode changes response guidance but is not an authorization control.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AssistantRequest" },
+              "example": {
+                "message": "Explain equivalent fractions.",
+                "subject": "math",
+                "grade": "Grade 5",
+                "language": "en",
+                "tutorMode": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Assistant response",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AssistantResponse" } } }
+          },
+          "400": { "description": "Missing prompt" },
+          "405": { "description": "Method not allowed" },
+          "500": { "description": "Model configuration or generation failure" }
+        }
+      },
+      "options": {
+        "operationId": "assistantCorsPreflight",
+        "responses": { "204": { "description": "CORS preflight accepted" } }
+      }
+    },
+    "/getNotificationImage": {
+      "get": {
+        "operationId": "getNotificationImage",
+        "summary": "Read an image attached to a notification",
+        "security": [{ "firebaseBearer": [] }],
+        "parameters": [
+          {
+            "name": "notificationId",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "minLength": 1, "maxLength": 1500 }
+          },
+          {
+            "name": "imageIndex",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 0, "maximum": 4 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image bytes authorized for the signed-in notification recipient",
+            "content": {
+              "image/png": { "schema": { "type": "string", "format": "binary" } },
+              "image/jpeg": { "schema": { "type": "string", "format": "binary" } },
+              "image/gif": { "schema": { "type": "string", "format": "binary" } },
+              "image/webp": { "schema": { "type": "string", "format": "binary" } }
+            }
+          },
+          "400": { "description": "Invalid notification or image index" },
+          "401": { "description": "Missing or invalid Firebase ID token" },
+          "404": { "description": "Image is not available to this user" },
+          "405": { "description": "Method not allowed" },
+          "500": { "description": "Image retrieval failed" }
+        }
+      }
+    },
+    "/receivePushNotificationEmail": {
+      "post": {
+        "operationId": "receivePushNotificationEmail",
+        "summary": "Receive an allowlisted notification email webhook",
+        "description": "SendGrid Inbound Parse multipart endpoint. The token query value must match PUSH_EMAIL_WEBHOOK_SECRET. The accepted sender is cajm23331@gmail.com; subjects are @everyone, @admins-only, @students, @teachers, or @user user@example.com. Keep the token in secret storage, never in frontend code.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "writeOnly": true }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": { "type": "string" },
+                  "subject": { "type": "string" },
+                  "text": { "type": "string", "maxLength": 10000 },
+                  "html": { "type": "string", "maxLength": 20000 },
+                  "attachment1": { "type": "string", "format": "binary" }
+                },
+                "required": ["from", "subject"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification delivery result",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/NotificationDelivery" } } }
+          },
+          "400": { "description": "Invalid subject or message payload" },
+          "401": { "description": "Webhook token rejected" },
+          "403": { "description": "Sender is not allowlisted" },
+          "404": { "description": "Target user was not found" },
+          "405": { "description": "Method not allowed" },
+          "413": { "description": "Email payload exceeds the request limit" },
+          "415": { "description": "Multipart form data is required" },
+          "500": { "description": "Email processing failed" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "firebaseBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Firebase ID token"
+      }
+    },
+    "schemas": {
+      "AssistantRequest": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "minLength": 1 },
+          "prompt": { "type": "string", "minLength": 1 },
+          "subject": { "type": "string" },
+          "pageTitle": { "type": "string" },
+          "grade": { "type": "string" },
+          "language": {
+            "type": "string",
+            "enum": ["en", "es", "tr", "pt"],
+            "default": "en",
+            "description": "Response language; unsupported values fall back to English."
+          },
+          "tutorMode": { "type": "boolean", "default": false },
+          "sourceUrls": { "type": "array", "items": { "type": "string", "format": "uri" }, "maxItems": 500 },
+          "sourceEntries": { "type": "array", "items": { "type": "object" }, "maxItems": 500 },
+          "siteKnowledge": { "type": "object" }
+        },
+        "anyOf": [{ "required": ["message"] }, { "required": ["prompt"] }]
+      },
+      "AssistantResponse": {
+        "type": "object",
+        "required": ["text", "suggestions"],
+        "properties": {
+          "text": { "type": "string" },
+          "suggestions": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "NotificationDelivery": {
+        "type": "object",
+        "required": ["ok", "recipientCount"],
+        "properties": {
+          "ok": { "type": "boolean" },
+          "recipientCount": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

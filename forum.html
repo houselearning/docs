@@ -362,6 +362,10 @@ import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, Timestamp
         return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
+    function inlineArgument(value) {
+        return escapeHtml(JSON.stringify(String(value ?? '')));
+    }
+
     // --- FOLLOW LOGIC ---
 
     /**
@@ -709,10 +713,10 @@ window.handleFollow = handleFollow;
         
         commentElement.innerHTML = `
             <div class="font-medium flex justify-between items-center mb-1">
-                <span class="${isUserComment ? 'text-accent' : 'text-gray-700'}">${displayUserName}</span>
+                <span class="${isUserComment ? 'text-accent' : 'text-gray-700'}">${escapeHtml(displayUserName)}</span>
                 <span class="text-xs text-gray-500">${formatTimestamp(commentData.timestamp)}</span>
             </div>
-            <p class="text-gray-800 whitespace-pre-wrap">${commentData.content}</p>
+            <p class="text-gray-800 whitespace-pre-wrap">${escapeHtml(commentData.content)}</p>
         `;
         return commentElement;
     }
@@ -721,7 +725,7 @@ window.handleFollow = handleFollow;
         if (!db || !userId) return;
 
         const commentsRef = getCommentsRef(postId);
-        const q = query(commentsRef, orderBy("timestamp", "asc"));
+        const q = query(commentsRef, where('moderationStatus', '==', 'approved'), orderBy("timestamp", "asc"));
 
         onSnapshot(q, (snapshot) => {
             commentsContainerElement.innerHTML = '';
@@ -754,10 +758,12 @@ window.handleFollow = handleFollow;
                     content: content,
                     timestamp: Timestamp.now(),
                     userId: userId,
-                    userEmail: userEmail
+                    userEmail: userEmail,
+                    moderationStatus: 'pending'
                 });
 
                 inputElement.value = '';
+                showTemporaryMessage('Comment submitted for safety review.', 'success');
                 // Scroll to bottom of comments list in thread view
                 if (threadContent && threadContent.contains(inputElement)) {
                     const commentsList = document.getElementById('thread-comments-list');
@@ -840,6 +846,10 @@ window.handleFollow = handleFollow;
         const displayUserName = getDisplayName(postData.userEmail);
         const tagColor = TAG_COLORS[postData.tag] || TAG_COLORS['General'];
         const commentsDisabled = postData.commentsDisabled || false;
+        const safePostId = escapeHtml(postId);
+        const postIdArgument = inlineArgument(postId);
+        const userIdArgument = inlineArgument(postData.userId || '');
+        const userEmailArgument = inlineArgument(postData.userEmail || '');
         // Get vote count from data, default to 0
         const voteCount = postData.voteCount || 0; 
         
@@ -856,16 +866,16 @@ window.handleFollow = handleFollow;
             <div class="flex justify-between items-start mb-3">
                 <div class="flex-1 min-w-0">
                     <h3 class="text-xl font-bold text-gray-900 truncate">
-                        <a href="#post:${postId}" onclick="if(window.openThread){window.openThread('${postId}'); return false;}" class="hover:underline">${postData.title}</a>
+                        <a href="#post:${encodeURIComponent(postId)}" onclick="if(window.openThread){window.openThread(${postIdArgument}); return false;}" class="hover:underline">${escapeHtml(postData.title)}</a>
                     </h3>
                 </div>
                 
                 <div class="flex items-center space-x-3 ml-4">
-                    <span class="text-xs font-semibold px-3 py-1 rounded-full text-white ${tagColor} shadow-md">${postData.tag}</span>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full text-white ${tagColor} shadow-md">${escapeHtml(postData.tag)}</span>
 
                     ${isUserPost ? `
                         <div class="dropdown">
-                            <button class="text-gray-500 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition" onclick="handleMenuClick('${postId}', ${commentsDisabled}, this)">
+                            <button class="text-gray-500 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition" onclick="handleMenuClick(${postIdArgument}, ${commentsDisabled}, this)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
                             </button>
                             <div class="dropdown-content">
@@ -875,36 +885,36 @@ window.handleFollow = handleFollow;
                 </div>
             </div>
 
-            <p class="text-gray-700 mb-4 whitespace-pre-wrap">${postData.content}</p>
+            <p class="text-gray-700 mb-4 whitespace-pre-wrap">${escapeHtml(postData.content)}</p>
             
             <div class="flex justify-between items-center text-xs text-gray-400 border-t pt-2 mt-2">
                 <div class="flex items-center space-x-3">
-                    <span class="font-bold text-base text-gray-700" id="vote-count-${postId}">${voteCount}</span>
+                    <span class="font-bold text-base text-gray-700" id="vote-count-${safePostId}">${voteCount}</span>
                     
-                    <button id="upvote-btn-${postId}" onclick="if(window.handleVote) { window.handleVote('${postId}', 1); }" class="vote-button relative flex items-center space-x-1 p-1 rounded-lg hover:bg-gray-100 transition ${upvoteClass}" aria-label="Upvote">
+                    <button id="upvote-btn-${safePostId}" onclick="if(window.handleVote) { window.handleVote(${postIdArgument}, 1); }" class="vote-button relative flex items-center space-x-1 p-1 rounded-lg hover:bg-gray-100 transition ${upvoteClass}" aria-label="Upvote">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
                         <span class="up-count text-xs">${(voteCache[postId]?.upvotes || []).length}</span>
                         <div class="vote-popover">Loading...</div>
                     </button>
 
-                    <button id="downvote-btn-${postId}" onclick="if(window.handleVote) { window.handleVote('${postId}', -1); }" class="vote-button relative flex items-center space-x-1 p-1 rounded-lg hover:bg-gray-100 transition ${downvoteClass}" aria-label="Downvote">
+                    <button id="downvote-btn-${safePostId}" onclick="if(window.handleVote) { window.handleVote(${postIdArgument}, -1); }" class="vote-button relative flex items-center space-x-1 p-1 rounded-lg hover:bg-gray-100 transition ${downvoteClass}" aria-label="Downvote">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
                         <span class="down-count text-xs">${(voteCache[postId]?.downvotes || []).length}</span>
                         <div class="vote-popover">Loading...</div>
                     </button>
                 </div>
                 <span class="text-right">
-                    Posted by <a href="#" onclick="if(window.openProfile) { window.openProfile('${postData.userId || ''}', '${postData.userEmail || ''}'); return false; }" class="font-medium text-gray-600 hover:underline">${displayUserName}</a> on ${formatTimestamp(postData.timestamp)}
+                    Posted by <a href="#" onclick="if(window.openProfile) { window.openProfile(${userIdArgument}, ${userEmailArgument}); return false; }" class="font-medium text-gray-600 hover:underline">${escapeHtml(displayUserName)}</a> on ${formatTimestamp(postData.timestamp)}
                 </span>
             </div>
 
             <div class="mt-5 pt-3 border-t border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-800 mb-3">Comments (${commentsDisabled ? 'Disabled' : 'Open'})</h4>
-                <div id="comments-list-${postId}" class="comments-list space-y-2 max-h-48 overflow-y-auto pr-2">
+                <div id="comments-list-${safePostId}" class="comments-list space-y-2 max-h-48 overflow-y-auto pr-2">
                     </div>
                 
-                <form id="comment-form-${postId}" class="mt-4 ${commentsDisabled || !userId ? 'hidden' : 'flex items-center space-x-2'}">
-                    <input type="text" id="comment-input-${postId}" placeholder="Write a comment..." required
+                <form id="comment-form-${safePostId}" class="mt-4 ${commentsDisabled || !userId ? 'hidden' : 'flex items-center space-x-2'}">
+                    <input type="text" id="comment-input-${safePostId}" placeholder="Write a comment..." maxlength="500" required
                         class="flex-grow p-2 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent text-sm" ${commentsDisabled ? 'disabled' : ''}>
                     <button type="submit" 
                         class="bg-accent hover:bg-secondary text-white font-medium py-2 px-4 rounded-lg text-sm transition" ${commentsDisabled ? 'disabled' : ''}>
@@ -917,14 +927,14 @@ window.handleFollow = handleFollow;
         `;
         
         // Wire up comments
-        const commentsListElement = postElement.querySelector(`#comments-list-${postId}`);
+        const commentsListElement = postElement.querySelector(`#comments-list-${CSS.escape(postId)}`);
         
         if (commentsListElement && userId) {
             loadComments(postId, commentsListElement);
         }
 
-        const commentForm = postElement.querySelector(`#comment-form-${postId}`);
-        const commentInput = postElement.querySelector(`#comment-input-${postId}`);
+        const commentForm = postElement.querySelector(`#comment-form-${CSS.escape(postId)}`);
+        const commentInput = postElement.querySelector(`#comment-input-${CSS.escape(postId)}`);
         if (commentForm && commentInput) {
             commentForm.addEventListener('submit', submitComment(postId, commentInput));
         }
@@ -949,11 +959,11 @@ window.handleFollow = handleFollow;
         // The real-time nature of onSnapshot handles subsequent updates.
 
         const postsRef = collection(db, `artifacts/${appId}/public/data/forum_posts`);
-        let q = query(postsRef, orderBy("timestamp", "desc"));
+        let q = query(postsRef, where('moderationStatus', '==', 'approved'), orderBy("timestamp", "desc"));
         
         if (currentTagFilter && currentTagFilter !== 'All') {
             // Firestore composite index required: (tag, timestamp DESC)
-            q = query(postsRef, where('tag', '==', currentTagFilter), orderBy("timestamp", "desc"));
+            q = query(postsRef, where('moderationStatus', '==', 'approved'), where('tag', '==', currentTagFilter), orderBy("timestamp", "desc"));
         }
 
         onSnapshot(q, (snapshot) => {
@@ -1033,13 +1043,14 @@ window.handleFollow = handleFollow;
                 voteCount: 0, // Initialize vote count
                 timestamp: Timestamp.now(),
                 userId: userId,
-                userEmail: userEmail
+                userEmail: userEmail,
+                moderationStatus: 'pending'
             });
 
             document.getElementById('post-title').value = '';
             document.getElementById('post-content').value = '';
             document.getElementById('post-tag').value = ''; // Clear selection
-            showTemporaryMessage("Post submitted successfully!", 'success');
+            showTemporaryMessage("Post submitted for safety review.", 'success');
 
         } catch (error) {
             console.error("Error submitting post:", error);
@@ -1318,6 +1329,10 @@ window.handleFollow = handleFollow;
             const displayUserName = getDisplayName(postData.userEmail);
             const tagColor = TAG_COLORS[postData.tag] || TAG_COLORS['General'];
             const commentsDisabled = postData.commentsDisabled || false;
+            const safePostId = escapeHtml(postId);
+            const postIdArgument = inlineArgument(postId);
+            const userIdArgument = inlineArgument(postData.userId || '');
+            const userEmailArgument = inlineArgument(postData.userEmail || '');
             // Get initial vote counts
             const voteCount = postData.voteCount || 0;
             
@@ -1331,18 +1346,18 @@ window.handleFollow = handleFollow;
             threadContent.innerHTML = `
                 <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-primary">
                     <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-3xl font-extrabold text-gray-900">${postData.title}</h2>
-                        <span class="text-sm font-semibold px-4 py-1 rounded-full text-white ${tagColor} shadow-md">${postData.tag}</span>
+                        <h2 class="text-3xl font-extrabold text-gray-900">${escapeHtml(postData.title)}</h2>
+                        <span class="text-sm font-semibold px-4 py-1 rounded-full text-white ${tagColor} shadow-md">${escapeHtml(postData.tag)}</span>
                     </div>
                     
                     <div class="text-sm text-gray-500 mb-6 border-b pb-4">
                         Posted by 
-                        <a href="#" onclick="if(window.openProfile) { window.openProfile('${postData.userId || ''}', '${postData.userEmail || ''}'); return false; }" class="font-medium text-primary hover:underline">${displayUserName}</a> 
+                        <a href="#" onclick="if(window.openProfile) { window.openProfile(${userIdArgument}, ${userEmailArgument}); return false; }" class="font-medium text-primary hover:underline">${escapeHtml(displayUserName)}</a>
                         on ${formatTimestamp(postData.timestamp)}
                         
                         ${isUserPost ? `
                             <div class="dropdown inline-block ml-4">
-                                <button id="thread-menu-btn" class="text-gray-500 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition" onclick="event.stopPropagation(); window.handleMenuClick('${postId}', ${commentsDisabled}, this)">
+                                <button id="thread-menu-btn" class="text-gray-500 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition" onclick="event.stopPropagation(); window.handleMenuClick(${postIdArgument}, ${commentsDisabled}, this)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
                                 </button>
                                 <div class="dropdown-content">
@@ -1351,19 +1366,19 @@ window.handleFollow = handleFollow;
                         ` : ''}
                     </div>
 
-                    <p class="text-lg text-gray-800 whitespace-pre-wrap leading-relaxed">${postData.content}</p>
+                    <p class="text-lg text-gray-800 whitespace-pre-wrap leading-relaxed">${escapeHtml(postData.content)}</p>
                     
                     <div class="flex items-center space-x-4 mt-6 border-t pt-4">
-                        <span class="font-bold text-xl text-gray-700" id="thread-vote-count-${postId}">${voteCount}</span>
+                        <span class="font-bold text-xl text-gray-700" id="thread-vote-count-${safePostId}">${voteCount}</span>
                         
-                        <button id="thread-upvote-btn-${postId}" onclick="window.handleVote('${postId}', 1)" 
+                        <button id="thread-upvote-btn-${safePostId}" onclick="window.handleVote(${postIdArgument}, 1)"
                             class="vote-button relative flex items-center space-x-1 p-2 rounded transition duration-150 hover:bg-gray-100 ${upvoteClass}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
                             <span class="up-count font-bold text-sm">${(voteCache[postId]?.upvotes || []).length}</span>
                             <div class="vote-popover">Loading...</div>
                         </button>
                         
-                        <button id="thread-downvote-btn-${postId}" onclick="window.handleVote('${postId}', -1)" 
+                        <button id="thread-downvote-btn-${safePostId}" onclick="window.handleVote(${postIdArgument}, -1)"
                             class="vote-button relative flex items-center space-x-1 p-2 rounded transition duration-150 hover:bg-gray-100 ${downvoteClass}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
                             <span class="down-count font-bold text-sm">${(voteCache[postId]?.downvotes || []).length}</span>
@@ -1378,7 +1393,7 @@ window.handleFollow = handleFollow;
                         </div>
                     
                     <form id="thread-comment-form" class="mt-6 border-t pt-4 ${commentsDisabled || !userId ? 'hidden' : 'flex items-center space-x-2'}">
-                        <input type="text" id="thread-comment-input" placeholder="Write a comment..." required
+                        <input type="text" id="thread-comment-input" placeholder="Write a comment..." maxlength="500" required
                             class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent" ${commentsDisabled ? 'disabled' : ''}>
                         <button type="submit" 
                             class="bg-accent hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition" ${commentsDisabled ? 'disabled' : ''}>
@@ -1753,5 +1768,6 @@ window.handleFollow = handleFollow;
 
     window.onload = initFirebase;
 </script>
+<script type="module" src="forum-moderation.mjs"></script>
 </body>
 </html>
