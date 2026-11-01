@@ -19,7 +19,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
 - [X] Fix HouseLearning Classroom UI, Button Position & Post Loading
 - [X] Fix the lesson of the day lessons
 ## March 2026
-- [X] Fix SEO & Accessibility
+- [x] Fix SEO & Accessibility (on-site metadata, sitemap, and accessibility updates shipped; external search-engine indexing is not verified)
 - [x] The Un-Rot Project. **READ MORE: [Click Here](https://blogger.houselearning.org/2026/02/the-un-rot-project-reclaiming-modern.html)**
 - [x] Add HouseLearning Quiz Mode
 - [X] Add SafeAI Comeback 2.0 (*yes, we're bringing back SafeAI*)
@@ -122,7 +122,7 @@ This roadmap shows the upcoming events over the next twelve months (2026-27). To
  - [ ] Rennovate HouseLearning Pages
 ## October 2026
  - [ ] Rennovate HouseLearning Gists
- - [ ] Rennovate HouseLearning Teacher Dashboard
+ - [x] Rennovate HouseLearning Teacher Dashboard (teacher workspace implementation covers applications, role-checked class management, assignments, student work, resources, sessions, and analytics; Firebase deployment and emulator verification remain pending)
  - [ ] Rennovate HouseLearning Community Forum
  - [x] Add Auto Moderators to HouseLearning Gists (code implemented; production Firebase rollout pending)
  - [ ] Add Auto Moderators to HouseLearning Community Forum
